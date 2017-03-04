@@ -25,6 +25,7 @@ func NewPlayer(out Output) *Player {
 	}
 }
 
+// Reset resets the player to start values
 func (p *Player) Reset() {
 	p.current = 1
 }

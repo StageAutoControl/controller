@@ -9,6 +9,7 @@ import (
 const sampleRate uint = 44100
 const numSamples uint = 1000
 
+// AudioOutput is a output stream to audio
 type AudioOutput struct {
 	*portaudio.Stream
 	strong, weak           chan struct{}
