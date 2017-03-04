@@ -1,0 +1,10 @@
+hash: 62dc1c362ffdf445798faba98c38c2f813daf996d7b207332c0b56b94aa4d4f1
+updated: 2017-03-01T21:58:29.728057441+01:00
+imports:
+- name: github.com/cryptix/wav
+  version: 844d399d120cec9249623f557ba69cf4d3bf8664
+- name: github.com/gordonklaus/portaudio
+  version: 2a038c93424fb36d026982db9fd365504a49f566
+- name: github.com/spf13/cobra
+  version: fcd0c5a1df88f5d6784cb4feead962c3f3d0b66c
+testImports: []
