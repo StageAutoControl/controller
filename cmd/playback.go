@@ -28,17 +28,27 @@ var playbackCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO: Work your own magic here
-		fmt.Println("playback called")
 		var loader cntl.Loader
 
 		switch loaderType {
 		case directoryLoader:
 			loader = files.New(dataDir)
 		case databaseLoader:
-			//loader = database.New(),
+		//loader = database.New(),
 		default:
 			panic(fmt.Errorf("Loader %q is not supported. Choose one of %s", loader, loaders))
 		}
+
+		data, err := loader.Load()
+		if err != nil {
+			panic(fmt.Errorf("Failed to load %q data: %v", loaderType, err))
+		}
+
+		fmt.Printf("Loaded %d set lists, %d songs, %d scenes, %d presets %d animations, %d device groups and %d devices\n",
+			len(data.SetLists), len(data.Songs), len(data.DmxScenes), len(data.DmxPresets), len(data.DmxAnimations),
+			len(data.DmxDeviceGroups), len(data.DmxDevices))
+
+
 	},
 }
 
