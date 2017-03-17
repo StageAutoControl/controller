@@ -1,51 +1,41 @@
 package cntl
 
-type Tag string
+import "github.com/StageAutoControl/controller/cntl/dmx"
 
-type Device struct {
-	ID           string
-	Name         string
-	Type         string
-	Universe     uint16
-	StartAddress uint16
-	AddressRange uint16
-	Tags         []Tag
+// SongSelector is a ID selector for a song
+type SongSelector struct {
+	ID string `json:"id" yaml:"id"`
 }
 
-type DeviceSelector struct {
-	ID   string
-	Tags []Tag
+// SetList is a set of songs in a specific order
+type SetList struct {
+	ID    string          `json:"id" yaml:"id"`
+	Name  string          `json:"name" yaml:"name"`
+	Songs []*SongSelector `json:"songs" yaml:"songs"`
 }
 
-type GroupSelector struct {
-	ID string
+// BarChange describes the changes of tempo and notes during a song
+type BarChange struct {
+	At              uint16              `json:"at" yaml:"at"`
+	NoteValue       uint8               `json:"noteValue" yaml:"noteValue"`
+	NoteCount       uint8               `json:"noteCount" yaml:"noteCount"`
+	Speed           uint16              `json:"speed" yaml:"speed"`
+	DmxScenes       []*dmx.Scene        `json:"dmxScenes" yaml:"dmxScenes"`
+	DmxDeviceParams []*dmx.DeviceParams `json:"dmxDeviceParams" yaml:"dmxDeviceParams"`
 }
 
-type DeviceGroup struct {
-	ID      string
-	Name    string
-	Devices []*DeviceSelector
+// ScenePosition describes the position of a DMX scene within a song
+type ScenePosition struct {
+	ID     string `json:"id" yaml:"id"`
+	Start  uint16 `json:"start" yaml:"start"`
+	Length uint8  `json:"length" yaml:"length"`
 }
 
-type DeviceParams struct {
-	Group  *GroupSelector
-	Device *DeviceSelector
-	Params *Params
-}
-
-type Scene struct {
-	ID   string
-	Name string
-}
-
-type SubScene struct {
-	At           uint16
-	DeviceParams []*DeviceParams
-}
-
-type Params struct {
-	Red    uint8
-	Green  uint8
-	Blue   uint8
-	Strobe uint8
+// Song is the whole container for everything that needs to be controlled during a song.
+type Song struct {
+	ID              string              `json:"id" yaml:"id"`
+	Name            string              `json:"name" yaml:"name"`
+	BarChanges      []*BarChange        `json:"barChanges" yaml:"barChanges"`
+	DmxScenes       []*ScenePosition    `json:"dmxScenes" yaml:"dmxScenes"`
+	DmxDeviceParams []*dmx.DeviceParams `json:"dmxDeviceParams" yaml:"dmxDeviceParams"`
 }

@@ -14,7 +14,7 @@ type Output interface {
 
 // Player is a Metronome Player
 type Player struct {
-	out Output
+	out     Output
 	current uint
 }
 
@@ -29,6 +29,7 @@ func NewPlayer(out Output) *Player {
 func (p *Player) Reset() {
 	p.current = 1
 }
+
 // PlayBarUntilSignal plays the given bar until the channel is filled
 func (p *Player) PlayBarUntilSignal(bar *Bar, sig chan os.Signal) (err error) {
 	return p.PlayBarUntilSignalOrLimit(bar, sig, 0)

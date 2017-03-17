@@ -7,9 +7,9 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/apinnecke/dmx-auto-control/metronome"
-	"github.com/apinnecke/dmx-auto-control/metronome/output"
-	"github.com/apinnecke/dmx-auto-control/metronome/utils"
+	"github.com/StageAutoControl/controller/metronome"
+	"github.com/StageAutoControl/controller/metronome/output"
+	"github.com/StageAutoControl/controller/metronome/utils"
 	"github.com/spf13/cobra"
 )
 

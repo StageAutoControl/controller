@@ -1,0 +1,15 @@
+dmxPresets:
+- id: 5d3a415a-0b15-11e7-90b9-03c2b960e034
+  name: strobe
+  deviceParams:
+  - group:
+      id: cb58bc10-0b16-11e7-b45a-7bee591b0adb
+    params:
+      strobe: 255
+- id: 4e3c2e84-0b15-11e7-a076-4b5bbb4c19bf
+  name: Left red
+  deviceParams:
+  - group:
+      id: 475b71a0-0b16-11e7-9406-e3f678e8b788
+    params:
+      red: 200

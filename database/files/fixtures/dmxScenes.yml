@@ -1,0 +1,20 @@
+dmxScenes:
+- id: 492cef2e-0b14-11e7-be89-c3fa25f9cabb
+  name: Test-Scene
+  noteValue: 4
+  noteCount: 4
+  subScenes:
+  - at: [1]
+    preset: 4e3c2e84-0b15-11e7-a076-4b5bbb4c19bf
+  - at: [2]
+    preset: 5d3a415a-0b15-11e7-90b9-03c2b960e034
+
+- id: a44f8dee-0b14-11e7-b5b9-bf1015384192
+  name: Second test scene
+  noteValue: 4
+  noteCount: 4
+  subScenes:
+  - at: [1]
+    preset: 5d3a415a-0b15-11e7-90b9-03c2b960e034
+  - at: [2]
+    preset: 4e3c2e84-0b15-11e7-a076-4b5bbb4c19bf

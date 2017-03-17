@@ -14,9 +14,9 @@ var cfgFile string
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Use:   "dmx-auto-control",
-	Short: "Automatic DMX controlling by analyzing audio signals and pre defined light scenes",
-	Long: ``,
+	Use:   "controller",
+	Short: "Stage automatic controlling, triggering state changes.",
+	Long:  `Automatic stage controlling, including midi and DMX, by analyzing audio signals and pre defined light scenes`,
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
@@ -31,14 +31,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	//// Here you will define your flags and configuration settings.
-	//// Cobra supports Persistent Flags, which, if defined here,
-	//// will be global for your application.
-	//
-	//RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.dmx-auto-control.yaml)")
-	//// Cobra also supports local flags, which will only run
-	//// when this action is called directly.
-	//RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.sac-controller.yaml)")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -47,7 +40,7 @@ func initConfig() {
 		viper.SetConfigFile(cfgFile)
 	}
 
-	viper.SetConfigName(".dmx-auto-control")
+	viper.SetConfigName(".sac-controller")
 	viper.AddConfigPath("$HOME")
 	viper.AutomaticEnv()
 

@@ -15,4 +15,3 @@ func GenerateSin(sampleRate, samples uint, freq float64) []float64 {
 
 	return b
 }
-

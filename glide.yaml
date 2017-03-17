@@ -1,5 +1,5 @@
-package: github.com/apinnecke/dmx-auto-control
+package: github.com/StageAutoControl/controller
 import:
-- package: github.com/gordonklaus/portaudio
 - package: github.com/cryptix/wav
 - package: github.com/spf13/cobra
+- package: gopkg.in/yaml.v2

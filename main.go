@@ -2,7 +2,7 @@
 
 package main
 
-import "github.com/apinnecke/dmx-auto-control/cmd"
+import "github.com/StageAutoControl/controller/cmd"
 
 func main() {
 	cmd.Execute()

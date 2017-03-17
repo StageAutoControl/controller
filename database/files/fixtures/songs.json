@@ -1,0 +1,28 @@
+{
+	"songs": [
+		{
+			"id": "3c1065c8-0b14-11e7-96eb-5b134621c411",
+			"name": "Test song",
+			"barChanges": [
+				{
+					"at": 1,
+					"noteValue": 4,
+					"noteCount": 4,
+					"speed": 160
+				}
+			],
+			"dmxScenes": [
+				{
+					"id": "492cef2e-0b14-11e7-be89-c3fa25f9cabb",
+					"start": 1,
+					"length": 4
+				},
+				{
+					"id": "a44f8dee-0b14-11e7-b5b9-bf1015384192",
+					"start": 5,
+					"length": 4
+				}
+			]
+		}
+	]
+}
