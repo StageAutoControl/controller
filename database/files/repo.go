@@ -6,19 +6,21 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
+	"strings"
+
 	"github.com/StageAutoControl/controller/cntl"
-	"github.com/StageAutoControl/controller/cntl/dmx"
 	"gopkg.in/yaml.v2"
 )
 
 type fileData struct {
-	SetLists        []*cntl.SetList    `json:"setLists" yaml:"setLists"`
-	Songs           []*cntl.Song       `json:"songs" yaml:"songs"`
-	DmxScenes       []*dmx.Scene       `json:"dmxScenes" yaml:"dmxScenes"`
-	DmxPresets      []*dmx.Preset      `json:"dmxPresets" yaml:"dmxPresets"`
-	DmxAnimations   []*dmx.Animation   `json:"dmxAnimations" yaml:"dmxAnimations"`
-	DmxDevices      []*dmx.Device      `json:"dmxDevices" yaml:"dmxDevices"`
-	DmxDeviceGroups []*dmx.DeviceGroup `json:"dmxDeviceGroups" yaml:"dmxDeviceGroups"`
+	SetLists        []*cntl.SetList        `json:"setLists" yaml:"setLists"`
+	Songs           []*cntl.Song           `json:"songs" yaml:"songs"`
+	DMXScenes       []*cntl.DMXScene       `json:"dmxScenes" yaml:"dmxScenes"`
+	DMXPresets      []*cntl.DMXPreset      `json:"dmxPresets" yaml:"dmxPresets"`
+	DMXAnimations   []*cntl.DMXAnimation   `json:"dmxAnimations" yaml:"dmxAnimations"`
+	DMXDevices      []*cntl.DMXDevice      `json:"dmxDevices" yaml:"dmxDevices"`
+	DMXDeviceTypes  []*cntl.DMXDeviceType  `json:"dmxDeviceTypes" yaml:"dmxDeviceTypes"`
+	DMXDeviceGroups []*cntl.DMXDeviceGroup `json:"dmxDeviceGroups" yaml:"dmxDeviceGroups"`
 }
 
 // Repository is a file repository
@@ -46,8 +48,11 @@ func (r *Repository) readDir(data *cntl.DataStore, dir string) (*cntl.DataStore,
 	}
 
 	for _, f := range fs {
-		path := filepath.Join(dir, f.Name())
+		if strings.HasPrefix(f.Name(), ".") {
+			continue
+		}
 
+		path := filepath.Join(dir, f.Name())
 		if f.IsDir() {
 			data, err = r.readDir(data, path)
 			if err != nil {
@@ -124,20 +129,28 @@ func (r *Repository) mergeData(data *cntl.DataStore, fileData *fileData) *cntl.D
 		data.Songs[s.ID] = s
 	}
 
-	for _, d := range fileData.DmxDevices {
-		data.DmxDevices[d.ID] = d
+	for _, d := range fileData.DMXDevices {
+		data.DMXDevices[d.ID] = d
 	}
 
-	for _, dg := range fileData.DmxDeviceGroups {
-		data.DmxDeviceGroups[dg.ID] = dg
+	for _, dg := range fileData.DMXDeviceGroups {
+		data.DMXDeviceGroups[dg.ID] = dg
 	}
 
-	for _, p := range fileData.DmxPresets {
-		data.DmxPresets[p.ID] = p
+	for _, dt := range fileData.DMXDeviceTypes {
+		data.DMXDeviceTypes[dt.ID] = dt
 	}
 
-	for _, sc := range fileData.DmxScenes {
-		data.DmxScenes[sc.ID] = sc
+	for _, p := range fileData.DMXPresets {
+		data.DMXPresets[p.ID] = p
+	}
+
+	for _, sc := range fileData.DMXScenes {
+		data.DMXScenes[sc.ID] = sc
+	}
+
+	for _, a := range fileData.DMXAnimations {
+		data.DMXAnimations[a.ID] = a
 	}
 
 	return data

@@ -1,0 +1,46 @@
+dmxDeviceTypes:
+- id: 1555d67e-1187-11e7-8135-9b41038b5b75
+  name: LED-Bar 67 Channel
+  channelCount: 67
+  channelsPerLED: 4
+  modeEnabled: true
+  modeChannel: 0
+  dimmerEnabled: true
+  dimmerChannel: 1
+  strobeEnabled: True
+  strobeChannel: 2
+  leds:
+  -  {position: 0, red: 0, green: 1, blue: 2, white: 3}
+  -  {position: 1, red: 4, green: 5, blue: 6, white: 7}
+  -  {position: 2, red: 8, green: 9, blue: 10, white: 11}
+  -  {position: 3, red: 12, green: 13, blue: 14, white: 15}
+  -  {position: 4, red: 16, green: 17, blue: 18, white: 19}
+  -  {position: 5, red: 20, green: 21, blue: 22, white: 23}
+  -  {position: 6, red: 24, green: 25, blue: 26, white: 27}
+  -  {position: 7, red: 28, green: 29, blue: 30, white: 31}
+  -  {position: 8, red: 32, green: 33, blue: 34, white: 35}
+  -  {position: 9, red: 36, green: 37, blue: 38, white: 39}
+  -  {position: 10, red: 40, green: 41, blue: 42, white: 43}
+  -  {position: 11, red: 44, green: 45, blue: 46, white: 47}
+  -  {position: 12, red: 48, green: 49, blue: 50, white: 51}
+  -  {position: 13, red: 52, green: 53, blue: 54, white: 55}
+  -  {position: 14, red: 56, green: 57, blue: 58, white: 59}
+  -  {position: 15, red: 60, green: 61, blue: 62, white: 63}
+
+- id: 628fc3ea-1188-11e7-8824-5f72d80c17b6
+  name: PAR 5 channel
+  channelCount: 5
+  channelsPerLED: 3
+  modeEnabled: false
+  modeChannel: 0
+  dimmerEnabled: true
+  dimmerChannel: 3
+  strobeEnabled: true
+  strobeChannel: 4
+  leds:
+  -  {position: 0, red: 0, green: 1, blue: 2}
+
+- id: 5ccc43ee-118c-11e7-8d53-974b41748b71
+  name: Strobe
+  strobeEnabled: true
+  strobeChannel: 0

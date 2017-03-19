@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"testing"
 
+	"fmt"
+
 	"github.com/StageAutoControl/controller/fixtures"
 )
 
@@ -19,37 +21,79 @@ func TestRepository_Load(t *testing.T) {
 
 	for key, sl := range fix.SetLists {
 		dsl, ok := data.SetLists[key]
-		compare(t, key, sl, dsl, ok)
+		if !ok {
+			t.Fatalf("ID %q not found \n", key)
+		}
+
+		if dsl.ID != sl.ID {
+			t.Errorf("ID %q is not equal \n", key)
+		}
 	}
 
 	for key, s := range fix.Songs {
 		ds, ok := data.Songs[key]
-		compare(t, key, s, ds, ok)
+		if !ok {
+			t.Fatalf("ID %q not found \n", key)
+		}
+
+		if ds.ID != s.ID {
+			t.Errorf("ID %q is not equal \n", key)
+		}
 	}
 
-	for key, s := range fix.DmxScenes {
-		ds, ok := data.DmxScenes[key]
-		compare(t, key, s, ds, ok)
+	for key, s := range fix.DMXScenes {
+		ds, ok := data.DMXScenes[key]
+		if !ok {
+			t.Fatalf("ID %q not found \n", key)
+		}
+
+		if ds.ID != s.ID {
+			t.Errorf("ID %q is not equal \n", key)
+		}
 	}
 
-	for key, p := range fix.DmxPresets {
-		dp, ok := data.DmxPresets[key]
-		compare(t, key, p, dp, ok)
+	for key, p := range fix.DMXPresets {
+		dp, ok := data.DMXPresets[key]
+		if !ok {
+			t.Fatalf("ID %q not found \n", key)
+		}
+
+		if dp.ID != p.ID {
+			t.Errorf("ID %q is not equal \n", key)
+		}
 	}
 
-	for key, a := range fix.DmxAnimations {
-		da, ok := data.DmxAnimations[key]
-		compare(t, key, a, da, ok)
+	for key, a := range fix.DMXAnimations {
+		da, ok := data.DMXAnimations[key]
+		if !ok {
+			t.Fatalf("ID %q not found \n", key)
+		}
+
+		if da.ID != a.ID {
+			t.Errorf("ID %q is not equal \n", key)
+		}
 	}
 
-	for key, dg := range fix.DmxDeviceGroups {
-		ddg, ok := data.DmxDeviceGroups[key]
-		compare(t, key, dg, ddg, ok)
+	for key, dg := range fix.DMXDeviceGroups {
+		ddg, ok := data.DMXDeviceGroups[key]
+		if !ok {
+			t.Fatalf("ID %q not found \n", key)
+		}
+
+		if ddg.ID != dg.ID {
+			t.Errorf("ID %q is not equal \n", key)
+		}
 	}
 
-	for key, d := range fix.DmxDevices {
-		dd, ok := data.DmxDevices[key]
-		compare(t, key, d, dd, ok)
+	for key, d := range fix.DMXDevices {
+		dd, ok := data.DMXDevices[key]
+		if !ok {
+			t.Fatalf("ID %q not found \n", key)
+		}
+
+		if dd.ID != d.ID {
+			t.Errorf("ID %q is not equal \n", key)
+		}
 	}
 
 }
@@ -62,4 +106,6 @@ func compare(t *testing.T, key string, expected, actual interface{}, ok bool) {
 	if !reflect.DeepEqual(expected, actual) {
 		t.Fatalf("Given objects at key %q are not equal. Expected %#v, got %#v", key, expected, actual)
 	}
+
+	fmt.Printf("ID %q is equal \n", key)
 }

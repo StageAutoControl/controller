@@ -4,8 +4,11 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/StageAutoControl/controller/cntl"
+	"github.com/StageAutoControl/controller/cntl/output"
+	"github.com/StageAutoControl/controller/cntl/song"
 	"github.com/StageAutoControl/controller/database/files"
 	"github.com/spf13/cobra"
 )
@@ -19,17 +22,23 @@ var (
 	loaders    = []string{directoryLoader, databaseLoader}
 	loaderType string
 	dataDir    string
+	songID     string
 )
 
 // playbackCmd represents the playback command
 var playbackCmd = &cobra.Command{
-	Use:   "playback",
+	Use:   "playback song-uuid",
 	Short: "Plays a given songname",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		// TODO: Work your own magic here
-		var loader cntl.Loader
+		if len(args) != 1 {
+			cmd.Usage()
+			os.Exit(1)
+		}
 
+		songID = args[0]
+
+		var loader cntl.Loader
 		switch loaderType {
 		case directoryLoader:
 			loader = files.New(dataDir)
@@ -44,11 +53,23 @@ var playbackCmd = &cobra.Command{
 			panic(fmt.Errorf("Failed to load %q data: %v", loaderType, err))
 		}
 
-		fmt.Printf("Loaded %d set lists, %d songs, %d scenes, %d presets %d animations, %d device groups and %d devices\n",
-			len(data.SetLists), len(data.Songs), len(data.DmxScenes), len(data.DmxPresets), len(data.DmxAnimations),
-			len(data.DmxDeviceGroups), len(data.DmxDevices))
+		fmt.Printf("Loaded %d set lists, %d songs, %d scenes, %d presets %d animations, %d device types, %d device groups and %d devices\n",
+			len(data.SetLists), len(data.Songs), len(data.DMXScenes), len(data.DMXPresets), len(data.DMXAnimations),
+			len(data.DMXDeviceTypes), len(data.DMXDeviceGroups), len(data.DMXDevices))
 
+		s, ok := data.Songs[songID]
+		if !ok {
+			fmt.Printf("Unable to find song %q.\n", s)
+			os.Exit(1)
+		}
 
+		output := output.NewBufferOutput(os.Stdout)
+		player := song.NewPlayer(data, output)
+
+		err = player.PlayAll(songID)
+		if err != nil {
+			panic(err)
+		}
 	},
 }
 
