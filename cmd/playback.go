@@ -7,8 +7,8 @@ import (
 	"os"
 
 	"github.com/StageAutoControl/controller/cntl"
-	"github.com/StageAutoControl/controller/cntl/output"
 	"github.com/StageAutoControl/controller/cntl/song"
+	"github.com/StageAutoControl/controller/cntl/transport"
 	"github.com/StageAutoControl/controller/database/files"
 	"github.com/spf13/cobra"
 )
@@ -16,13 +16,20 @@ import (
 const (
 	directoryLoader = "directory"
 	databaseLoader  = "database"
+
+	bufferTransport     = "buffer"
+	visualizerTransport = "visualizer"
+	artNetTransport     = "art-net"
 )
 
 var (
-	loaders    = []string{directoryLoader, databaseLoader}
-	loaderType string
-	dataDir    string
-	songID     string
+	loaders           = []string{directoryLoader, databaseLoader}
+	transports        = []string{bufferTransport, visualizerTransport, artNetTransport}
+	loaderType        string
+	transportType     string
+	viualizerEndpoint string
+	dataDir           string
+	songID            string
 )
 
 // playbackCmd represents the playback command
@@ -43,7 +50,10 @@ var playbackCmd = &cobra.Command{
 		case directoryLoader:
 			loader = files.New(dataDir)
 		case databaseLoader:
-		//loader = database.New(),
+			//loader = database.New(),
+			fmt.Println("Database loader is not yet supported.")
+			os.Exit(1)
+
 		default:
 			panic(fmt.Errorf("Loader %q is not supported. Choose one of %s", loader, loaders))
 		}
@@ -63,11 +73,26 @@ var playbackCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		output := output.NewBufferOutput(os.Stdout)
-		player := song.NewPlayer(data, output)
+		var writer song.TransportWriter
+		switch transportType {
+		case bufferTransport:
+			writer = transport.NewBufferTransport(os.Stdout)
+			break
 
-		err = player.PlayAll(songID)
-		if err != nil {
+		case visualizerTransport:
+			writer, err = transport.NewVisualizerTransport(viualizerEndpoint)
+			if err != nil {
+				fmt.Printf("Unable to connect to the visualizer: %v \n", err)
+				os.Exit(1)
+			}
+
+		default:
+			fmt.Printf("Transport %q is not supported. \n", transportType)
+			os.Exit(1)
+		}
+
+		player := song.NewPlayer(data, writer)
+		if err = player.PlayAll(songID); err != nil {
 			panic(err)
 		}
 	},
@@ -78,4 +103,7 @@ func init() {
 
 	playbackCmd.PersistentFlags().StringVarP(&dataDir, "data-dir", "d", "", "Data directory to load (when loader is set to directory)")
 	playbackCmd.PersistentFlags().StringVarP(&loaderType, "loader", "l", directoryLoader, fmt.Sprintf("Which loader to use %s.", loaders))
+
+	playbackCmd.PersistentFlags().StringVarP(&transportType, "transport", "t", bufferTransport, fmt.Sprintf("Which transport to use %s.", transports))
+	playbackCmd.PersistentFlags().StringVar(&viualizerEndpoint, "visualizer-endpoint", "localhost:1337", "Endpoint of the visualizer backend if visualizer transport is chosen.")
 }

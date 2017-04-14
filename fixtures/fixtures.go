@@ -177,6 +177,7 @@ var data = &cntl.DataStore{
 		"1555d67e-1187-11e7-8135-9b41038b5b75": {
 			ID:             "1555d67e-1187-11e7-8135-9b41038b5b75",
 			Name:           "LED-Bar 67 Channel",
+			Key:            "LEDBar67",
 			ChannelCount:   67,
 			ChannelsPerLED: 4,
 			ModeEnabled:    true,
@@ -207,6 +208,7 @@ var data = &cntl.DataStore{
 		"628fc3ea-1188-11e7-8824-5f72d80c17b6": {
 			ID:             "628fc3ea-1188-11e7-8824-5f72d80c17b6",
 			Name:           "PAR 5 channel",
+			Key:            "PAR5",
 			ChannelCount:   5,
 			ChannelsPerLED: 3,
 			ModeEnabled:    false,
@@ -222,6 +224,7 @@ var data = &cntl.DataStore{
 		"5ccc43ee-118c-11e7-8d53-974b41748b71": {
 			ID:            "5ccc43ee-118c-11e7-8d53-974b41748b71",
 			Name:          "Strobe",
+			Key:           "Strobe",
 			StrobeEnabled: true,
 			StrobeChannel: 0,
 		},

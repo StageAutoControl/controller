@@ -1,6 +1,7 @@
 dmxDeviceTypes:
 - id: 1555d67e-1187-11e7-8135-9b41038b5b75
   name: LED-Bar 67 Channel
+  key: LEDBar67
   channelCount: 67
   channelsPerLED: 4
   modeEnabled: true
@@ -29,6 +30,7 @@ dmxDeviceTypes:
 
 - id: 628fc3ea-1188-11e7-8824-5f72d80c17b6
   name: PAR 5 channel
+  key: PAR5
   channelCount: 5
   channelsPerLED: 3
   modeEnabled: false
@@ -42,5 +44,6 @@ dmxDeviceTypes:
 
 - id: 5ccc43ee-118c-11e7-8d53-974b41748b71
   name: Strobe
+  key: Strobe
   strobeEnabled: true
   strobeChannel: 0

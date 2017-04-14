@@ -1,12 +1,18 @@
-hash: f34c995bd0cb4fd1d74fe435a0502bbf04a5d9704facf00bc983fedbb9a3b594
-updated: 2017-03-16T19:23:33.556429792+01:00
+hash: 0d8de8ddb736c7fb73720a6ee4eb0729e0391a1071fa69448ba78ba007518188
+updated: 2017-04-08T06:48:31.886956947+02:00
 imports:
 - name: github.com/cryptix/wav
   version: 844d399d120cec9249623f557ba69cf4d3bf8664
 - name: github.com/fsnotify/fsnotify
-  version: 7d7316ed6e1ed2de075aab8dfc76de5d158d66e1
+  version: 4da3e2cfbabc9f751898f250b49f2439785783a1
+- name: github.com/golang/protobuf
+  version: 2bba0603135d7d7f5cb73b2125beeda19c09f4ef
+  subpackages:
+  - proto
 - name: github.com/gordonklaus/portaudio
   version: 2a038c93424fb36d026982db9fd365504a49f566
+- name: github.com/gorilla/websocket
+  version: a91eba7f97777409bc2c443f5534d41dd20c5720
 - name: github.com/hashicorp/hcl
   version: 630949a3c5fa3c613328e1b8256052cbc2327c9b
   subpackages:
@@ -21,13 +27,15 @@ imports:
 - name: github.com/inconshreveable/mousetrap
   version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
 - name: github.com/magiconair/properties
-  version: b3b15ef068fd0b17ddf408a23669f20811d194d2
+  version: 51463bfca2576e06c62a8504b5c0f06d61312647
 - name: github.com/mitchellh/mapstructure
   version: 53818660ed4955e899c0bcafa97299a388bd7c8e
 - name: github.com/pelletier/go-buffruneio
   version: c37440a7cf42ac63b919c752ca73a85067e05992
 - name: github.com/pelletier/go-toml
-  version: fee7787d3f811af92276f5ff10107092e95b7a1d
+  version: fe206efb84b2bc8e8cfafe6b4c1826622be969e3
+- name: github.com/satori/go.uuid
+  version: 879c5887cd475cd7864858769793b2ceb0d44feb
 - name: github.com/spf13/afero
   version: 9be650865eab0c12963d8753212f4f9c66cdcf12
   subpackages:
@@ -39,7 +47,7 @@ imports:
 - name: github.com/spf13/jwalterweatherman
   version: fa7ca7e836cf3a8bb4ebf799f472c12d7e903d66
 - name: github.com/spf13/pflag
-  version: 9ff6c6923cfffbcd502984b8e0c80539a94968b7
+  version: 9a906f17374922ed0f74e1b2f593d3723f2ffb00
 - name: github.com/spf13/viper
   version: 84f94806c67f59dd7ae87bc5351f7a9c94a4558d
 - name: golang.org/x/sys
@@ -47,7 +55,7 @@ imports:
   subpackages:
   - unix
 - name: golang.org/x/text
-  version: f28f36722d5ef2f9655ad3de1f248e3e52ad5ebd
+  version: f4b4367115ec2de254587813edaa901bc1c723a8
   subpackages:
   - transform
   - unicode/norm

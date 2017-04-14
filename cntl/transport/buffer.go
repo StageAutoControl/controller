@@ -1,4 +1,4 @@
-package output
+package transport
 
 import (
 	"fmt"
@@ -12,16 +12,19 @@ import (
 // BufferOutput is an output channel that can render to a buffer
 type BufferOutput struct {
 	w io.Writer
+	i uint64
 }
 
-// NewBufferOutput returns a new BufferOutput instance
-func NewBufferOutput(w io.Writer) *BufferOutput {
-	return &BufferOutput{w}
+// NewBufferTransport returns a new BufferOutput instance
+func NewBufferTransport(w io.Writer) *BufferOutput {
+	return &BufferOutput{w, 0}
 }
 
 // Write writes to the buffer
-func (b *BufferOutput) Write(cmd cntl.Command) {
-	fmt.Fprintf(b.w, "%+v, %+v, %s\n", cmd.BarChange, cmd.MIDICommands, renderCommands(cmd.DMXCommands))
+func (b *BufferOutput) Write(cmd cntl.Command) error {
+	fmt.Fprintf(b.w, "%d %+v, %+v, %s\n", b.i, cmd.BarChange, cmd.MIDICommands, renderCommands(cmd.DMXCommands))
+	b.i++
+	return nil
 }
 func renderCommands(cmds cntl.DMXCommands) string {
 	s := make([]string, len(cmds))

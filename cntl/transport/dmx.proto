@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package transport;
+
+message DMXCommand {
+    uint32 universe = 1;
+    uint32 channel = 2;
+    uint32 value = 3;
+}
+
+message DMXCommands {
+    repeated DMXCommand commands = 1;
+}
