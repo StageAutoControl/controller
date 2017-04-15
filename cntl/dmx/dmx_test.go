@@ -12,21 +12,21 @@ func TestStreamlineScenes(t *testing.T) {
 	ds := fixtures.DataStore()
 	exp := []struct {
 		s *cntl.Song
-		m map[uint64]*cntl.DMXScene
+		m map[uint64][]*cntl.DMXScene
 	}{
 		{
 			s: ds.Songs["3c1065c8-0b14-11e7-96eb-5b134621c411"],
-			m: map[uint64]*cntl.DMXScene{
-				0:    ds.DMXScenes["492cef2e-0b14-11e7-be89-c3fa25f9cabb"],
-				32:   ds.DMXScenes["492cef2e-0b14-11e7-be89-c3fa25f9cabb"],
-				64:   ds.DMXScenes["492cef2e-0b14-11e7-be89-c3fa25f9cabb"],
-				96:   ds.DMXScenes["492cef2e-0b14-11e7-be89-c3fa25f9cabb"],
-				512:  ds.DMXScenes["a44f8dee-0b14-11e7-b5b9-bf1015384192"],
-				528:  ds.DMXScenes["a44f8dee-0b14-11e7-b5b9-bf1015384192"],
-				544:  ds.DMXScenes["a44f8dee-0b14-11e7-b5b9-bf1015384192"],
-				1408: ds.DMXScenes["99b86a5e-0e7a-11e7-a01a-5b5fbdeba3d6"],
-				1472: ds.DMXScenes["99b86a5e-0e7a-11e7-a01a-5b5fbdeba3d6"],
-				1920: ds.DMXScenes["b82f4750-0e7a-11e7-9522-0f9d6d69958a"],
+			m: map[uint64][]*cntl.DMXScene{
+				0:    {ds.DMXScenes["492cef2e-0b14-11e7-be89-c3fa25f9cabb"]},
+				32:   {ds.DMXScenes["492cef2e-0b14-11e7-be89-c3fa25f9cabb"]},
+				64:   {ds.DMXScenes["492cef2e-0b14-11e7-be89-c3fa25f9cabb"]},
+				96:   {ds.DMXScenes["492cef2e-0b14-11e7-be89-c3fa25f9cabb"]},
+				512:  {ds.DMXScenes["a44f8dee-0b14-11e7-b5b9-bf1015384192"]},
+				528:  {ds.DMXScenes["a44f8dee-0b14-11e7-b5b9-bf1015384192"]},
+				544:  {ds.DMXScenes["a44f8dee-0b14-11e7-b5b9-bf1015384192"]},
+				1408: {ds.DMXScenes["99b86a5e-0e7a-11e7-a01a-5b5fbdeba3d6"]},
+				1472: {ds.DMXScenes["99b86a5e-0e7a-11e7-a01a-5b5fbdeba3d6"]},
+				1920: {ds.DMXScenes["b82f4750-0e7a-11e7-9522-0f9d6d69958a"]},
 			},
 		},
 	}
@@ -83,13 +83,13 @@ func TestRenderScene(t *testing.T) {
 		{
 			s: ds.DMXScenes["492cef2e-0b14-11e7-be89-c3fa25f9cabb"],
 			c: []cntl.DMXCommands{
-				{{Universe: 1, Channel: 222, Value: 255}},
+				{{Universe: 1, Channel: 222, Value: cntl.DMXValue{Value: 255}}},
 				{}, {}, {}, {}, {}, {}, {},
-				{{Universe: 1, Channel: 222, Value: 255}},
+				{{Universe: 1, Channel: 222, Value: cntl.DMXValue{Value: 255}}},
 				{}, {}, {}, {}, {}, {}, {},
-				{{Universe: 1, Channel: 222, Value: 255}},
+				{{Universe: 1, Channel: 222, Value: cntl.DMXValue{Value: 255}}},
 				{}, {}, {}, {}, {}, {}, {},
-				{{Universe: 1, Channel: 222, Value: 255}},
+				{{Universe: 1, Channel: 222, Value: cntl.DMXValue{Value: 255}}},
 				{}, {}, {}, {}, {}, {}, {},
 			},
 			err: nil,
@@ -97,9 +97,9 @@ func TestRenderScene(t *testing.T) {
 		{
 			s: ds.DMXScenes["a44f8dee-0b14-11e7-b5b9-bf1015384192"],
 			c: []cntl.DMXCommands{
-				{{Universe: 1, Channel: 224, Value: 255}},
+				{{Universe: 1, Channel: 224, Value: cntl.DMXValue{Value: 255}}},
 				{}, {}, {}, {}, {}, {}, {},
-				{{Universe: 1, Channel: 224, Value: 255}},
+				{{Universe: 1, Channel: 224, Value: cntl.DMXValue{Value: 255}}},
 				{}, {}, {}, {}, {}, {}, {},
 			},
 			err: nil,
@@ -107,45 +107,45 @@ func TestRenderScene(t *testing.T) {
 		{
 			s: ds.DMXScenes["99b86a5e-0e7a-11e7-a01a-5b5fbdeba3d6"],
 			c: []cntl.DMXCommands{
-				{{Universe: 1, Channel: 228, Value: 31}},
-				{{Universe: 1, Channel: 228, Value: 63}},
-				{{Universe: 1, Channel: 228, Value: 127}},
-				{{Universe: 1, Channel: 228, Value: 255}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 31}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 63}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 127}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 255}}},
 				{}, {}, {}, {},
-				{{Universe: 1, Channel: 228, Value: 31}},
-				{{Universe: 1, Channel: 228, Value: 63}},
-				{{Universe: 1, Channel: 228, Value: 127}},
-				{{Universe: 1, Channel: 228, Value: 255}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 31}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 63}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 127}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 255}}},
 				{}, {}, {}, {},
-				{{Universe: 1, Channel: 228, Value: 31}},
-				{{Universe: 1, Channel: 228, Value: 63}},
-				{{Universe: 1, Channel: 228, Value: 127}},
-				{{Universe: 1, Channel: 228, Value: 255}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 31}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 63}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 127}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 255}}},
 				{}, {}, {}, {},
-				{{Universe: 1, Channel: 228, Value: 31}},
-				{{Universe: 1, Channel: 228, Value: 63}},
-				{{Universe: 1, Channel: 228, Value: 127}},
-				{{Universe: 1, Channel: 228, Value: 255}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 31}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 63}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 127}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 255}}},
 				{}, {}, {}, {},
-				{{Universe: 1, Channel: 228, Value: 31}},
-				{{Universe: 1, Channel: 228, Value: 63}},
-				{{Universe: 1, Channel: 228, Value: 127}},
-				{{Universe: 1, Channel: 228, Value: 255}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 31}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 63}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 127}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 255}}},
 				{}, {}, {}, {},
-				{{Universe: 1, Channel: 228, Value: 31}},
-				{{Universe: 1, Channel: 228, Value: 63}},
-				{{Universe: 1, Channel: 228, Value: 127}},
-				{{Universe: 1, Channel: 228, Value: 255}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 31}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 63}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 127}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 255}}},
 				{}, {}, {}, {},
-				{{Universe: 1, Channel: 228, Value: 31}},
-				{{Universe: 1, Channel: 228, Value: 63}},
-				{{Universe: 1, Channel: 228, Value: 127}},
-				{{Universe: 1, Channel: 228, Value: 255}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 31}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 63}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 127}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 255}}},
 				{}, {}, {}, {},
-				{{Universe: 1, Channel: 228, Value: 31}},
-				{{Universe: 1, Channel: 228, Value: 63}},
-				{{Universe: 1, Channel: 228, Value: 127}},
-				{{Universe: 1, Channel: 228, Value: 255}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 31}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 63}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 127}}},
+				{{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 255}}},
 				{}, {}, {}, {},
 			},
 			err: nil,
@@ -190,7 +190,7 @@ func TestRenderPreset(t *testing.T) {
 			p: ds.DMXPresets["0de258e0-0e7b-11e7-afd4-ebf6036983dc"],
 			c: []cntl.DMXCommands{
 				{
-					{Universe: 1, Channel: 222, Value: 255},
+					{Universe: 1, Channel: 222, Value: cntl.DMXValue{255}},
 				},
 			},
 			err: nil,
@@ -199,7 +199,7 @@ func TestRenderPreset(t *testing.T) {
 			p: ds.DMXPresets["11adf93e-0e7b-11e7-998c-5bd2bd0df396"],
 			c: []cntl.DMXCommands{
 				{
-					{Universe: 1, Channel: 224, Value: 255},
+					{Universe: 1, Channel: 224, Value: cntl.DMXValue{255}},
 				},
 			},
 			err: nil,
@@ -208,7 +208,7 @@ func TestRenderPreset(t *testing.T) {
 			p: ds.DMXPresets["652e716a-0e7b-11e7-b92a-8f2ff28ba235"],
 			c: []cntl.DMXCommands{
 				{
-					{Universe: 1, Channel: 223, Value: 255},
+					{Universe: 1, Channel: 223, Value: cntl.DMXValue{255}},
 				},
 			},
 			err: nil,
@@ -244,22 +244,22 @@ func TestMerge(t *testing.T) {
 }
 func TestMergeAtOffset(t *testing.T) {
 	cmds := []cntl.DMXCommands{
-		{{Universe: 0, Channel: 255, Value: 12}},
-		{{Universe: 45, Channel: 200, Value: 15}},
-		{{Universe: 12, Channel: 0, Value: 255}},
-		{{Universe: 44, Channel: 55, Value: 66}},
-		{{Universe: 41, Channel: 210, Value: 115}},
+		{{Universe: 0, Channel: 255, Value: cntl.DMXValue{Value: 12}}},
+		{{Universe: 45, Channel: 200, Value: cntl.DMXValue{Value: 15}}},
+		{{Universe: 12, Channel: 0, Value: cntl.DMXValue{Value: 255}}},
+		{{Universe: 44, Channel: 55, Value: cntl.DMXValue{Value: 66}}},
+		{{Universe: 41, Channel: 210, Value: cntl.DMXValue{Value: 115}}},
 	}
 	cs := []cntl.DMXCommands{
-		{{Universe: 10, Channel: 15, Value: 1}},
-		{{Universe: 11, Channel: 16, Value: 15}},
+		{{Universe: 10, Channel: 15, Value: cntl.DMXValue{Value: 1}}},
+		{{Universe: 11, Channel: 16, Value: cntl.DMXValue{Value: 15}}},
 	}
 	e := []cntl.DMXCommands{
-		{{Universe: 0, Channel: 255, Value: 12}},
-		{{Universe: 45, Channel: 200, Value: 15}},
-		{{Universe: 12, Channel: 0, Value: 255}, {Universe: 10, Channel: 15, Value: 1}},
-		{{Universe: 44, Channel: 55, Value: 66}, {Universe: 11, Channel: 16, Value: 15}},
-		{{Universe: 41, Channel: 210, Value: 115}},
+		{{Universe: 0, Channel: 255, Value: cntl.DMXValue{Value: 12}}},
+		{{Universe: 45, Channel: 200, Value: cntl.DMXValue{Value: 15}}},
+		{{Universe: 12, Channel: 0, Value: cntl.DMXValue{Value: 255}}, {Universe: 10, Channel: 15, Value: cntl.DMXValue{Value: 1}}},
+		{{Universe: 44, Channel: 55, Value: cntl.DMXValue{Value: 66}}, {Universe: 11, Channel: 16, Value: cntl.DMXValue{Value: 15}}},
+		{{Universe: 41, Channel: 210, Value: cntl.DMXValue{Value: 115}}},
 	}
 
 	res := MergeAtOffset(cmds, cs, 2)
@@ -280,30 +280,40 @@ func TestRenderDeviceParams(t *testing.T) {
 		{
 			dp: &cntl.DMXDeviceParams{
 				Device: &cntl.DMXDeviceSelector{ID: "5e0335e0-0b17-11e7-ad6c-63a7138d926c"},
-				Params: &cntl.DMXParams{Red: 255, Green: 255, Blue: 255, LED: 0},
+				Params: &cntl.DMXParams{
+					Red:   &cntl.DMXValue{Value: 255},
+					Green: &cntl.DMXValue{Value: 255},
+					Blue:  &cntl.DMXValue{Value: 255},
+					LED:   0,
+				},
 			},
 			c: []cntl.DMXCommands{
 				{
-					{Universe: 2, Channel: 26, Value: 255},
-					{Universe: 2, Channel: 27, Value: 255},
-					{Universe: 2, Channel: 28, Value: 255},
+					{Universe: 2, Channel: 26, Value: cntl.DMXValue{Value: 255}},
+					{Universe: 2, Channel: 27, Value: cntl.DMXValue{Value: 255}},
+					{Universe: 2, Channel: 28, Value: cntl.DMXValue{Value: 255}},
 				},
 			},
 			err: nil,
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Group:  &cntl.DMXDeviceGroupSelector{ID: "475b71a0-0b16-11e7-9406-e3f678e8b788"},
-				Params: &cntl.DMXParams{Red: 255, Green: 255, Blue: 255, LED: 0},
+				Group: &cntl.DMXDeviceGroupSelector{ID: "475b71a0-0b16-11e7-9406-e3f678e8b788"},
+				Params: &cntl.DMXParams{
+					Red:   &cntl.DMXValue{Value: 255},
+					Green: &cntl.DMXValue{Value: 255},
+					Blue:  &cntl.DMXValue{Value: 255},
+					LED:   0,
+				},
 			},
 			c: []cntl.DMXCommands{
 				{
-					{Universe: 2, Channel: 10, Value: 255},
-					{Universe: 2, Channel: 11, Value: 255},
-					{Universe: 2, Channel: 12, Value: 255},
-					{Universe: 2, Channel: 14, Value: 255},
-					{Universe: 2, Channel: 15, Value: 255},
-					{Universe: 2, Channel: 16, Value: 255},
+					{Universe: 2, Channel: 10, Value: cntl.DMXValue{Value: 255}},
+					{Universe: 2, Channel: 11, Value: cntl.DMXValue{Value: 255}},
+					{Universe: 2, Channel: 12, Value: cntl.DMXValue{Value: 255}},
+					{Universe: 2, Channel: 14, Value: cntl.DMXValue{Value: 255}},
+					{Universe: 2, Channel: 15, Value: cntl.DMXValue{Value: 255}},
+					{Universe: 2, Channel: 16, Value: cntl.DMXValue{Value: 255}},
 				},
 			},
 			err: nil,
@@ -311,11 +321,11 @@ func TestRenderDeviceParams(t *testing.T) {
 		{
 			dp: &cntl.DMXDeviceParams{
 				Group:  &cntl.DMXDeviceGroupSelector{ID: "cb58bc10-0b16-11e7-b45a-7bee591b0adb"},
-				Params: &cntl.DMXParams{Preset: 200},
+				Params: &cntl.DMXParams{Preset: &cntl.DMXValue{Value: 200}},
 			},
 			c: []cntl.DMXCommands{
 				{
-					{Universe: 1, Channel: 222, Value: 200},
+					{Universe: 1, Channel: 222, Value: cntl.DMXValue{Value: 200}},
 				},
 			},
 			err: nil,
@@ -327,16 +337,16 @@ func TestRenderDeviceParams(t *testing.T) {
 			},
 			c: []cntl.DMXCommands{
 				{
-					{Universe: 1, Channel: 228, Value: 31},
+					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 31}},
 				},
 				{
-					{Universe: 1, Channel: 228, Value: 63},
+					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 63}},
 				},
 				{
-					{Universe: 1, Channel: 228, Value: 127},
+					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 127}},
 				},
 				{
-					{Universe: 1, Channel: 228, Value: 255},
+					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 255}},
 				},
 			},
 			err: nil,
@@ -378,7 +388,9 @@ func TestRenderParams(t *testing.T) {
 			ds: []*cntl.DMXDevice{
 				ds.DMXDevices["4a545466-0b17-11e7-9c61-d3c0693099ab"],
 			},
-			p: cntl.DMXParams{Red: 255},
+			p: cntl.DMXParams{
+				Red: &cntl.DMXValue{Value: 255},
+			},
 			c: 1,
 		},
 		{
@@ -386,7 +398,11 @@ func TestRenderParams(t *testing.T) {
 				ds.DMXDevices["4a545466-0b17-11e7-9c61-d3c0693099ab"],
 				ds.DMXDevices["5e0335e0-0b17-11e7-ad6c-63a7138d926c"],
 			},
-			p: cntl.DMXParams{Red: 255, Green: 255, Blue: 255},
+			p: cntl.DMXParams{
+				Red:   &cntl.DMXValue{Value: 255},
+				Green: &cntl.DMXValue{Value: 255},
+				Blue:  &cntl.DMXValue{Value: 255},
+			},
 			c: 6,
 		},
 	}
@@ -417,16 +433,16 @@ func TestRenderAnimation(t *testing.T) {
 			a: ds.DMXAnimations["a51f7b2a-0e7b-11e7-bfc8-57da167865d7"],
 			c: []cntl.DMXCommands{
 				{
-					{Universe: 1, Channel: 228, Value: 31},
+					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 31}},
 				},
 				{
-					{Universe: 1, Channel: 228, Value: 63},
+					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 63}},
 				},
 				{
-					{Universe: 1, Channel: 228, Value: 127},
+					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 127}},
 				},
 				{
-					{Universe: 1, Channel: 228, Value: 255},
+					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 255}},
 				},
 			},
 		},

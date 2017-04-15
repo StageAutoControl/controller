@@ -4,6 +4,14 @@ import (
 	"github.com/StageAutoControl/controller/cntl"
 )
 
+var (
+	value31  = &cntl.DMXValue{31}
+	value63  = &cntl.DMXValue{63}
+	value127 = &cntl.DMXValue{127}
+	value200 = &cntl.DMXValue{200}
+	value255 = &cntl.DMXValue{255}
+)
+
 var data = &cntl.DataStore{
 	SetLists: map[string]*cntl.SetList{
 		"f5b4be8a-0b18-11e7-b837-4bac99d86956": {
@@ -39,8 +47,12 @@ var data = &cntl.DataStore{
 			Name: "Test-Preset 1",
 			DeviceParams: []*cntl.DMXDeviceParams{
 				{
-					Device: &cntl.DMXDeviceSelector{ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e"},
-					Params: &cntl.DMXParams{Red: 255},
+					Device: &cntl.DMXDeviceSelector{
+						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
+					},
+					Params: &cntl.DMXParams{
+						Red: value255,
+					},
 				},
 			}},
 		"11adf93e-0e7b-11e7-998c-5bd2bd0df396": {
@@ -51,7 +63,9 @@ var data = &cntl.DataStore{
 					Device: &cntl.DMXDeviceSelector{
 						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
 					},
-					Params: &cntl.DMXParams{Blue: 255},
+					Params: &cntl.DMXParams{
+						Blue: value255,
+					},
 				},
 			}},
 		"652e716a-0e7b-11e7-b92a-8f2ff28ba235": {
@@ -62,7 +76,9 @@ var data = &cntl.DataStore{
 					Device: &cntl.DMXDeviceSelector{
 						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
 					},
-					Params: &cntl.DMXParams{Green: 255},
+					Params: &cntl.DMXParams{
+						Green: value255,
+					},
 				},
 			}},
 
@@ -70,9 +86,12 @@ var data = &cntl.DataStore{
 			ID:   "5d3a415a-0b15-11e7-90b9-03c2b960e034",
 			Name: "Test-Preset 4",
 			DeviceParams: []*cntl.DMXDeviceParams{
-				{
-					Group:  &cntl.DMXDeviceGroupSelector{ID: "cb58bc10-0b16-11e7-b45a-7bee591b0adb"},
-					Params: &cntl.DMXParams{Strobe: 255},
+				{Group: &cntl.DMXDeviceGroupSelector{
+					ID: "cb58bc10-0b16-11e7-b45a-7bee591b0adb",
+				},
+					Params: &cntl.DMXParams{
+						Strobe: value255,
+					},
 				},
 			},
 		},
@@ -81,8 +100,10 @@ var data = &cntl.DataStore{
 			Name: "Test-Preset 5",
 			DeviceParams: []*cntl.DMXDeviceParams{
 				{
-					Group:  &cntl.DMXDeviceGroupSelector{ID: "475b71a0-0b16-11e7-9406-e3f678e8b788"},
-					Params: &cntl.DMXParams{Red: 200},
+					Group: &cntl.DMXDeviceGroupSelector{ID: "475b71a0-0b16-11e7-9406-e3f678e8b788"},
+					Params: &cntl.DMXParams{
+						Red: value200,
+					},
 				},
 			},
 		},
@@ -284,10 +305,10 @@ var data = &cntl.DataStore{
 			ID:     "a51f7b2a-0e7b-11e7-bfc8-57da167865d7",
 			Length: 4,
 			Frames: []*cntl.DMXAnimationFrame{
-				{At: 0, Params: cntl.DMXParams{LED: 1, Blue: 31}},
-				{At: 1, Params: cntl.DMXParams{LED: 1, Blue: 63}},
-				{At: 2, Params: cntl.DMXParams{LED: 1, Blue: 127}},
-				{At: 3, Params: cntl.DMXParams{LED: 1, Blue: 255}},
+				{At: 0, Params: cntl.DMXParams{LED: 1, Blue: value31}},
+				{At: 1, Params: cntl.DMXParams{LED: 1, Blue: value63}},
+				{At: 2, Params: cntl.DMXParams{LED: 1, Blue: value127}},
+				{At: 3, Params: cntl.DMXParams{LED: 1, Blue: value255}},
 			},
 		},
 	},

@@ -17,23 +17,24 @@ var (
 )
 
 // StreamlineScenes returns a map of frame -> scene that is easier to handle then a plain array
-func StreamlineScenes(ds *cntl.DataStore, s *cntl.Song) (map[uint64]*cntl.DMXScene, error) {
-	scs := make(map[uint64]*cntl.DMXScene)
+func StreamlineScenes(ds *cntl.DataStore, s *cntl.Song) (map[uint64][]*cntl.DMXScene, error) {
+	scs := make(map[uint64][]*cntl.DMXScene)
 	for _, sp := range s.DMXScenes {
 		sc, ok := ds.DMXScenes[sp.ID]
 		if !ok {
-			return map[uint64]*cntl.DMXScene{}, fmt.Errorf("Cannot find DMXScene %q", sp.ID)
+			return map[uint64][]*cntl.DMXScene{}, fmt.Errorf("Cannot find DMXScene %q", sp.ID)
 		}
 
-		scs[sp.At] = sc
+		l := CalcSceneLength(sc)
+		at := uint64(sp.At)
 
-		if sp.Repeat > 0 {
-			l := CalcSceneLength(sc)
-			at := uint64(sp.At)
-
-			for i := uint64(1); i <= uint64(sp.Repeat); i++ {
-				scs[at+i*l] = sc
+		for i := uint64(0); i <= uint64(sp.Repeat); i++ {
+			pos := at + i*l
+			if _, ok := scs[pos]; !ok {
+				scs[pos] = make([]*cntl.DMXScene, 0)
 			}
+
+			scs[pos] = append(scs[pos], sc)
 		}
 	}
 
@@ -195,34 +196,34 @@ func RenderDeviceParams(ds *cntl.DataStore, dp *cntl.DMXDeviceParams) ([]cntl.DM
 func RenderParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, p cntl.DMXParams) (cmds cntl.DMXCommands, err error) {
 	var channels cntl.DMXCommands
 
-	if p.Red > 0 {
+	if p.Red != nil {
 		channels = append(channels, cntl.DMXCommand{
 			Channel: ChannelRed,
-			Value:   p.Red,
+			Value:   *p.Red,
 		})
 	}
-	if p.Green > 0 {
+	if p.Green != nil {
 		channels = append(channels, cntl.DMXCommand{
 			Channel: ChannelGreen,
-			Value:   p.Green,
+			Value:   *p.Green,
 		})
 	}
-	if p.Blue > 0 {
+	if p.Blue != nil {
 		channels = append(channels, cntl.DMXCommand{
 			Channel: ChannelBlue,
-			Value:   p.Blue,
+			Value:   *p.Blue,
 		})
 	}
-	if p.Strobe > 0 {
+	if p.Strobe != nil {
 		channels = append(channels, cntl.DMXCommand{
 			Channel: ChannelStrobe,
-			Value:   p.Strobe,
+			Value:   *p.Strobe,
 		})
 	}
-	if p.Preset > 0 {
+	if p.Preset != nil {
 		channels = append(channels, cntl.DMXCommand{
 			Channel: ChannelMode,
-			Value:   p.Preset,
+			Value:   *p.Preset,
 		})
 	}
 
@@ -254,7 +255,23 @@ func RenderAnimation(ds *cntl.DataStore, dd []*cntl.DMXDevice, a *cntl.DMXAnimat
 
 		cmds[f.At] = append(cmds[f.At], ps...)
 	}
-
+	//
+	//for i, cmd := range cmds {
+	//	if i == 0 {
+	//		continue
+	//	}
+	//
+	//	for _, c := range cmds[i-1] {
+	//		if !cmd.ContainsChannel(c) {
+	//			cmds[i] = append(cmd, cntl.DMXCommand{
+	//				Universe: c.Universe,
+	//				Channel:  c.Channel,
+	//				Value:    0,
+	//			})
+	//		}
+	//	}
+	//}
+	//
 	return cmds, nil
 }
 

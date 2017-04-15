@@ -8,6 +8,21 @@ message DMXCommand {
     uint32 value = 3;
 }
 
-message DMXCommands {
-    repeated DMXCommand commands = 1;
+message MIDICommand {
+    uint32 channel = 1;
+    uint32 value = 2;
+}
+
+message BarChange {
+    uint64 at = 1;
+    uint32 noteValue = 2;
+    uint32 noteCount = 3;
+    uint32 speed = 4;
+}
+
+message Command {
+    repeated DMXCommand dmxCommands = 1;
+    repeated MIDICommand midiCommands = 2;
+    optional BarChange barChange = 3;
+    uint64 frame = 4;
 }

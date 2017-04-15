@@ -34,7 +34,7 @@ func (t *VisualizerTransport) Write(cmd cntl.Command) error {
 		cs.Commands[i] = &DMXCommand{
 			Universe: uint32(c.Universe),
 			Channel:  uint32(c.Channel),
-			Value:    uint32(c.Value),
+			Value:    uint32(c.Value.Value),
 		}
 	}
 

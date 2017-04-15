@@ -32,26 +32,30 @@ func Render(ds *cntl.DataStore, songID string) ([]cntl.Command, error) {
 			cs[i].BarChange = bc
 		}
 
-		if sc, ok := scs[i]; ok {
-			dcs, err := dmx.RenderScene(ds, sc)
-			if err != nil {
-				return []cntl.Command{}, err
-			}
-
-			for j, dc := range dcs {
-				if len(dc) == 0 {
-					continue
+		if scs, ok := scs[i]; ok {
+			for _, sc := range scs {
+				dcs, err := dmx.RenderScene(ds, sc)
+				if err != nil {
+					return []cntl.Command{}, err
 				}
 
-				cmdIndex := uint64(j) + i
+				fmt.Println(sc.ID, i, dcs)
 
-				if cmdIndex >= uint64(len(cs)) {
-					cs = append(cs, cntl.Command{DMXCommands: dc})
-				} else {
-					cs[cmdIndex].DMXCommands = append(
-						cs[cmdIndex].DMXCommands,
-						dc...,
-					)
+				for j, dc := range dcs {
+					if len(dc) == 0 {
+						continue
+					}
+
+					cmdIndex := uint64(j) + i
+
+					if cmdIndex >= uint64(len(cs)) {
+						cs = append(cs, cntl.Command{DMXCommands: dc})
+					} else {
+						cs[cmdIndex].DMXCommands = append(
+							cs[cmdIndex].DMXCommands,
+							dc...,
+						)
+					}
 				}
 			}
 		}

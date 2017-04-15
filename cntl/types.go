@@ -1,5 +1,7 @@
 package cntl
 
+import "encoding/json"
+
 // SongSelector is a ID selector for a song
 type SongSelector struct {
 	ID string `json:"id" yaml:"id"`
@@ -119,12 +121,12 @@ type DMXSubScene struct {
 
 // DMXParams is a DMX parameter object
 type DMXParams struct {
-	LED    uint16   `json:"led" yaml:"led"`
-	Red    DMXValue `json:"red" yaml:"red"`
-	Green  DMXValue `json:"green" yaml:"green"`
-	Blue   DMXValue `json:"blue" yaml:"blue"`
-	Strobe DMXValue `json:"strobe" yaml:"strobe"`
-	Preset DMXValue `json:"preset" yaml:"preset"`
+	LED    uint16    `json:"led" yaml:"led"`
+	Red    *DMXValue `json:"red" yaml:"red"`
+	Green  *DMXValue `json:"green" yaml:"green"`
+	Blue   *DMXValue `json:"blue" yaml:"blue"`
+	Strobe *DMXValue `json:"strobe" yaml:"strobe"`
+	Preset *DMXValue `json:"preset" yaml:"preset"`
 }
 
 // DMXAnimation is an animation of dmx params in relation to time
@@ -163,9 +165,14 @@ type DMXCommand struct {
 
 // Equals returns true if given DMXCommand is equal to the called one
 func (cmd DMXCommand) Equals(c DMXCommand) bool {
-	return cmd.Channel == c.Channel &&
-		cmd.Universe == c.Universe &&
+	return cmd.EqualsChannel(c) &&
 		cmd.Value == c.Value
+}
+
+// EqualsChannel returns true if given DMXCommand is equal to the called one in terms of channel and universe
+func (cmd DMXCommand) EqualsChannel(c DMXCommand) bool {
+	return cmd.Channel == c.Channel &&
+		cmd.Universe == c.Universe
 }
 
 // DMXCommands is an array of DMXCommands
@@ -175,6 +182,17 @@ type DMXCommands []DMXCommand
 func (cmds DMXCommands) Contains(c DMXCommand) bool {
 	for _, cmd := range cmds {
 		if cmd.Equals(c) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// ContainsChannel returns whether given DMXCommand's channel and universe is in the called collection
+func (cmds DMXCommands) ContainsChannel(c DMXCommand) bool {
+	for _, cmd := range cmds {
+		if cmd.EqualsChannel(c) {
 			return true
 		}
 	}
@@ -204,7 +222,31 @@ type DMXUniverse uint16
 type DMXChannel uint16
 
 // DMXValue is the value a DMX channel can represent (0-255)
-type DMXValue uint8
+type DMXValue struct {
+	Value uint8
+}
+
+// MarshalYAML encodes the value to YAML
+func (v *DMXValue) MarshalYAML() (interface{}, error) {
+	return v.Value, nil
+}
+
+// UnmarshalYAML takes the value from YAML
+func (v *DMXValue) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	if err := unmarshal(&v.Value); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (v *DMXValue) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.Value)
+}
+
+func (v *DMXValue) UnmarshalJSON(b []byte) error {
+	return json.Unmarshal(b, &v.Value)
+}
 
 // MIDICommand tells a MIDI controller to set a channel to a specific value
 type MIDICommand struct {

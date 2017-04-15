@@ -9,23 +9,23 @@ func TestDMXCommand_Equals(t *testing.T) {
 		equal bool
 	}{
 		{
-			cmd1:  DMXCommand{Universe: 1, Channel: 1, Value: 12},
-			cmd2:  DMXCommand{Universe: 1, Channel: 1, Value: 12},
+			cmd1:  DMXCommand{Universe: 1, Channel: 1, Value: DMXValue{12}},
+			cmd2:  DMXCommand{Universe: 1, Channel: 1, Value: DMXValue{12}},
 			equal: true,
 		},
 		{
-			cmd1:  DMXCommand{Universe: 2, Channel: 1, Value: 12},
-			cmd2:  DMXCommand{Universe: 1, Channel: 1, Value: 12},
+			cmd1:  DMXCommand{Universe: 2, Channel: 1, Value: DMXValue{12}},
+			cmd2:  DMXCommand{Universe: 1, Channel: 1, Value: DMXValue{12}},
 			equal: false,
 		},
 		{
-			cmd1:  DMXCommand{Universe: 1, Channel: 2, Value: 12},
-			cmd2:  DMXCommand{Universe: 1, Channel: 1, Value: 12},
+			cmd1:  DMXCommand{Universe: 1, Channel: 2, Value: DMXValue{12}},
+			cmd2:  DMXCommand{Universe: 1, Channel: 1, Value: DMXValue{12}},
 			equal: false,
 		},
 		{
-			cmd1:  DMXCommand{Universe: 1, Channel: 1, Value: 12},
-			cmd2:  DMXCommand{Universe: 1, Channel: 1, Value: 14},
+			cmd1:  DMXCommand{Universe: 1, Channel: 1, Value: DMXValue{12}},
+			cmd2:  DMXCommand{Universe: 1, Channel: 1, Value: DMXValue{14}},
 			equal: false,
 		},
 		{
@@ -50,32 +50,32 @@ func TestDMXCommands_Equals(t *testing.T) {
 		equal bool
 	}{
 		{
-			cmd1:  DMXCommands{{Universe: 1, Channel: 1, Value: 12}},
-			cmd2:  DMXCommands{{Universe: 1, Channel: 1, Value: 12}},
+			cmd1:  DMXCommands{{Universe: 1, Channel: 1, Value: DMXValue{12}}},
+			cmd2:  DMXCommands{{Universe: 1, Channel: 1, Value: DMXValue{12}}},
 			equal: true,
 		},
 		{
-			cmd1:  DMXCommands{{Universe: 2, Channel: 1, Value: 12}},
-			cmd2:  DMXCommands{{Universe: 1, Channel: 1, Value: 12}},
+			cmd1:  DMXCommands{{Universe: 2, Channel: 1, Value: DMXValue{12}}},
+			cmd2:  DMXCommands{{Universe: 1, Channel: 1, Value: DMXValue{12}}},
 			equal: false,
 		},
 		{
-			cmd1:  DMXCommands{{Universe: 1, Channel: 2, Value: 12}},
-			cmd2:  DMXCommands{{Universe: 1, Channel: 1, Value: 12}},
+			cmd1:  DMXCommands{{Universe: 1, Channel: 2, Value: DMXValue{12}}},
+			cmd2:  DMXCommands{{Universe: 1, Channel: 1, Value: DMXValue{12}}},
 			equal: false,
 		},
 		{
-			cmd1:  DMXCommands{{Universe: 1, Channel: 1, Value: 12}},
-			cmd2:  DMXCommands{{Universe: 1, Channel: 1, Value: 14}},
+			cmd1:  DMXCommands{{Universe: 1, Channel: 1, Value: DMXValue{12}}},
+			cmd2:  DMXCommands{{Universe: 1, Channel: 1, Value: DMXValue{14}}},
 			equal: false,
 		},
 		{
-			cmd1:  DMXCommands{{Universe: 1, Channel: 1, Value: 12}},
-			cmd2:  DMXCommands{{Universe: 1, Channel: 1, Value: 12}, {Universe: 1, Channel: 1, Value: 12}},
+			cmd1:  DMXCommands{{Universe: 1, Channel: 1, Value: DMXValue{12}}},
+			cmd2:  DMXCommands{{Universe: 1, Channel: 1, Value: DMXValue{12}}, {Universe: 1, Channel: 1, Value: DMXValue{12}}},
 			equal: false,
 		},
 		{
-			cmd1:  DMXCommands{{Universe: 1, Channel: 1, Value: 12}},
+			cmd1:  DMXCommands{{Universe: 1, Channel: 1, Value: DMXValue{12}}},
 			cmd2:  DMXCommands{},
 			equal: false,
 		},
@@ -102,37 +102,37 @@ func TestDMXCommands_Contains(t *testing.T) {
 		contains bool
 	}{
 		{
-			cmd1:     DMXCommands{{Universe: 1, Channel: 1, Value: 12}},
-			cmd2:     DMXCommand{Universe: 1, Channel: 1, Value: 12},
+			cmd1:     DMXCommands{{Universe: 1, Channel: 1, Value: DMXValue{12}}},
+			cmd2:     DMXCommand{Universe: 1, Channel: 1, Value: DMXValue{12}},
 			contains: true,
 		},
 		{
-			cmd1:     DMXCommands{{Universe: 2, Channel: 1, Value: 12}},
-			cmd2:     DMXCommand{Universe: 1, Channel: 1, Value: 12},
+			cmd1:     DMXCommands{{Universe: 2, Channel: 1, Value: DMXValue{12}}},
+			cmd2:     DMXCommand{Universe: 1, Channel: 1, Value: DMXValue{12}},
 			contains: false,
 		},
 		{
-			cmd1:     DMXCommands{{Universe: 1, Channel: 2, Value: 12}},
-			cmd2:     DMXCommand{Universe: 1, Channel: 1, Value: 12},
+			cmd1:     DMXCommands{{Universe: 1, Channel: 2, Value: DMXValue{12}}},
+			cmd2:     DMXCommand{Universe: 1, Channel: 1, Value: DMXValue{12}},
 			contains: false,
 		},
 		{
-			cmd1:     DMXCommands{{Universe: 1, Channel: 1, Value: 12}},
-			cmd2:     DMXCommand{Universe: 1, Channel: 1, Value: 14},
+			cmd1:     DMXCommands{{Universe: 1, Channel: 1, Value: DMXValue{12}}},
+			cmd2:     DMXCommand{Universe: 1, Channel: 1, Value: DMXValue{14}},
 			contains: false,
 		},
 		{
-			cmd1:     DMXCommands{{Universe: 1, Channel: 1, Value: 12}, {Universe: 1, Channel: 1, Value: 13}, {Universe: 1, Channel: 1, Value: 2}},
-			cmd2:     DMXCommand{Universe: 1, Channel: 1, Value: 12},
+			cmd1:     DMXCommands{{Universe: 1, Channel: 1, Value: DMXValue{12}}, {Universe: 1, Channel: 1, Value: DMXValue{13}}, {Universe: 1, Channel: 1, Value: DMXValue{2}}},
+			cmd2:     DMXCommand{Universe: 1, Channel: 1, Value: DMXValue{12}},
 			contains: true,
 		},
 		{
-			cmd1:     DMXCommands{{Universe: 1, Channel: 1, Value: 12}, {}},
+			cmd1:     DMXCommands{{Universe: 1, Channel: 1, Value: DMXValue{12}}, {}},
 			cmd2:     DMXCommand{},
 			contains: true,
 		},
 		{
-			cmd1:     DMXCommands{{Universe: 1, Channel: 1, Value: 12}},
+			cmd1:     DMXCommands{{Universe: 1, Channel: 1, Value: DMXValue{12}}},
 			cmd2:     DMXCommand{},
 			contains: false,
 		},

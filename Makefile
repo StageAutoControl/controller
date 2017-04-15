@@ -25,12 +25,12 @@ proto:
 
 start-visualizer: build
 	./controller playback \
-		--data-dir ~/src/github.com/apinnecke/omw-sac-data/ \
+		--data-dir "$${SAC_DATA_DIR}" \
 		--transport visualizer \
 		--visualizer-endpoint localhost:1337 \
 		some-song-uuid-2
 
 start-buffer: build
 	./controller playback \
-        --data-dir ~/src/github.com/apinnecke/omw-sac-data/ \
+        --data-dir "$${SAC_DATA_DIR}" \
         some-song-uuid-2

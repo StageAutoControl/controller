@@ -8,6 +8,8 @@ import (
 
 	"strings"
 
+	"log"
+
 	"github.com/StageAutoControl/controller/cntl"
 	"gopkg.in/yaml.v2"
 )
@@ -81,7 +83,7 @@ func (r *Repository) readDir(data *cntl.DataStore, dir string) (*cntl.DataStore,
 			break
 
 		default:
-			return nil, fmt.Errorf("Unable to load file %q. No loader for file extension %q known.", path, ext)
+			log.Printf("Unable to load file %q. No loader for file extension %q known.", path, ext)
 		}
 	}
 
