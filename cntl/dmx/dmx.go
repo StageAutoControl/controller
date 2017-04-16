@@ -9,11 +9,13 @@ import (
 
 // Render Errors
 var (
-	ErrGroupDeviceUnique     = errors.New("DMXDeviceParams can only have a group or a Device")
-	ErrGroupDeviceUnset      = errors.New("DMXDeviceParams must have either a group or a Device")
-	ErrParamsAnimationUnique = errors.New("DMXDeviceParams can only have an animation or Params")
-	ErrParamsAnimationUnset  = errors.New("DMXDeviceParams must have either an animation or Params")
-	ErrDeviceParamsNoDevices = errors.New("DMXDeviceParams matches no device")
+	ErrGroupDeviceUnique                 = errors.New("DMXDeviceParams can only have a group or a Device")
+	ErrGroupDeviceUnset                  = errors.New("DMXDeviceParams must have either a group or a Device")
+	ErrParamsAnimationUnique             = errors.New("DMXDeviceParams can only have an animation or Params")
+	ErrParamsAnimationUnset              = errors.New("DMXDeviceParams must have either an animation or Params")
+	ErrDeviceParamsNoDevices             = errors.New("DMXDeviceParams matches no device")
+	ErrDeviceSelectorMustHaveTagsOrID    = errors.New("DMXDeviceSelector must have either tags or an ID")
+	ErrDeviceSelectorCannotHaveTagsAndID = errors.New("DMXDeviceSelector cannot have tags and an ID")
 )
 
 // StreamlineScenes returns a map of frame -> scene that is easier to handle then a plain array
@@ -255,30 +257,14 @@ func RenderAnimation(ds *cntl.DataStore, dd []*cntl.DMXDevice, a *cntl.DMXAnimat
 
 		cmds[f.At] = append(cmds[f.At], ps...)
 	}
-	//
-	//for i, cmd := range cmds {
-	//	if i == 0 {
-	//		continue
-	//	}
-	//
-	//	for _, c := range cmds[i-1] {
-	//		if !cmd.ContainsChannel(c) {
-	//			cmds[i] = append(cmd, cntl.DMXCommand{
-	//				Universe: c.Universe,
-	//				Channel:  c.Channel,
-	//				Value:    0,
-	//			})
-	//		}
-	//	}
-	//}
-	//
+
 	return cmds, nil
 }
 
 // ResolveDeviceSelector returns all DMXDevices that match the given selector
-func ResolveDeviceSelector(ds *cntl.DataStore, sel *cntl.DMXDeviceSelector) (dd []*cntl.DMXDevice, err error) {
+func ResolveDeviceSelector(ds *cntl.DataStore, sel *cntl.DMXDeviceSelector) ([]*cntl.DMXDevice, error) {
 	if sel.ID != "" && len(sel.Tags) > 0 {
-
+		return []*cntl.DMXDevice{}, ErrDeviceSelectorCannotHaveTagsAndID
 	}
 
 	if sel.ID != "" {
@@ -286,12 +272,15 @@ func ResolveDeviceSelector(ds *cntl.DataStore, sel *cntl.DMXDeviceSelector) (dd 
 		if !ok {
 			return []*cntl.DMXDevice{}, fmt.Errorf("Unable to find device by id %q", sel.ID)
 		}
-		dd = append(dd, d)
+
+		return []*cntl.DMXDevice{d}, nil
 	}
 
-	dd = append(dd, ResolveDevicesByTags(ds, sel.Tags)...)
+	if len(sel.Tags) > 0 {
+		return ResolveDevicesByTags(ds, sel.Tags), nil
+	}
 
-	return
+	return []*cntl.DMXDevice{}, ErrDeviceSelectorMustHaveTagsOrID
 }
 
 // ResolveDevicesByTags returns all DMXDevices that match *all* of the given tags

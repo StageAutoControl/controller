@@ -39,8 +39,6 @@ func Render(ds *cntl.DataStore, songID string) ([]cntl.Command, error) {
 					return []cntl.Command{}, err
 				}
 
-				fmt.Println(sc.ID, i, dcs)
-
 				for j, dc := range dcs {
 					if len(dc) == 0 {
 						continue
