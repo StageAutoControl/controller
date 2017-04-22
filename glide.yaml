@@ -2,10 +2,11 @@ package: github.com/StageAutoControl/controller
 import:
 - package: github.com/cryptix/wav
 - package: github.com/spf13/cobra
-- package: gopkg.in/yaml.v2
 - package: github.com/satori/go.uuid
   version: ^1.1.0
 - package: github.com/golang/protobuf
   subpackages:
-    - proto
+  - proto
 - package: github.com/gorilla/websocket
+- package: github.com/gorilla/rpc
+  version: ^1.1.0

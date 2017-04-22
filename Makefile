@@ -3,7 +3,8 @@ PACKAGES:=$$(go list ./... | grep -v /vendor/)
 .phony: build test fmt
 
 build:
-	go build -o controller .
+	@mkdir -p bin
+	go build -o bin/controller .
 
 install:
 	@glide install --strip-vendor
@@ -23,14 +24,18 @@ test:
 proto:
 	protoc -I "cntl/transport" --go_out="cntl/transport" cntl/transport/dmx.proto
 
-start-visualizer: build
-	./controller playback \
+start-playback-visualizer: build
+	./bin/controller playback \
 		--data-dir "$${SAC_DATA_DIR}" \
 		--transport visualizer \
 		--visualizer-endpoint localhost:1337 \
-		some-song-uuid-2
+		"$${1}"
 
-start-buffer: build
-	./controller playback \
-        --data-dir "$${SAC_DATA_DIR}" \
-        some-song-uuid-2
+start-playback-buffer: build
+	./bin/controller playback \
+        	--data-dir "$${SAC_DATA_DIR}" \
+        	"$${1}"
+
+start-api: build
+	./bin/controller api \
+	--data-dir "$${SAC_DATA_DIR}"
