@@ -7,18 +7,24 @@ import (
 	"github.com/gorilla/rpc/v2/json"
 )
 
-func NewHandler() http.Handler {
+// NewHandler creates a new Gorilla RPC service handler and adds all our command handler
+func NewHandler(repo repo) http.Handler {
 	rpcServer := rpc.NewServer()
 	rpcServer.RegisterCodec(json.NewCodec(), "application/json")
 	rpcServer.RegisterCodec(json.NewCodec(), "application/json;charset=UTF-8")
 
-	var handlers = map[string]interface{}{
-		"SetList": &setListHandler{},
-	}
-
-	for name, handler := range handlers {
-		rpcServer.RegisterService(handler, name)
-	}
+	rpcServer.RegisterService(&setListHandler{repo}, "SetList")
 
 	return rpcServer
+}
+
+// NewRepoLockingHandler is a simple wrapper handler that cares about locking the
+// repo to prevent overrides or segmentation faults
+func NewRepoLockingHandler(repo repo, handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		repo.Lock()
+		defer repo.Unlock()
+
+		handler.ServeHTTP(rw, r)
+	})
 }
