@@ -14,21 +14,14 @@ import (
 )
 
 const (
-	directoryLoader = "directory"
-	databaseLoader  = "database"
-
 	bufferTransport     = "buffer"
 	visualizerTransport = "visualizer"
 	artNetTransport     = "art-net"
 )
 
 var (
-	loaders           = []string{directoryLoader, databaseLoader}
-	transports        = []string{bufferTransport, visualizerTransport, artNetTransport}
-	loaderType        string
 	transportType     string
 	viualizerEndpoint string
-	dataDir           string
 	songID            string
 )
 
@@ -100,9 +93,6 @@ var playbackCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(playbackCmd)
-
-	playbackCmd.PersistentFlags().StringVarP(&dataDir, "data-dir", "d", "", "Data directory to load (when loader is set to directory)")
-	playbackCmd.PersistentFlags().StringVarP(&loaderType, "loader", "l", directoryLoader, fmt.Sprintf("Which loader to use %s.", loaders))
 
 	playbackCmd.PersistentFlags().StringVarP(&transportType, "transport", "t", bufferTransport, fmt.Sprintf("Which transport to use %s.", transports))
 	playbackCmd.PersistentFlags().StringVar(&viualizerEndpoint, "visualizer-endpoint", "localhost:1337", "Endpoint of the visualizer backend if visualizer transport is chosen.")

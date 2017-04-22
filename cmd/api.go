@@ -8,7 +8,10 @@ import (
 	"net/http"
 	"os"
 
+	"log"
+
 	"github.com/StageAutoControl/controller/api"
+	"github.com/StageAutoControl/controller/database/files"
 	"github.com/spf13/cobra"
 )
 
@@ -23,9 +26,12 @@ var apiCmd = &cobra.Command{
 	Long:  `A JSON RPC server to manage the data handled by this controller.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		mux := http.NewServeMux()
-		handler := api.NewHandler()
+		repo := files.New(dataDir)
+
+		handler := api.NewRepoLockingHandler(repo, api.NewHandler(repo))
 		mux.Handle("/rpc", handler)
 
+		log.Printf("Starting api server at %s", apiListen)
 		if err := http.ListenAndServe(apiListen, mux); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
