@@ -10,6 +10,17 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+const (
+	fileNameSetLists        = "set_lists"
+	fileNameSongs           = "songs"
+	fileNameDmxDevices      = "dmx_devices"
+	fileNameDmxDeviceTypes  = "dmx_device_types"
+	fileNameDmxDeviceGroups = "dmx_device_groups"
+	fileNameDmxScenes       = "dmx_scenes"
+	fileNameDmxPresets      = "dmx_presets"
+	fileNameDmxAnimations   = "dmx_animations"
+)
+
 type fileData struct {
 	SetLists        []*cntl.SetList
 	Songs           []*cntl.Song
@@ -49,14 +60,14 @@ func (r *Repository) Load() (*cntl.DataStore, error) {
 
 func (r *Repository) readDir(data *fileData, dir string) error {
 	fileTargets := map[string]interface{}{
-		"set_lists":         &data.SetLists,
-		"songs":             &data.Songs,
-		"dmx_devices":       &data.DMXDevices,
-		"dmx_device_types":  &data.DMXDeviceTypes,
-		"dmx_device_groups": &data.DMXDeviceGroups,
-		"dmx_scenes":        &data.DMXScenes,
-		"dmx_presets":       &data.DMXPresets,
-		"dmx_animations":    &data.DMXAnimations,
+		fileNameSetLists:        &data.SetLists,
+		fileNameSongs:           &data.Songs,
+		fileNameDmxDevices:      &data.DMXDevices,
+		fileNameDmxDeviceTypes:  &data.DMXDeviceTypes,
+		fileNameDmxDeviceGroups: &data.DMXDeviceGroups,
+		fileNameDmxScenes:       &data.DMXScenes,
+		fileNameDmxPresets:      &data.DMXPresets,
+		fileNameDmxAnimations:   &data.DMXAnimations,
 	}
 
 	for fileName, target := range fileTargets {
