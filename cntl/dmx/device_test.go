@@ -1,9 +1,8 @@
 package dmx
 
 import (
-	"testing"
-
 	"errors"
+	"testing"
 
 	"github.com/StageAutoControl/controller/cntl"
 	"github.com/StageAutoControl/controller/fixtures"

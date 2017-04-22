@@ -5,10 +5,9 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
-
-	"log"
 
 	"github.com/StageAutoControl/controller/api"
 	"github.com/StageAutoControl/controller/database/files"
