@@ -26,6 +26,7 @@ func (b *BufferOutput) Write(cmd cntl.Command) error {
 	b.i++
 	return nil
 }
+
 func renderCommands(cmds cntl.DMXCommands) string {
 	s := make([]string, len(cmds))
 

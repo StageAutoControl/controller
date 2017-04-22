@@ -5,6 +5,8 @@ import (
 	"log"
 	"net"
 
+	"strings"
+
 	"github.com/StageAutoControl/controller/cntl"
 	"github.com/golang/protobuf/proto"
 )
@@ -57,5 +59,15 @@ func (t *VisualizerTransport) Write(cmd cntl.Command) error {
 }
 
 func (t *VisualizerTransport) debug(cs DMXCommands, b []byte) {
-	log.Printf("Sent %d commands to visualizer: %v", len(cs.Commands), b)
+	log.Printf("Sent %d commands to visualizer: %v", len(cs.Commands), renderDMXCommands(cs))
+}
+
+func renderDMXCommands(cmds DMXCommands) string {
+	s := make([]string, len(cmds.Commands))
+
+	for i, c := range cmds.Commands {
+		s[i] = fmt.Sprintf("%d:%d -> %d", c.Universe, c.Channel, c.Value)
+	}
+
+	return strings.Join(s, " | ")
 }
