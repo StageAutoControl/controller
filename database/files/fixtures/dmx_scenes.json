@@ -1,0 +1,79 @@
+[
+  {
+    "id": "492cef2e-0b14-11e7-be89-c3fa25f9cabb",
+    "name": "Test-Scene 1",
+    "noteCount": 4,
+    "noteValue": 4,
+    "subScenes": [
+      {
+        "at": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "preset": "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
+      }
+    ]
+  },
+  {
+    "id": "a44f8dee-0b14-11e7-b5b9-bf1015384192",
+    "name": "Test-Scene 2",
+    "noteCount": 2,
+    "noteValue": 4,
+    "subScenes": [
+      {
+        "at": [
+          0,
+          1
+        ],
+        "preset": "11adf93e-0e7b-11e7-998c-5bd2bd0df396"
+      }
+    ]
+  },
+  {
+    "id": "99b86a5e-0e7a-11e7-a01a-5b5fbdeba3d6",
+    "name": "Test-Scene 3",
+    "noteCount": 8,
+    "noteValue": 4,
+    "subScenes": [
+      {
+        "at": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "deviceParams": [
+          {
+            "animationId": "a51f7b2a-0e7b-11e7-bfc8-57da167865d7",
+            "device": {
+              "id": "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b82f4750-0e7a-11e7-9522-0f9d6d69958a",
+    "name": "Test-Scene 4",
+    "noteCount": 4,
+    "noteValue": 4,
+    "subScenes": [
+      {
+        "at": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "preset": "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
+      }
+    ]
+  }
+]

@@ -6,8 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"encoding/json"
+
 	"github.com/StageAutoControl/controller/cntl"
-	"gopkg.in/yaml.v2"
 )
 
 const (
@@ -71,7 +72,7 @@ func (r *Repository) readDir(data *fileData, dir string) error {
 	}
 
 	for fileName, target := range fileTargets {
-		file := filepath.Join(dir, fmt.Sprintf("%s.yml", fileName))
+		file := getFileName(dir, fileName)
 
 		if _, err := os.Stat(file); os.IsNotExist(err) {
 			return fmt.Errorf("Expected to find %q but does not exist.", file)
@@ -79,23 +80,39 @@ func (r *Repository) readDir(data *fileData, dir string) error {
 			return fmt.Errorf("Error checking file %q: %v", file, err)
 		}
 
-		if err := r.readYAMLFile(file, target); err != nil {
+		if err := r.readFile(file, target); err != nil {
 			return fmt.Errorf("Error reading file %q: %v", file, err)
 		}
 	}
 
 	return nil
 }
+func getFileName(dir, fileName string) string {
+	return filepath.Join(dir, fmt.Sprintf("%s.json", fileName))
+}
 
-func (r *Repository) readYAMLFile(path string, target interface{}) error {
-	b, err := ioutil.ReadFile(path)
+func (r *Repository) readFile(file string, target interface{}) error {
+	b, err := ioutil.ReadFile(file)
 	if err != nil {
-		return fmt.Errorf("Error reading file %q: %v", path, err)
+		return fmt.Errorf("Error reading file %q: %v", file, err)
 	}
 
-	err = yaml.Unmarshal(b, target)
+	err = json.Unmarshal(b, target)
 	if err != nil {
-		return fmt.Errorf("Unable to parse content of %q: %v", path, err)
+		return fmt.Errorf("Unable to parse content of %q: %v", file, err)
+	}
+
+	return nil
+}
+
+func (r *Repository) writeFile(file string, content interface{}) error {
+	b, err := json.MarshalIndent(content, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	if err := ioutil.WriteFile(file, b, 0755); err != nil {
+		return err
 	}
 
 	return nil
