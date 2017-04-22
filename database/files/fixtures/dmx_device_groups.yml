@@ -1,0 +1,16 @@
+- id: 475b71a0-0b16-11e7-9406-e3f678e8b788
+  name: All PARs on the left side
+  devices:
+    - tags:
+      - par
+      - left
+- id: 29f7adf8-0b17-11e7-bd45-9f82a70b477b
+  name: All PARs on the right side
+  devices:
+  - tags:
+    - par
+    - right
+- id: cb58bc10-0b16-11e7-b45a-7bee591b0adb
+  name: LED Bar infront the drums
+  devices:
+  - id: 35cae00a-0b17-11e7-8bca-bbf30c56f20e

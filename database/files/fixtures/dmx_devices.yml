@@ -1,0 +1,41 @@
+- id: 35cae00a-0b17-11e7-8bca-bbf30c56f20e
+  name: LED-Bar below drums front
+  typeId: 1555d67e-1187-11e7-8135-9b41038b5b75
+  universe: 1
+  startChannel: 222
+  tags: [bar, drums]
+
+- id: s429fc37c-0b17-11e7-8b94-c3b6519355d3
+  name: PAR inner left, stand 1 position 1
+  typeId: par
+  universe: 2
+  startChannel: 10
+  tags: [par, left, inner, stand, drums-left]
+
+- id: 4a545466-0b17-11e7-9c61-d3c0693099ab
+  name: PAR inner left, stand 1 position 2
+  typeId: par
+  universe: 2
+  startChannel: 14
+  tags: [par, left, inner, stand, drums-left]
+
+- id: 5e0335e0-0b17-11e7-ad6c-63a7138d926c
+  name: PAR inner right, stand 2 position 1
+  typeId: par
+  universe: 2
+  startChannel: 26
+  tags: [par, right, inner, stand, drums-right]
+
+- id: 620101f4-0b17-11e7-85cc-539952d9aef2
+  name: PAR inner right, stand 2 position 2
+  typeId: par
+  universe: 2
+  startChannel: 30
+  tags: [par, right, inner, stand, drums-right]
+
+- id: 6f7bca8a-0b17-11e7-b604-a356da737e54
+  name: Strobe Vocs
+  typeId: strobe
+  universe: 1
+  startChannel: 202
+  tags: [strobe-back, vocs]

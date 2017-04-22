@@ -1,28 +1,24 @@
 package files
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
-
-	"strings"
-
-	"log"
 
 	"github.com/StageAutoControl/controller/cntl"
 	"gopkg.in/yaml.v2"
 )
 
 type fileData struct {
-	SetLists        []*cntl.SetList        `json:"setLists" yaml:"setLists"`
-	Songs           []*cntl.Song           `json:"songs" yaml:"songs"`
-	DMXScenes       []*cntl.DMXScene       `json:"dmxScenes" yaml:"dmxScenes"`
-	DMXPresets      []*cntl.DMXPreset      `json:"dmxPresets" yaml:"dmxPresets"`
-	DMXAnimations   []*cntl.DMXAnimation   `json:"dmxAnimations" yaml:"dmxAnimations"`
-	DMXDevices      []*cntl.DMXDevice      `json:"dmxDevices" yaml:"dmxDevices"`
-	DMXDeviceTypes  []*cntl.DMXDeviceType  `json:"dmxDeviceTypes" yaml:"dmxDeviceTypes"`
-	DMXDeviceGroups []*cntl.DMXDeviceGroup `json:"dmxDeviceGroups" yaml:"dmxDeviceGroups"`
+	SetLists        []*cntl.SetList
+	Songs           []*cntl.Song
+	DMXScenes       []*cntl.DMXScene
+	DMXPresets      []*cntl.DMXPreset
+	DMXAnimations   []*cntl.DMXAnimation
+	DMXDevices      []*cntl.DMXDevice
+	DMXDeviceTypes  []*cntl.DMXDeviceType
+	DMXDeviceGroups []*cntl.DMXDeviceGroup
 }
 
 // Repository is a file repository
@@ -40,89 +36,61 @@ func New(dataDir string) *Repository {
 // Load implements cntl.Loader and loads the data from filesystem
 func (r *Repository) Load() (*cntl.DataStore, error) {
 	store := cntl.NewStore()
-	return r.readDir(store, r.dataDir)
-}
+	data := &fileData{}
 
-func (r *Repository) readDir(data *cntl.DataStore, dir string) (*cntl.DataStore, error) {
-	fs, err := ioutil.ReadDir(dir)
-	if err != nil {
+	if err := r.readDir(data, r.dataDir); err != nil {
 		return nil, err
 	}
 
-	for _, f := range fs {
-		if strings.HasPrefix(f.Name(), ".") {
-			continue
+	r.mergeData(store, data)
+
+	return store, nil
+}
+
+func (r *Repository) readDir(data *fileData, dir string) error {
+	fileTargets := map[string]interface{}{
+		"set_lists":         &data.SetLists,
+		"songs":             &data.Songs,
+		"dmx_devices":       &data.DMXDevices,
+		"dmx_device_types":  &data.DMXDeviceTypes,
+		"dmx_device_groups": &data.DMXDeviceGroups,
+		"dmx_scenes":        &data.DMXScenes,
+		"dmx_presets":       &data.DMXPresets,
+		"dmx_animations":    &data.DMXAnimations,
+	}
+
+	for fileName, target := range fileTargets {
+		file := filepath.Join(dir, fmt.Sprintf("%s.yml", fileName))
+
+		if _, err := os.Stat(file); os.IsNotExist(err) {
+			return fmt.Errorf("Expected to find %q but does not exist.", file)
+		} else if err != nil {
+			return fmt.Errorf("Error checking file %q: %v", file, err)
 		}
 
-		path := filepath.Join(dir, f.Name())
-		if f.IsDir() {
-			data, err = r.readDir(data, path)
-			if err != nil {
-				return nil, err
-			}
-
-			continue
-		}
-
-		ext := filepath.Ext(path)
-		switch ext {
-		case ".yml", ".yaml":
-			data, err = r.readYAMLFile(data, path)
-			if err != nil {
-				return nil, err
-			}
-
-			break
-
-		case ".json":
-			data, err = r.readJSONFile(data, path)
-			if err != nil {
-				return nil, err
-			}
-
-			break
-
-		default:
-			log.Printf("Unable to load file %q. No loader for file extension %q known.", path, ext)
+		if err := r.readYAMLFile(file, target); err != nil {
+			return fmt.Errorf("Error reading file %q: %v", file, err)
 		}
 	}
 
-	return data, nil
+	return nil
 }
 
-func (r *Repository) readJSONFile(data *cntl.DataStore, path string) (*cntl.DataStore, error) {
-	var fileData fileData
-
+func (r *Repository) readYAMLFile(path string, target interface{}) error {
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("Error reading file %q: %v", path, err)
+		return fmt.Errorf("Error reading file %q: %v", path, err)
 	}
 
-	err = json.Unmarshal(b, &fileData)
+	err = yaml.Unmarshal(b, target)
 	if err != nil {
-		return nil, fmt.Errorf("Unable to parse content of %q: %v", path, err)
+		return fmt.Errorf("Unable to parse content of %q: %v", path, err)
 	}
 
-	return r.mergeData(data, &fileData), nil
+	return nil
 }
 
-func (r *Repository) readYAMLFile(data *cntl.DataStore, path string) (*cntl.DataStore, error) {
-	var fileData fileData
-
-	b, err := ioutil.ReadFile(path)
-	if err != nil {
-		return nil, fmt.Errorf("Error reading file %q: %v", path, err)
-	}
-
-	err = yaml.Unmarshal(b, &fileData)
-	if err != nil {
-		return nil, fmt.Errorf("Unable to parse content of %q: %v", path, err)
-	}
-
-	return r.mergeData(data, &fileData), nil
-}
-
-func (r *Repository) mergeData(data *cntl.DataStore, fileData *fileData) *cntl.DataStore {
+func (r *Repository) mergeData(data *cntl.DataStore, fileData *fileData) {
 	for _, sl := range fileData.SetLists {
 		data.SetLists[sl.ID] = sl
 	}
@@ -154,6 +122,4 @@ func (r *Repository) mergeData(data *cntl.DataStore, fileData *fileData) *cntl.D
 	for _, a := range fileData.DMXAnimations {
 		data.DMXAnimations[a.ID] = a
 	}
-
-	return data
 }
