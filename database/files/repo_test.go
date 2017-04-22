@@ -1,10 +1,7 @@
 package files
 
 import (
-	"reflect"
 	"testing"
-
-	"fmt"
 
 	"github.com/StageAutoControl/controller/fixtures"
 )
@@ -96,16 +93,4 @@ func TestRepository_Load(t *testing.T) {
 		}
 	}
 
-}
-
-func compare(t *testing.T, key string, expected, actual interface{}, ok bool) {
-	if !ok {
-		t.Fatalf("Cannot find key %q in given data object", key)
-	}
-
-	if !reflect.DeepEqual(expected, actual) {
-		t.Fatalf("Given objects at key %q are not equal. Expected %#v, got %#v", key, expected, actual)
-	}
-
-	fmt.Printf("ID %q is equal \n", key)
 }
