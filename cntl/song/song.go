@@ -29,7 +29,7 @@ func Render(ds *cntl.DataStore, songID string) ([]cntl.Command, error) {
 	for i := uint64(0); i < s.Length; i++ {
 
 		if bc, ok := bcs[i]; ok {
-			cs[i].BarChange = bc
+			cs[i].BarChange = &bc
 		}
 
 		if scs, ok := scs[i]; ok {
@@ -62,8 +62,8 @@ func Render(ds *cntl.DataStore, songID string) ([]cntl.Command, error) {
 	return cs, nil
 }
 
-func streamlineBarChanges(s *cntl.Song) map[uint64]*cntl.BarChange {
-	bcs := make(map[uint64]*cntl.BarChange)
+func streamlineBarChanges(s *cntl.Song) map[uint64]cntl.BarChange {
+	bcs := make(map[uint64]cntl.BarChange)
 	for _, bc := range s.BarChanges {
 		bcs[bc.At] = bc
 	}

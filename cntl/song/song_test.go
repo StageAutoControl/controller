@@ -22,11 +22,11 @@ func TestStreamlineBarChanges(t *testing.T) {
 	ds := fixtures.DataStore()
 	exp := []struct {
 		s *cntl.Song
-		m map[uint64]*cntl.BarChange
+		m map[uint64]cntl.BarChange
 	}{
 		{
 			s: ds.Songs["3c1065c8-0b14-11e7-96eb-5b134621c411"],
-			m: map[uint64]*cntl.BarChange{
+			m: map[uint64]cntl.BarChange{
 				0:    {At: 0, NoteCount: 4, NoteValue: 4, Speed: 160},
 				512:  {At: 512, NoteCount: 3, NoteValue: 4},
 				1184: {At: 1184, NoteCount: 7, NoteValue: 8},
@@ -57,18 +57,18 @@ func TestStreamlineBarChanges(t *testing.T) {
 
 func TestCalcBarLength(t *testing.T) {
 	exp := []struct {
-		bc     *cntl.BarChange
+		bc     cntl.BarChange
 		length uint64
 	}{
-		{&cntl.BarChange{At: 0, NoteCount: 3, NoteValue: 4}, 24},
-		{&cntl.BarChange{At: 63, NoteCount: 12, NoteValue: 8}, 48},
-		{&cntl.BarChange{At: 10, NoteCount: 11, NoteValue: 4}, 88},
-		{&cntl.BarChange{At: 104, NoteCount: 4, NoteValue: 4}, 32},
-		{&cntl.BarChange{At: 5, NoteCount: 9, NoteValue: 8}, 36},
+		{cntl.BarChange{At: 0, NoteCount: 3, NoteValue: 4}, 24},
+		{cntl.BarChange{At: 63, NoteCount: 12, NoteValue: 8}, 48},
+		{cntl.BarChange{At: 10, NoteCount: 11, NoteValue: 4}, 88},
+		{cntl.BarChange{At: 104, NoteCount: 4, NoteValue: 4}, 32},
+		{cntl.BarChange{At: 5, NoteCount: 9, NoteValue: 8}, 36},
 	}
 
 	for i, e := range exp {
-		if l := CalcBarLength(e.bc); l != e.length {
+		if l := CalcBarLength(&e.bc); l != e.length {
 			t.Errorf("Expected to get length %d, got %d for index %d", e.length, l, i)
 		}
 	}

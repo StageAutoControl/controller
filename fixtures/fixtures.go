@@ -17,7 +17,7 @@ var data = &cntl.DataStore{
 		"f5b4be8a-0b18-11e7-b837-4bac99d86956": {
 			ID:   "f5b4be8a-0b18-11e7-b837-4bac99d86956",
 			Name: "Regular gig",
-			Songs: []*cntl.SongSelector{
+			Songs: []cntl.SongSelector{
 				{ID: "3c1065c8-0b14-11e7-96eb-5b134621c411"},
 			},
 		},
@@ -27,13 +27,13 @@ var data = &cntl.DataStore{
 			ID:     "3c1065c8-0b14-11e7-96eb-5b134621c411",
 			Name:   "Test song",
 			Length: 3200,
-			BarChanges: []*cntl.BarChange{
+			BarChanges: []cntl.BarChange{
 				{At: 0, NoteCount: 4, NoteValue: 4, Speed: 160},
 				{At: 512, NoteCount: 3, NoteValue: 4},
 				{At: 1184, NoteCount: 7, NoteValue: 8},
 				{At: 1632, NoteCount: 4, NoteValue: 4},
 			},
-			DMXScenes: []*cntl.ScenePosition{
+			DMXScenes: []cntl.ScenePosition{
 				{At: 0, ID: "492cef2e-0b14-11e7-be89-c3fa25f9cabb", Repeat: 4},
 				{At: 512, ID: "a44f8dee-0b14-11e7-b5b9-bf1015384192", Repeat: 3},
 				{At: 1408, ID: "99b86a5e-0e7a-11e7-a01a-5b5fbdeba3d6", Repeat: 2},
@@ -45,7 +45,7 @@ var data = &cntl.DataStore{
 		"0de258e0-0e7b-11e7-afd4-ebf6036983dc": {
 			ID:   "0de258e0-0e7b-11e7-afd4-ebf6036983dc",
 			Name: "Test-Preset 1",
-			DeviceParams: []*cntl.DMXDeviceParams{
+			DeviceParams: []cntl.DMXDeviceParams{
 				{
 					Device: &cntl.DMXDeviceSelector{
 						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
@@ -58,7 +58,7 @@ var data = &cntl.DataStore{
 		"11adf93e-0e7b-11e7-998c-5bd2bd0df396": {
 			ID:   "11adf93e-0e7b-11e7-998c-5bd2bd0df396",
 			Name: "Test-Preset 2",
-			DeviceParams: []*cntl.DMXDeviceParams{
+			DeviceParams: []cntl.DMXDeviceParams{
 				{
 					Device: &cntl.DMXDeviceSelector{
 						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
@@ -71,7 +71,7 @@ var data = &cntl.DataStore{
 		"652e716a-0e7b-11e7-b92a-8f2ff28ba235": {
 			ID:   "652e716a-0e7b-11e7-b92a-8f2ff28ba235",
 			Name: "Test-Preset 3",
-			DeviceParams: []*cntl.DMXDeviceParams{
+			DeviceParams: []cntl.DMXDeviceParams{
 				{
 					Device: &cntl.DMXDeviceSelector{
 						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
@@ -85,7 +85,7 @@ var data = &cntl.DataStore{
 		"5d3a415a-0b15-11e7-90b9-03c2b960e034": {
 			ID:   "5d3a415a-0b15-11e7-90b9-03c2b960e034",
 			Name: "Test-Preset 4",
-			DeviceParams: []*cntl.DMXDeviceParams{
+			DeviceParams: []cntl.DMXDeviceParams{
 				{Group: &cntl.DMXDeviceGroupSelector{
 					ID: "cb58bc10-0b16-11e7-b45a-7bee591b0adb",
 				},
@@ -98,7 +98,7 @@ var data = &cntl.DataStore{
 		"4e3c2e84-0b15-11e7-a076-4b5bbb4c19bf": {
 			ID:   "4e3c2e84-0b15-11e7-a076-4b5bbb4c19bf",
 			Name: "Test-Preset 5",
-			DeviceParams: []*cntl.DMXDeviceParams{
+			DeviceParams: []cntl.DMXDeviceParams{
 				{
 					Group: &cntl.DMXDeviceGroupSelector{ID: "475b71a0-0b16-11e7-9406-e3f678e8b788"},
 					Params: &cntl.DMXParams{
@@ -114,7 +114,7 @@ var data = &cntl.DataStore{
 			Name:      "Test-Scene 1",
 			NoteCount: 4,
 			NoteValue: 4,
-			SubScenes: []*cntl.DMXSubScene{
+			SubScenes: []cntl.DMXSubScene{
 				{
 					At:     []uint8{0, 1, 2, 3},
 					Preset: "0de258e0-0e7b-11e7-afd4-ebf6036983dc",
@@ -126,7 +126,7 @@ var data = &cntl.DataStore{
 			Name:      "Test-Scene 2",
 			NoteCount: 2,
 			NoteValue: 4,
-			SubScenes: []*cntl.DMXSubScene{
+			SubScenes: []cntl.DMXSubScene{
 				{
 					At:     []uint8{0, 1},
 					Preset: "11adf93e-0e7b-11e7-998c-5bd2bd0df396",
@@ -138,10 +138,10 @@ var data = &cntl.DataStore{
 			Name:      "Test-Scene 3",
 			NoteCount: 8,
 			NoteValue: 4,
-			SubScenes: []*cntl.DMXSubScene{
+			SubScenes: []cntl.DMXSubScene{
 				{
 					At: []uint8{0, 1, 2, 3, 4, 5, 6, 7},
-					DeviceParams: []*cntl.DMXDeviceParams{
+					DeviceParams: []cntl.DMXDeviceParams{
 						{
 							Device: &cntl.DMXDeviceSelector{
 								ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
@@ -157,7 +157,7 @@ var data = &cntl.DataStore{
 			Name:      "Test-Scene 4",
 			NoteCount: 4,
 			NoteValue: 4,
-			SubScenes: []*cntl.DMXSubScene{
+			SubScenes: []cntl.DMXSubScene{
 				{
 					At:     []uint8{0, 1, 2, 3},
 					Preset: "0de258e0-0e7b-11e7-afd4-ebf6036983dc",
@@ -169,7 +169,7 @@ var data = &cntl.DataStore{
 		"475b71a0-0b16-11e7-9406-e3f678e8b788": {
 			ID:   "475b71a0-0b16-11e7-9406-e3f678e8b788",
 			Name: "All PARs on the left side",
-			Devices: []*cntl.DMXDeviceSelector{
+			Devices: []cntl.DMXDeviceSelector{
 				{
 					Tags: []cntl.Tag{"par", "left"},
 				},
@@ -178,7 +178,7 @@ var data = &cntl.DataStore{
 		"29f7adf8-0b17-11e7-bd45-9f82a70b477b": {
 			ID:   "29f7adf8-0b17-11e7-bd45-9f82a70b477b",
 			Name: "All PARs on the right side",
-			Devices: []*cntl.DMXDeviceSelector{
+			Devices: []cntl.DMXDeviceSelector{
 				{
 					Tags: []cntl.Tag{"par", "right"},
 				},
@@ -187,7 +187,7 @@ var data = &cntl.DataStore{
 		"cb58bc10-0b16-11e7-b45a-7bee591b0adb": {
 			ID:   "cb58bc10-0b16-11e7-b45a-7bee591b0adb",
 			Name: "LED Bar infront the drums",
-			Devices: []*cntl.DMXDeviceSelector{
+			Devices: []cntl.DMXDeviceSelector{
 				{
 					ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
 				},
@@ -304,7 +304,7 @@ var data = &cntl.DataStore{
 		"a51f7b2a-0e7b-11e7-bfc8-57da167865d7": {
 			ID:     "a51f7b2a-0e7b-11e7-bfc8-57da167865d7",
 			Length: 4,
-			Frames: []*cntl.DMXAnimationFrame{
+			Frames: []cntl.DMXAnimationFrame{
 				{At: 0, Params: cntl.DMXParams{LED: 1, Blue: value31}},
 				{At: 1, Params: cntl.DMXParams{LED: 1, Blue: value63}},
 				{At: 2, Params: cntl.DMXParams{LED: 1, Blue: value127}},

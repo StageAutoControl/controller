@@ -77,7 +77,7 @@ func RenderScene(ds *cntl.DataStore, sc *cntl.DMXScene) ([]cntl.DMXCommands, err
 		}
 
 		for _, dp := range ss.DeviceParams {
-			dcs, err := RenderDeviceParams(ds, dp)
+			dcs, err := RenderDeviceParams(ds, &dp)
 			if err != nil {
 				return []cntl.DMXCommands{}, fmt.Errorf("Error rendering scene %q: %v", sc.ID, err)
 			}
@@ -98,7 +98,7 @@ func RenderScene(ds *cntl.DataStore, sc *cntl.DMXScene) ([]cntl.DMXCommands, err
 func RenderPreset(ds *cntl.DataStore, p *cntl.DMXPreset) ([]cntl.DMXCommands, error) {
 	var cmds []cntl.DMXCommands
 	for _, dp := range p.DeviceParams {
-		dpcs, err := RenderDeviceParams(ds, dp)
+		dpcs, err := RenderDeviceParams(ds, &dp)
 		if err != nil {
 			return []cntl.DMXCommands{}, fmt.Errorf("Error handling preset %q: %v", p.ID, err)
 		}
@@ -152,7 +152,7 @@ func RenderDeviceParams(ds *cntl.DataStore, dp *cntl.DMXDeviceParams) ([]cntl.DM
 		}
 
 		for _, sel := range g.Devices {
-			d, err := ResolveDeviceSelector(ds, sel)
+			d, err := ResolveDeviceSelector(ds, &sel)
 			if err != nil {
 				return []cntl.DMXCommands{}, err
 			}

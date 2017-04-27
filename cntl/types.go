@@ -9,9 +9,9 @@ type SongSelector struct {
 
 // SetList is a set of songs in a specific order
 type SetList struct {
-	ID    string          `json:"id" yaml:"id"`
-	Name  string          `json:"name" yaml:"name"`
-	Songs []*SongSelector `json:"songs" yaml:"songs"`
+	ID    string         `json:"id" yaml:"id"`
+	Name  string         `json:"name" yaml:"name"`
+	Songs []SongSelector `json:"songs" yaml:"songs"`
 }
 
 // BarChange describes the changes of tempo and notes during a song
@@ -31,12 +31,12 @@ type ScenePosition struct {
 
 // Song is the whole container for everything that needs to be controlled during a song.
 type Song struct {
-	ID              string             `json:"id" yaml:"id"`
-	Name            string             `json:"name" yaml:"name"`
-	Length          uint64             `json:"length" yaml:"length"`
-	BarChanges      []*BarChange       `json:"barChanges" yaml:"barChanges"`
-	DMXScenes       []*ScenePosition   `json:"dmxScenes" yaml:"dmxScenes"`
-	DMXDeviceParams []*DMXDeviceParams `json:"dmxDeviceParams" yaml:"dmxDeviceParams"`
+	ID              string            `json:"id" yaml:"id"`
+	Name            string            `json:"name" yaml:"name"`
+	Length          uint64            `json:"length" yaml:"length"`
+	BarChanges      []BarChange       `json:"barChanges" yaml:"barChanges"`
+	DMXScenes       []ScenePosition   `json:"dmxScenes" yaml:"dmxScenes"`
+	DMXDeviceParams []DMXDeviceParams `json:"dmxDeviceParams" yaml:"dmxDeviceParams"`
 }
 
 // Tag is a string literal tagging a DMX device
@@ -90,9 +90,9 @@ type DMXDeviceGroupSelector struct {
 
 // DMXDeviceGroup is a DMX device group
 type DMXDeviceGroup struct {
-	ID      string               `json:"id" yaml:"id"`
-	Name    string               `json:"name" yaml:"name"`
-	Devices []*DMXDeviceSelector `json:"devices" yaml:"devices"`
+	ID      string              `json:"id" yaml:"id"`
+	Name    string              `json:"name" yaml:"name"`
+	Devices []DMXDeviceSelector `json:"devices" yaml:"devices"`
 }
 
 // DMXDeviceParams is an object storing DMX parameters including the selection of either groups or devices
@@ -105,18 +105,18 @@ type DMXDeviceParams struct {
 
 // DMXScene is a whole light scene
 type DMXScene struct {
-	ID        string         `json:"id" yaml:"id"`
-	Name      string         `json:"name" yaml:"name"`
-	NoteValue uint8          `json:"noteValue" yaml:"noteValue"`
-	NoteCount uint8          `json:"noteCount" yaml:"noteCount"`
-	SubScenes []*DMXSubScene `json:"subScenes" yaml:"subScenes"`
+	ID        string        `json:"id" yaml:"id"`
+	Name      string        `json:"name" yaml:"name"`
+	NoteValue uint8         `json:"noteValue" yaml:"noteValue"`
+	NoteCount uint8         `json:"noteCount" yaml:"noteCount"`
+	SubScenes []DMXSubScene `json:"subScenes" yaml:"subScenes"`
 }
 
 // DMXSubScene is a sub scene of a light scene
 type DMXSubScene struct {
-	At           []uint8            `json:"at" yaml:"at"`
-	DeviceParams []*DMXDeviceParams `json:"deviceParams" yaml:"deviceParams"`
-	Preset       string             `json:"preset" yaml:"preset"`
+	At           []uint8           `json:"at" yaml:"at"`
+	DeviceParams []DMXDeviceParams `json:"deviceParams" yaml:"deviceParams"`
+	Preset       string            `json:"preset" yaml:"preset"`
 }
 
 // DMXParams is a DMX parameter object
@@ -131,9 +131,9 @@ type DMXParams struct {
 
 // DMXAnimation is an animation of dmx params in relation to time
 type DMXAnimation struct {
-	ID     string               `json:"id" yaml:"id"`
-	Length uint8                `json:"length" yaml:"length"`
-	Frames []*DMXAnimationFrame `json:"frames" yaml:"frames"`
+	ID     string              `json:"id" yaml:"id"`
+	Length uint8               `json:"length" yaml:"length"`
+	Frames []DMXAnimationFrame `json:"frames" yaml:"frames"`
 }
 
 // DMXAnimationFrame is a single frame in an animation
@@ -144,9 +144,9 @@ type DMXAnimationFrame struct {
 
 // DMXPreset is a DMX Preet for devices or device groups
 type DMXPreset struct {
-	ID           string             `json:"id" yaml:"id"`
-	Name         string             `json:"name" yaml:"name"`
-	DeviceParams []*DMXDeviceParams `json:"deviceParams" yaml:"deviceParams"`
+	ID           string            `json:"id" yaml:"id"`
+	Name         string            `json:"name" yaml:"name"`
+	DeviceParams []DMXDeviceParams `json:"deviceParams" yaml:"deviceParams"`
 }
 
 // Command is a container to set settings
@@ -240,12 +240,19 @@ func (v *DMXValue) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	return nil
 }
 
+// MarshalJSON converts the value to a json byte array
 func (v *DMXValue) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.Value)
 }
 
+// UnmarshalJSON sets the value from a json byte array
 func (v *DMXValue) UnmarshalJSON(b []byte) error {
 	return json.Unmarshal(b, &v.Value)
+}
+
+// Equals returns whether the two given objects are equal
+func (v *DMXValue) Equals(v2 *DMXValue) bool {
+	return v != nil && v2 != nil && v.Value == v2.Value
 }
 
 // MIDICommand tells a MIDI controller to set a channel to a specific value
