@@ -11,6 +11,7 @@ import (
 
 	"github.com/StageAutoControl/controller/api"
 	"github.com/StageAutoControl/controller/database/files"
+	"github.com/gorilla/handlers"
 	"github.com/spf13/cobra"
 )
 
@@ -30,8 +31,20 @@ var apiCmd = &cobra.Command{
 		handler := api.NewRepoLockingHandler(repo, api.NewHandler(repo))
 		mux.Handle("/rpc", handler)
 
+		h := handlers.CORS(
+			handlers.AllowCredentials(),
+			handlers.AllowedHeaders([]string{"Accept", "Accept-Language", "Content-Language", "Origin", "Content-Type", "Authorization"}),
+			handlers.AllowedMethods([]string{"HEAD", "POST"}),
+			handlers.AllowedOrigins([]string{"*"}),
+		)(mux)
+
+		// Add Logging middleware
+		h = handlers.LoggingHandler(os.Stdout, h)
+		// Add recovery handler to fetch panics
+		h = handlers.RecoveryHandler(handlers.PrintRecoveryStack(true))(h)
+
 		log.Printf("Starting api server at %s", apiListen)
-		if err := http.ListenAndServe(apiListen, mux); err != nil {
+		if err := http.ListenAndServe(apiListen, h); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}

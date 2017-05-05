@@ -10,3 +10,5 @@ import:
 - package: github.com/gorilla/websocket
 - package: github.com/gorilla/rpc
   version: ^1.1.0
+- package: github.com/gorilla/handlers
+  version: ^1.2.0

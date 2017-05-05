@@ -9,6 +9,11 @@ import (
 // EmptyRequest is used e.g. for Get request where no args need to be passed.
 type EmptyRequest struct{}
 
+// IDRequest is a request just containing the ID of something.
+type IDRequest struct {
+	ID string `json:"id"`
+}
+
 // BaseResponse is the basic response for all handlers. Might be extended for detailed responses.
 type BaseResponse struct {
 	Message string      `json:"message"`
