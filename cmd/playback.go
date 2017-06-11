@@ -60,9 +60,9 @@ var playbackCmd = &cobra.Command{
 			len(data.SetLists), len(data.Songs), len(data.DMXScenes), len(data.DMXPresets), len(data.DMXAnimations),
 			len(data.DMXDeviceTypes), len(data.DMXDeviceGroups), len(data.DMXDevices))
 
-		s, ok := data.Songs[songID]
+		_, ok := data.Songs[songID]
 		if !ok {
-			fmt.Printf("Unable to find song %q.\n", s)
+			fmt.Printf("Unable to find song %q.\n", songID)
 			os.Exit(1)
 		}
 

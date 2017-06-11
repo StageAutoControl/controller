@@ -1,4 +1,4 @@
-PACKAGES:=$$(go list ./... | grep -v /vendor/)
+PACKAGES:=$(go list ./... | grep -v /vendor/)
 
 .phony: build test fmt
 
@@ -26,16 +26,16 @@ proto:
 
 start-playback-visualizer: build
 	./bin/controller playback \
-		--data-dir "$${SAC_DATA_DIR}" \
+		--data-dir "${SAC_DATA_DIR}" \
 		--transport visualizer \
 		--visualizer-endpoint localhost:1337 \
-		"$${1}"
+		"${SONG}"
 
 start-playback-buffer: build
 	./bin/controller playback \
-        	--data-dir "$${SAC_DATA_DIR}" \
-        	"$${1}"
+        	--data-dir "${SAC_DATA_DIR}" \
+        	"${SONG}"
 
 start-api: build
 	./bin/controller api \
-	--data-dir "$${SAC_DATA_DIR}"
+	--data-dir "${SAC_DATA_DIR}"

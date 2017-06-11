@@ -32,18 +32,20 @@ func NewVisualizerTransport(endpoint string) (*VisualizerTransport, error) {
 
 // Write writes to the visualizer stream
 func (t *VisualizerTransport) Write(cmd cntl.Command) error {
-	cs := DMXCommands{
-		Commands: make([]*DMXCommand, len(cmd.DMXCommands)),
+	transportCommand := Command{
+		DmxCommands:  make([]*DMXCommand, len(cmd.DMXCommands)),
+		MidiCommands: make([]*MIDICommand, len(cmd.MIDICommands)),
+		BarChange:    convertBarChange(cmd.BarChange),
 	}
 	for i, c := range cmd.DMXCommands {
-		cs.Commands[i] = &DMXCommand{
+		transportCommand.DmxCommands[i] = &DMXCommand{
 			Universe: uint32(c.Universe),
 			Channel:  uint32(c.Channel),
 			Value:    uint32(c.Value.Value),
 		}
 	}
 
-	b, err := proto.Marshal(&cs)
+	b, err := proto.Marshal(&transportCommand)
 	if err != nil {
 		return err
 	}
@@ -56,21 +58,41 @@ func (t *VisualizerTransport) Write(cmd cntl.Command) error {
 		return fmt.Errorf("Did not sent anything, sent %d bytes.", n)
 	}
 
-	go t.debug(cs, b)
+	go t.debug(transportCommand, b)
 
 	return nil
 }
 
-func (t *VisualizerTransport) debug(cs DMXCommands, b []byte) {
-	log.Printf("Sent %d commands to visualizer: %v", len(cs.Commands), renderDMXCommands(cs))
+func convertBarChange(bc *cntl.BarChange) *BarChange {
+	if bc == nil {
+		return nil
+	}
+	return &BarChange{
+		At:        bc.At,
+		NoteCount: uint32(bc.NoteCount),
+		NoteValue: uint32(bc.NoteValue),
+		Speed:     uint32(bc.Speed),
+	}
 }
 
-func renderDMXCommands(cmds DMXCommands) string {
-	s := make([]string, len(cmds.Commands))
+func (t *VisualizerTransport) debug(cs Command, b []byte) {
+	log.Printf("Sent %d commands to visualizer: %v", len(cs.DmxCommands), renderDMXCommands(cs))
+}
 
-	for i, c := range cmds.Commands {
+func renderDMXCommands(cmds Command) string {
+	s := make([]string, len(cmds.DmxCommands))
+
+	for i, c := range cmds.DmxCommands {
 		s[i] = fmt.Sprintf("%d:%d -> %d", c.Universe, c.Channel, c.Value)
 	}
 
-	return strings.Join(s, " | ")
+	return fmt.Sprintf("%s --> %s", renderBarChange(cmds.BarChange), strings.Join(s, " | "))
+}
+
+func renderBarChange(bc *BarChange) string {
+	if bc == nil {
+		return strings.Repeat(" ", 20)
+	}
+
+	return fmt.Sprintf("%19s", fmt.Sprintf("#%d %d/%d @%d bpm", bc.At, bc.NoteCount, bc.NoteValue, bc.Speed))
 }
