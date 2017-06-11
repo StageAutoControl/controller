@@ -1,16 +1,16 @@
-hash: 822667b8ea3c712ae177df1fecde09d613693378f6afaa424fcb6ec32fafa1cd
-updated: 2017-04-27T05:55:56.013991947+02:00
+hash: 220d069b2818917811c87268ad6844fe4ff46c9d9bb8a34431248aaec2a1a623
+updated: 2017-06-11T22:48:09.073363926+02:00
 imports:
 - name: github.com/cryptix/wav
-  version: 844d399d120cec9249623f557ba69cf4d3bf8664
+  version: e5b9c2887ea0fa9da1438557242bf5993d56ddab
 - name: github.com/fsnotify/fsnotify
   version: 4da3e2cfbabc9f751898f250b49f2439785783a1
 - name: github.com/golang/protobuf
-  version: 2bba0603135d7d7f5cb73b2125beeda19c09f4ef
+  version: 5a0f697c9ed9d68fef0116532c6e05cfeae00e55
   subpackages:
   - proto
 - name: github.com/gorilla/handlers
-  version: 3a5767ca75ece5f7f1440b1d16975247f8d8b221
+  version: a4043c62cc2329bacda331d33fc908ab11ef0ec3
 - name: github.com/gorilla/rpc
   version: 22c016f3df3febe0c1f6727598b6389507e03a18
   subpackages:
@@ -19,7 +19,7 @@ imports:
 - name: github.com/gorilla/websocket
   version: a91eba7f97777409bc2c443f5534d41dd20c5720
 - name: github.com/hashicorp/hcl
-  version: 7fa7fff964d035e8a162cce3a164b3ad02ad651b
+  version: 392dba7d905ed5d04a5794ba89f558b27e2ba1ca
   subpackages:
   - hcl/ast
   - hcl/parser
@@ -34,11 +34,13 @@ imports:
 - name: github.com/magiconair/properties
   version: 51463bfca2576e06c62a8504b5c0f06d61312647
 - name: github.com/mitchellh/mapstructure
-  version: cc8532a8e9a55ea36402aa21efdf403a60d34096
+  version: d0303fe809921458f417bcf828397a65db30a7e4
 - name: github.com/pelletier/go-buffruneio
   version: c37440a7cf42ac63b919c752ca73a85067e05992
 - name: github.com/pelletier/go-toml
-  version: fe206efb84b2bc8e8cfafe6b4c1826622be969e3
+  version: fe7536c3dee2596cdd23ee9976a17c22bdaae286
+- name: github.com/rakyll/portmidi
+  version: f2d84c90f80a19a07149e9694787df6285ee6fd1
 - name: github.com/satori/go.uuid
   version: 879c5887cd475cd7864858769793b2ceb0d44feb
 - name: github.com/spf13/afero
@@ -48,22 +50,22 @@ imports:
 - name: github.com/spf13/cast
   version: acbeb36b902d72a7a4c18e8f3241075e7ab763e4
 - name: github.com/spf13/cobra
-  version: fcd0c5a1df88f5d6784cb4feead962c3f3d0b66c
+  version: d7cfb134748502f60bc1797cd26fcc3e4eb4b927
 - name: github.com/spf13/jwalterweatherman
-  version: fa7ca7e836cf3a8bb4ebf799f472c12d7e903d66
+  version: 0efa5202c04663c757d84f90f5219c1250baf94f
 - name: github.com/spf13/pflag
-  version: 314c91c3e94238576bab29cbcdd44b57ab8e0d39
+  version: e57e3eeb33f795204c1ca35f56c44f83227c6e66
 - name: github.com/spf13/viper
-  version: 0967fc9aceab2ce9da34061253ac10fb99bba5b2
+  version: a1ecfa6a20bd4ef9e9caded262ee1b1b26847675
 - name: golang.org/x/sys
-  version: d75a52659825e75fff6158388dddc6a5b04f9ba5
+  version: 0b25a408a50076fbbcae6b7ac0ea5fbb0b085e79
   subpackages:
   - unix
 - name: golang.org/x/text
-  version: a9a820217f98f7c8a207ec1e45a874e1fe12c478
+  version: 210eee5cf7323015d097341bcf7166130d001cd8
   subpackages:
   - transform
   - unicode/norm
 - name: gopkg.in/yaml.v2
-  version: a3f3340b5840cee44f372bddb5880fcbc419b46a
+  version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
 testImports: []
