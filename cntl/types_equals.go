@@ -161,3 +161,52 @@ func (v1 DMXPreset) Equals(v2 DMXPreset) bool {
 		v1.Name == v2.Name &&
 		dmxDeviceParamsList(v1.DeviceParams).Equals(dmxDeviceParamsList(v2.DeviceParams))
 }
+
+// Contains returns whether given DMXCommand is in the called collection
+func (cmds DMXCommands) Contains(c DMXCommand) bool {
+	for _, cmd := range cmds {
+		if cmd.Equals(c) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// ContainsChannel returns whether given DMXCommand's channel and universe is in the called collection
+func (cmds DMXCommands) ContainsChannel(c DMXCommand) bool {
+	for _, cmd := range cmds {
+		if cmd.EqualsChannel(c) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// Equals returns true when both the called and the given one have the same entries without caring for order
+func (cmds DMXCommands) Equals(c DMXCommands) bool {
+	if len(cmds) != len(c) {
+		return false
+	}
+
+	for _, cmd := range cmds {
+		if !c.Contains(cmd) {
+			return false
+		}
+	}
+
+	return true
+}
+
+// Equals returns true if given DMXCommand is equal to the called one
+func (cmd DMXCommand) Equals(c DMXCommand) bool {
+	return cmd.EqualsChannel(c) &&
+		cmd.Value == c.Value
+}
+
+// EqualsChannel returns true if given DMXCommand is equal to the called one in terms of channel and universe
+func (cmd DMXCommand) EqualsChannel(c DMXCommand) bool {
+	return cmd.Channel == c.Channel &&
+		cmd.Universe == c.Universe
+}

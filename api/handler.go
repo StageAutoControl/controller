@@ -14,6 +14,14 @@ func NewHandler(repo repo) http.Handler {
 	rpcServer.RegisterCodec(json.NewCodec(), "application/json;charset=UTF-8")
 
 	rpcServer.RegisterService(&setListHandler{repo}, "SetList")
+	rpcServer.RegisterService(&songHandler{repo}, "Song")
+
+	rpcServer.RegisterService(&dmxAnimationHandler{repo}, "DMXAnimation")
+	rpcServer.RegisterService(&dmxDeviceHandler{repo}, "DMXDevice")
+	rpcServer.RegisterService(&dmxDeviceGroupHandler{repo}, "DMXDeviceGroup")
+	rpcServer.RegisterService(&dmxDeviceTypeHandler{repo}, "DMXDeviceType")
+	rpcServer.RegisterService(&dmxPresetHandler{repo}, "DMXPreset")
+	rpcServer.RegisterService(&dmxSceneHandler{repo}, "DMXScene")
 
 	return rpcServer
 }

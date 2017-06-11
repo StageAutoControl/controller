@@ -16,9 +16,14 @@ func TestNewHandler(t *testing.T) {
 
 	t.Run("Has all methods", func(t *testing.T) {
 		methods := map[string][]string{
-			"SetList": {
-				"GetAll", "Get", "Create", "Update", "Delete",
-			},
+			"SetList":        {"GetAll", "Get", "Create", "Update", "Delete"},
+			"Song":           {"GetAll", "Get", "Create", "Update", "Delete"},
+			"DMXAnimation":   {"GetAll", "Get", "Create", "Update", "Delete"},
+			"DMXDevice":      {"GetAll", "Get", "Create", "Update", "Delete"},
+			"DMXDeviceGroup": {"GetAll", "Get", "Create", "Update", "Delete"},
+			"DMXDeviceType":  {"GetAll", "Get", "Create", "Update", "Delete"},
+			"DMXPreset":      {"GetAll", "Get", "Create", "Update", "Delete"},
+			"DMXScene":       {"GetAll", "Get", "Create", "Update", "Delete"},
 		}
 
 		for obj, ms := range methods {
