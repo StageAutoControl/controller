@@ -23,6 +23,6 @@ message BarChange {
 message Command {
     repeated DMXCommand dmxCommands = 1;
     repeated MIDICommand midiCommands = 2;
-    optional BarChange barChange = 3;
-    uint64 frame = 4;
+    BarChange barChange = 3;
+    required uint64 frame = 4;
 }

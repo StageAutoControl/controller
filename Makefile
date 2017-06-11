@@ -16,7 +16,7 @@ fmt:
 	@go fmt $(PACKAGES)
 
 lint:
-	@golint ./... | grep -vE "vendor" || printf ""
+	@golint ./... | grep -vE "vendor|\.pb\.go" || printf ""
 
 test:
 	@go test ${PACKAGES}

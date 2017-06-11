@@ -11,11 +11,13 @@ import (
 	"github.com/golang/protobuf/proto"
 )
 
+// VisualizerTransport is a writer to the visualizer tool
 type VisualizerTransport struct {
 	endpoint string
 	socket   net.Conn
 }
 
+// NewVisualizerTransport creates a new VisualizerTransport
 func NewVisualizerTransport(endpoint string) (*VisualizerTransport, error) {
 	socket, err := net.Dial("tcp", endpoint)
 	if err != nil {
@@ -28,6 +30,7 @@ func NewVisualizerTransport(endpoint string) (*VisualizerTransport, error) {
 	}, nil
 }
 
+// Write writes to the visualizer stream
 func (t *VisualizerTransport) Write(cmd cntl.Command) error {
 	cs := DMXCommands{
 		Commands: make([]*DMXCommand, len(cmd.DMXCommands)),

@@ -9,7 +9,7 @@ build:
     - glide-install
 
     - golint:
-      exclude: vendor
+      exclude: vendor|\.pb\.go
 
     - script:
         name: go test

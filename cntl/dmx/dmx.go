@@ -114,7 +114,7 @@ func Merge(cmds []cntl.DMXCommands, cs []cntl.DMXCommands) []cntl.DMXCommands {
 	return MergeAtOffset(cmds, cs, 0)
 }
 
-// Merge merges two arrays of DMXCommands after a given offset
+// MergeAtOffset merges two arrays of DMXCommands after a given offset
 func MergeAtOffset(cmds []cntl.DMXCommands, cs []cntl.DMXCommands, offset int) []cntl.DMXCommands {
 	for i, cs := range cs {
 		index := i + offset

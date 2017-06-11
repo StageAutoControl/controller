@@ -6,7 +6,7 @@ import (
 	"github.com/StageAutoControl/controller/cntl"
 )
 
-// OutputWriter is a writer to an output stream, for example a websocket or Stdout.
+// TransportWriter is a writer to an output stream, for example a websocket or Stdout.
 type TransportWriter interface {
 	Write(cntl.Command) error
 }
@@ -60,6 +60,7 @@ func (p *Player) PlayAll(songID string) error {
 	return nil
 }
 
+// CalcRenderSpeed calculates the render speed of a BarChange to a time.Duration
 func CalcRenderSpeed(bc *cntl.BarChange) time.Duration {
 	return time.Minute / time.Duration(bc.Speed*uint16(bc.NoteValue)/4) / time.Duration(cntl.RenderFrames/bc.NoteValue)
 }
