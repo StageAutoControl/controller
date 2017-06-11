@@ -1,5 +1,5 @@
-hash: 220d069b2818917811c87268ad6844fe4ff46c9d9bb8a34431248aaec2a1a623
-updated: 2017-06-11T22:48:09.073363926+02:00
+hash: d308a4e9b7c5f5b4a67962f69241723aa4c2e5f61bbc364f52c052f3a8061148
+updated: 2017-06-11T23:39:23.691078688+02:00
 imports:
 - name: github.com/cryptix/wav
   version: e5b9c2887ea0fa9da1438557242bf5993d56ddab
@@ -31,6 +31,12 @@ imports:
   - json/token
 - name: github.com/inconshreveable/mousetrap
   version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
+- name: github.com/jsimonetti/go-artnet
+  version: 1ce577b05b8e9fc7266cd969ef975a52e606e961
+  subpackages:
+  - packet
+  - packet/code
+  - version
 - name: github.com/magiconair/properties
   version: 51463bfca2576e06c62a8504b5c0f06d61312647
 - name: github.com/mitchellh/mapstructure
@@ -39,10 +45,10 @@ imports:
   version: c37440a7cf42ac63b919c752ca73a85067e05992
 - name: github.com/pelletier/go-toml
   version: fe7536c3dee2596cdd23ee9976a17c22bdaae286
-- name: github.com/rakyll/portmidi
-  version: f2d84c90f80a19a07149e9694787df6285ee6fd1
 - name: github.com/satori/go.uuid
   version: 879c5887cd475cd7864858769793b2ceb0d44feb
+- name: github.com/Sirupsen/logrus
+  version: 85b1699d505667d13f8ac4478c1debbf85d6c5de
 - name: github.com/spf13/afero
   version: 9be650865eab0c12963d8753212f4f9c66cdcf12
   subpackages:

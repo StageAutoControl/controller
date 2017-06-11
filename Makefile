@@ -1,10 +1,8 @@
-PACKAGES:=$(go list ./... | grep -v /vendor/)
+PACKAGES:=$$(go list ./... | grep -v /vendor/)
 
-.phony: build test fmt
+.PHONY: build build build-arm build-linux build-docker test fmt all
 
-build:
-	@mkdir -p bin
-	go build -o bin/controller .
+all: build-all
 
 install:
 	@glide install --strip-vendor
@@ -19,23 +17,44 @@ lint:
 	@golint ./... | grep -vE "vendor|\.pb\.go" || printf ""
 
 test:
-	@go test ${PACKAGES}
+	go test -v $(PACKAGES)
 
 proto:
 	protoc -I "cntl/transport" --go_out="cntl/transport" cntl/transport/dmx.proto
 
-start-playback-visualizer: build
-	./bin/controller playback \
+start-playback-visualizer: build-darwin
+	./bin/controller_darwin playback \
 		--data-dir "${SAC_DATA_DIR}" \
 		--transport visualizer \
 		--visualizer-endpoint localhost:1337 \
 		"${SONG}"
 
-start-playback-buffer: build
-	./bin/controller playback \
+start-playback-buffer: build-darwin
+	./bin/controller_darwin playback \
         	--data-dir "${SAC_DATA_DIR}" \
+			--transport buffer \
         	"${SONG}"
 
-start-api: build
-	./bin/controller api \
+start-playback-artnet: build-darwin
+	./bin/controller_darwin playback \
+        	--data-dir "${SAC_DATA_DIR}" \
+			--transport artnet \
+        	"${SONG}"
+
+start-api: build-darwin
+	./bin/controller_darwin api \
 	--data-dir "${SAC_DATA_DIR}"
+
+build-all: build-darwin build-arm build-linux build-docker
+
+build-darwin:
+	go build -o bin/controller_darwin .
+
+build-linux: 
+	GOOS=linux CGO_ENABLED=0 go build -a -ldflags '-s' -installsuffix cgo -o bin/controller_linux .
+
+build-arm:
+	GOOS=linux GOARCH=arm GOARM=6 CGO_ENABLED=0 go build -a -ldflags '-s' -installsuffix cgo -o bin/controller_arm .
+
+build-docker: build-linux
+	docker build -t stageautocontrol/controller .

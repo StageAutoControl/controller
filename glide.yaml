@@ -13,3 +13,5 @@ import:
 - package: github.com/gorilla/handlers
   version: ^1.2.0
 - package: github.com/rakyll/portmidi
+  package: github.com/jsimonetti/go-artnet
+  version: 1ce577b05b8e9fc7266cd969ef975a52e606e961

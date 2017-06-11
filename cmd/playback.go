@@ -16,10 +16,11 @@ import (
 const (
 	bufferTransport     = "buffer"
 	visualizerTransport = "visualizer"
-	artNetTransport     = "art-net"
+	artnetTransport     = "artnet"
 )
 
 var (
+	transports        = []string{bufferTransport, visualizerTransport, artnetTransport}
 	transportType     string
 	viualizerEndpoint string
 	songID            string
@@ -74,6 +75,13 @@ var playbackCmd = &cobra.Command{
 
 		case visualizerTransport:
 			writer, err = transport.NewVisualizerTransport(viualizerEndpoint)
+			if err != nil {
+				fmt.Printf("Unable to connect to the visualizer: %v \n", err)
+				os.Exit(1)
+			}
+
+		case artnetTransport:
+			writer, err = transport.NewArtNet("stage-auto-control")
 			if err != nil {
 				fmt.Printf("Unable to connect to the visualizer: %v \n", err)
 				os.Exit(1)

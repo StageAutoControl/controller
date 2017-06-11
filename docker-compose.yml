@@ -1,0 +1,16 @@
+version: "2"
+services:
+  controller:
+    image: stageautocontrol/controller
+    build: .
+    command: ["artnet-test"]
+#    ports:
+#      - 6454
+
+networks:
+    default:
+        driver: bridge
+        ipam:
+          driver: default
+          config:
+            - subnet: 2.0.0.0/8

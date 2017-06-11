@@ -3,6 +3,7 @@
 package main
 
 import "github.com/StageAutoControl/controller/cmd"
+import _ "github.com/StageAutoControl/controller/cmd/artnet"
 
 func main() {
 	cmd.Execute()

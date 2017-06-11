@@ -30,3 +30,8 @@ func (v *DMXValue) UnmarshalJSON(b []byte) error {
 func (v *DMXValue) Equals(v2 *DMXValue) bool {
 	return v != nil && v2 != nil && v.Value == v2.Value
 }
+
+// Byte returns the byte representation of the value
+func (v *DMXValue) Byte() byte {
+	return byte(v.Value)
+}

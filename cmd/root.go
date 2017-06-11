@@ -17,7 +17,6 @@ const (
 
 var (
 	loaders    = []string{directoryLoader, databaseLoader}
-	transports = []string{bufferTransport, visualizerTransport, artNetTransport}
 	loaderType string
 	dataDir    string
 	cfgFile    string
