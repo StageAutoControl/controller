@@ -17,10 +17,11 @@ const (
 	bufferTransport     = "buffer"
 	visualizerTransport = "visualizer"
 	artnetTransport     = "artnet"
+	midiTransport       = "midi"
 )
 
 var (
-	transports        = []string{bufferTransport, visualizerTransport, artnetTransport}
+	transports        = []string{bufferTransport, visualizerTransport, artnetTransport, midiTransport}
 	transportTypes    []string
 	viualizerEndpoint string
 	songID            string
@@ -71,29 +72,40 @@ var playbackCmd = &cobra.Command{
 		for _, transportType := range transportTypes {
 			switch transportType {
 			case bufferTransport:
-				writers = append(writers, transport.NewBufferTransport(os.Stdout))
+				writers = append(writers, transport.NewBuffer(os.Stdout))
 				break
 
 			case visualizerTransport:
-				w, err := transport.NewVisualizerTransport(viualizerEndpoint)
+				w, err := transport.NewVisualizer(viualizerEndpoint)
 				if err != nil {
 					fmt.Printf("Unable to connect to the visualizer: %v \n", err)
 					os.Exit(1)
 				}
 
 				writers = append(writers, w)
+				break
 
 			case artnetTransport:
 				w, err := transport.NewArtNet("stage-auto-control")
 				if err != nil {
 					fmt.Printf("Unable to connect to the visualizer: %v \n", err)
+				}
+
+				writers = append(writers, w)
+				break
+
+			case midiTransport:
+				w, err := transport.NewMIDI("")
+				if err != nil {
+					fmt.Printf("Unable to connect to midi device: %v \n", err)
 					os.Exit(1)
 				}
 
 				writers = append(writers, w)
+				break
 
 			default:
-				fmt.Printf("Transport %q is not supported. \n", transportTypes)
+				fmt.Printf("Transport %q is not supported. \n", transportType)
 				os.Exit(1)
 			}
 		}

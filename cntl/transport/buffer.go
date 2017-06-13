@@ -9,19 +9,19 @@ import (
 	"github.com/StageAutoControl/controller/cntl"
 )
 
-// BufferOutput is an output channel that can render to a buffer
-type BufferOutput struct {
+// Buffer is an output channel that can render to a buffer
+type Buffer struct {
 	w io.Writer
 	i uint64
 }
 
-// NewBufferTransport returns a new BufferOutput instance
-func NewBufferTransport(w io.Writer) *BufferOutput {
-	return &BufferOutput{w, 0}
+// NewBuffer returns a new Buffer instance
+func NewBuffer(w io.Writer) *Buffer {
+	return &Buffer{w, 0}
 }
 
 // Write writes to the buffer
-func (b *BufferOutput) Write(cmd cntl.Command) error {
+func (b *Buffer) Write(cmd cntl.Command) error {
 	fmt.Fprintf(b.w, "%d %+v, %+v, %s\n", b.i, cmd.BarChange, cmd.MIDICommands, renderCommands(cmd.DMXCommands))
 	b.i++
 	return nil

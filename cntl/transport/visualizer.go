@@ -11,41 +11,41 @@ import (
 	"github.com/golang/protobuf/proto"
 )
 
-// VisualizerTransport is a writer to the visualizer tool
-type VisualizerTransport struct {
+// Visualizer is a writer to the visualizer tool
+type Visualizer struct {
 	endpoint string
 	socket   net.Conn
 }
 
-// NewVisualizerTransport creates a new VisualizerTransport
-func NewVisualizerTransport(endpoint string) (*VisualizerTransport, error) {
+// NewVisualizer creates a new Visualizer
+func NewVisualizer(endpoint string) (*Visualizer, error) {
 	socket, err := net.Dial("tcp", endpoint)
 	if err != nil {
 		return nil, err
 	}
 
-	return &VisualizerTransport{
+	return &Visualizer{
 		socket:   socket,
 		endpoint: endpoint,
 	}, nil
 }
 
 // Write writes to the visualizer stream
-func (t *VisualizerTransport) Write(cmd cntl.Command) error {
-	transportCommand := Command{
+func (t *Visualizer) Write(cmd cntl.Command) error {
+	tc := Command{
 		DmxCommands:  make([]*DMXCommand, len(cmd.DMXCommands)),
 		MidiCommands: make([]*MIDICommand, len(cmd.MIDICommands)),
 		BarChange:    convertBarChange(cmd.BarChange),
 	}
 	for i, c := range cmd.DMXCommands {
-		transportCommand.DmxCommands[i] = &DMXCommand{
+		tc.DmxCommands[i] = &DMXCommand{
 			Universe: uint32(c.Universe),
 			Channel:  uint32(c.Channel),
 			Value:    uint32(c.Value.Value),
 		}
 	}
 
-	b, err := proto.Marshal(&transportCommand)
+	b, err := proto.Marshal(&tc)
 	if err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func (t *VisualizerTransport) Write(cmd cntl.Command) error {
 		return fmt.Errorf("Did not sent anything, sent %d bytes.", n)
 	}
 
-	go t.debug(transportCommand, b)
+	go t.debug(tc, b)
 
 	return nil
 }
@@ -75,7 +75,7 @@ func convertBarChange(bc *cntl.BarChange) *BarChange {
 	}
 }
 
-func (t *VisualizerTransport) debug(cs Command, b []byte) {
+func (t *Visualizer) debug(cs Command, b []byte) {
 	log.Printf("Sent %d commands to visualizer: %v", len(cs.DmxCommands), renderDMXCommands(cs))
 }
 
