@@ -32,7 +32,11 @@ start-playback-visualizer: build-darwin
 start-playback-buffer: build-darwin
 	./bin/controller_darwin playback \
         	--data-dir "${SAC_DATA_DIR}" \
+<<<<<<< HEAD
 			--transport buffer \
+=======
+        	--transport buffer \
+>>>>>>> feat(player): Make player multi transport aware
         	"${SONG}"
 
 start-playback-artnet: build-darwin

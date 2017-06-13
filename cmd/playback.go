@@ -21,7 +21,7 @@ const (
 
 var (
 	transports        = []string{bufferTransport, visualizerTransport, artnetTransport}
-	transportType     string
+	transportTypes    []string
 	viualizerEndpoint string
 	songID            string
 )
@@ -67,32 +67,37 @@ var playbackCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		var writer song.TransportWriter
-		switch transportType {
-		case bufferTransport:
-			writer = transport.NewBufferTransport(os.Stdout)
-			break
+		var writers []song.TransportWriter
+		for _, transportType := range transportTypes {
+			switch transportType {
+			case bufferTransport:
+				writers = append(writers, transport.NewBufferTransport(os.Stdout))
+				break
 
-		case visualizerTransport:
-			writer, err = transport.NewVisualizerTransport(viualizerEndpoint)
-			if err != nil {
-				fmt.Printf("Unable to connect to the visualizer: %v \n", err)
+			case visualizerTransport:
+				w, err := transport.NewVisualizerTransport(viualizerEndpoint)
+				if err != nil {
+					fmt.Printf("Unable to connect to the visualizer: %v \n", err)
+					os.Exit(1)
+				}
+
+				writers = append(writers, w)
+
+			case artnetTransport:
+				w, err := transport.NewArtNet("stage-auto-control")
+				if err != nil {
+					fmt.Printf("Unable to connect to the visualizer: %v \n", err)
+					os.Exit(1)
+				}
+
+				writers = append(writers, w)
+
+			default:
+				fmt.Printf("Transport %q is not supported. \n", transportTypes)
 				os.Exit(1)
 			}
-
-		case artnetTransport:
-			writer, err = transport.NewArtNet("stage-auto-control")
-			if err != nil {
-				fmt.Printf("Unable to connect to the visualizer: %v \n", err)
-				os.Exit(1)
-			}
-
-		default:
-			fmt.Printf("Transport %q is not supported. \n", transportType)
-			os.Exit(1)
 		}
-
-		player := song.NewPlayer(data, writer)
+		player := song.NewPlayer(data, writers)
 		if err = player.PlayAll(songID); err != nil {
 			panic(err)
 		}
@@ -102,6 +107,6 @@ var playbackCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(playbackCmd)
 
-	playbackCmd.PersistentFlags().StringVarP(&transportType, "transport", "t", bufferTransport, fmt.Sprintf("Which transport to use %s.", transports))
+	playbackCmd.PersistentFlags().StringSliceVarP(&transportTypes, "transport", "t", []string{bufferTransport}, fmt.Sprintf("Which transports to use from %s.", transports))
 	playbackCmd.PersistentFlags().StringVar(&viualizerEndpoint, "visualizer-endpoint", "localhost:1337", "Endpoint of the visualizer backend if visualizer transport is chosen.")
 }

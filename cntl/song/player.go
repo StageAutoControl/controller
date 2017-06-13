@@ -14,12 +14,12 @@ type TransportWriter interface {
 // Player plays various things from a given data store, for example songs or whole set lists.
 type Player struct {
 	ds *cntl.DataStore
-	w  TransportWriter
+	ws []TransportWriter
 }
 
 // NewPlayer returns a new Player instance
-func NewPlayer(ds *cntl.DataStore, w TransportWriter) *Player {
-	return &Player{ds, w}
+func NewPlayer(ds *cntl.DataStore, ws []TransportWriter) *Player {
+	return &Player{ds, ws}
 }
 
 // Play plays a given length of a song
@@ -51,13 +51,19 @@ func (p *Player) PlayAll(songID string) error {
 				t = time.NewTicker(CalcRenderSpeed(cmd.BarChange))
 			}
 
-			go p.w.Write(cmd)
+			go p.write(cmd)
 
 			i++
 		}
 	}
 
 	return nil
+}
+
+func (p *Player) write(cmd cntl.Command) {
+	for _, w := range p.ws {
+		go w.Write(cmd)
+	}
 }
 
 // CalcRenderSpeed calculates the render speed of a BarChange to a time.Duration
