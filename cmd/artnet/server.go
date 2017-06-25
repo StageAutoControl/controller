@@ -11,15 +11,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/StageAutoControl/controller/cmd"
 	artnetTransport "github.com/StageAutoControl/controller/cntl/transport/artnet"
 	"github.com/jsimonetti/go-artnet"
 	"github.com/spf13/cobra"
 )
 
-// ArtNetServer represents the ArtNetTest command
-var ArtNetServer = &cobra.Command{
-	Use:   "artnet-server",
+// Server represents the ArtNetTest command
+var Server = &cobra.Command{
+	Use:   "server",
 	Short: "ArtNet server to test network communication",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -68,5 +67,5 @@ var ArtNetServer = &cobra.Command{
 }
 
 func init() {
-	cmd.RootCmd.AddCommand(ArtNetServer)
+	ArtNetCmd.AddCommand(Server)
 }

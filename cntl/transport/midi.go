@@ -1,15 +1,34 @@
 package transport
 
-import "github.com/StageAutoControl/controller/cntl"
+import (
+	"log"
 
+	"github.com/StageAutoControl/controller/cntl"
+	"github.com/rakyll/portmidi"
+)
+
+// MIDI is a transport that sends MIDI signals using portmidi.
 type MIDI struct {
-	device string
+	deviceID portmidi.DeviceID
 }
 
-func NewMIDI(device string) (*MIDI, error) {
-	return &MIDI{device}, nil
+// NewMIDI creates a new MIDI transport
+func NewMIDI(deviceID portmidi.DeviceID) (*MIDI, error) {
+	portmidi.Initialize()
+
+	if deviceID == 0 {
+		deviceID = portmidi.DefaultOutputDeviceID()
+	}
+
+	info := portmidi.Info(deviceID)
+	if info == nil {
+		log.Fatal("Unable to read default output device")
+	}
+
+	return &MIDI{deviceID}, nil
 }
 
+// Write writes MIDI signals to portmidi
 func (m *MIDI) Write(cmd cntl.Command) error {
 	if len(cmd.MIDICommands) == 0 {
 		return nil
@@ -25,5 +44,6 @@ func (m *MIDI) Write(cmd cntl.Command) error {
 }
 
 func (m *MIDI) send(c cntl.MIDICommand) error {
+
 	return nil
 }

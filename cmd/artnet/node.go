@@ -11,16 +11,15 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/StageAutoControl/controller/cmd"
 	artnetTransport "github.com/StageAutoControl/controller/cntl/transport/artnet"
 	"github.com/jsimonetti/go-artnet"
 	"github.com/jsimonetti/go-artnet/packet/code"
 	"github.com/spf13/cobra"
 )
 
-// ArtNetNode represents the ArtNetTest command
-var ArtNetNode = &cobra.Command{
-	Use:   "artnet-node",
+// Node represents the ArtNetTest command
+var Node = &cobra.Command{
+	Use:   "node",
 	Short: "ArtNet node to test network communication",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -55,5 +54,5 @@ var ArtNetNode = &cobra.Command{
 }
 
 func init() {
-	cmd.RootCmd.AddCommand(ArtNetNode)
+	ArtNetCmd.AddCommand(Node)
 }

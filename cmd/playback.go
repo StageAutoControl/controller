@@ -10,6 +10,7 @@ import (
 	"github.com/StageAutoControl/controller/cntl/song"
 	"github.com/StageAutoControl/controller/cntl/transport"
 	"github.com/StageAutoControl/controller/database/files"
+	"github.com/rakyll/portmidi"
 	"github.com/spf13/cobra"
 )
 
@@ -25,6 +26,7 @@ var (
 	transportTypes    []string
 	viualizerEndpoint string
 	songID            string
+	deviceID          int
 )
 
 // playbackCmd represents the playback command
@@ -95,7 +97,7 @@ var playbackCmd = &cobra.Command{
 				break
 
 			case midiTransport:
-				w, err := transport.NewMIDI("")
+				w, err := transport.NewMIDI(portmidi.DeviceID(deviceID))
 				if err != nil {
 					fmt.Printf("Unable to connect to midi device: %v \n", err)
 					os.Exit(1)
@@ -121,4 +123,5 @@ func init() {
 
 	playbackCmd.PersistentFlags().StringSliceVarP(&transportTypes, "transport", "t", []string{bufferTransport}, fmt.Sprintf("Which transports to use from %s.", transports))
 	playbackCmd.PersistentFlags().StringVar(&viualizerEndpoint, "visualizer-endpoint", "localhost:1337", "Endpoint of the visualizer backend if visualizer transport is chosen.")
+	playbackCmd.PersistentFlags().IntVarP(&deviceID, "device-id", "d", 0, "DeviceID of MIDI output to use (On empty string the default device is used)")
 }
