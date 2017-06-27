@@ -51,19 +51,15 @@ func (p *Player) PlayAll(songID string) error {
 				t = time.NewTicker(CalcRenderSpeed(cmd.BarChange))
 			}
 
-			go p.write(cmd)
+			for _, w := range p.ws {
+				go w.Write(cmd)
+			}
 
 			i++
 		}
 	}
 
 	return nil
-}
-
-func (p *Player) write(cmd cntl.Command) {
-	for _, w := range p.ws {
-		go w.Write(cmd)
-	}
 }
 
 // CalcRenderSpeed calculates the render speed of a BarChange to a time.Duration

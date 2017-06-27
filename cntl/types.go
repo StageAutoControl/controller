@@ -35,6 +35,7 @@ type Song struct {
 	BarChanges      []BarChange       `json:"barChanges" yaml:"barChanges"`
 	DMXScenes       []ScenePosition   `json:"dmxScenes" yaml:"dmxScenes"`
 	DMXDeviceParams []DMXDeviceParams `json:"dmxDeviceParams" yaml:"dmxDeviceParams"`
+	MIDICommands    []MIDICommand     `json:"midiCommands" yaml:"midiCommands"`
 }
 
 // Tag is a string literal tagging a DMX device
@@ -178,8 +179,10 @@ type DMXValue struct {
 
 // MIDICommand tells a MIDI controller to set a channel to a specific value
 type MIDICommand struct {
-	Channel uint8 `json:"channel" yaml:"channel"`
-	Value   uint8 `json:"value" yaml:"value"`
+	At     uint64 `json:"at" yaml:"at"`
+	Status uint8  `json:"status" yaml:"status"`
+	Data1  uint8  `json:"data1" yaml:"data1"`
+	Data2  uint8  `json:"data2" yaml:"data2"`
 }
 
 // MIDICommands is an array of MIDICommands

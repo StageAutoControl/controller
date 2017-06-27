@@ -4,13 +4,13 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/StageAutoControl/controller/cntl"
 	"github.com/StageAutoControl/controller/cntl/song"
 	"github.com/StageAutoControl/controller/cntl/transport"
 	"github.com/StageAutoControl/controller/database/files"
-	"github.com/rakyll/portmidi"
 	"github.com/spf13/cobra"
 )
 
@@ -26,7 +26,7 @@ var (
 	transportTypes    []string
 	viualizerEndpoint string
 	songID            string
-	deviceID          int
+	midiDeviceID      string
 )
 
 // playbackCmd represents the playback command
@@ -45,6 +45,7 @@ var playbackCmd = &cobra.Command{
 		var loader cntl.Loader
 		switch loaderType {
 		case directoryLoader:
+			fmt.Printf("Loading data directoy %q ... \n", dataDir)
 			loader = files.New(dataDir)
 		case databaseLoader:
 			//loader = database.New(),
@@ -57,18 +58,20 @@ var playbackCmd = &cobra.Command{
 
 		data, err := loader.Load()
 		if err != nil {
-			panic(fmt.Errorf("Failed to load %q data: %v", loaderType, err))
+			panic(fmt.Errorf("Failed to load data from %q: %v", loaderType, err))
 		}
 
 		fmt.Printf("Loaded %d set lists, %d songs, %d scenes, %d presets %d animations, %d device types, %d device groups and %d devices\n",
 			len(data.SetLists), len(data.Songs), len(data.DMXScenes), len(data.DMXPresets), len(data.DMXAnimations),
 			len(data.DMXDeviceTypes), len(data.DMXDeviceGroups), len(data.DMXDevices))
 
-		_, ok := data.Songs[songID]
+		s, ok := data.Songs[songID]
 		if !ok {
 			fmt.Printf("Unable to find song %q.\n", songID)
 			os.Exit(1)
 		}
+
+		log.Printf("Playing song %q (%s) ...", s.Name, songID)
 
 		var writers []song.TransportWriter
 		for _, transportType := range transportTypes {
@@ -91,13 +94,14 @@ var playbackCmd = &cobra.Command{
 				w, err := transport.NewArtNet("stage-auto-control")
 				if err != nil {
 					fmt.Printf("Unable to connect to the visualizer: %v \n", err)
+					os.Exit(1)
 				}
 
 				writers = append(writers, w)
 				break
 
 			case midiTransport:
-				w, err := transport.NewMIDI(portmidi.DeviceID(deviceID))
+				w, err := transport.NewMIDI(midiDeviceID)
 				if err != nil {
 					fmt.Printf("Unable to connect to midi device: %v \n", err)
 					os.Exit(1)
@@ -123,5 +127,5 @@ func init() {
 
 	playbackCmd.PersistentFlags().StringSliceVarP(&transportTypes, "transport", "t", []string{bufferTransport}, fmt.Sprintf("Which transports to use from %s.", transports))
 	playbackCmd.PersistentFlags().StringVar(&viualizerEndpoint, "visualizer-endpoint", "localhost:1337", "Endpoint of the visualizer backend if visualizer transport is chosen.")
-	playbackCmd.PersistentFlags().IntVarP(&deviceID, "device-id", "d", 0, "DeviceID of MIDI output to use (On empty string the default device is used)")
+	playbackCmd.PersistentFlags().StringVarP(&midiDeviceID, "midi-device-id", "m", "", "DeviceID of MIDI output to use (On empty string the default device is used)")
 }

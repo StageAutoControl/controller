@@ -18,7 +18,7 @@ var MidiDeviceCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := portmidi.Initialize(); err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
+			fmt.Println(err)
 			os.Exit(1)
 		}
 		defer portmidi.Terminate()
@@ -32,20 +32,20 @@ var MidiDeviceCmd = &cobra.Command{
 		for i := 0; i < num; i++ {
 			info := portmidi.Info(portmidi.DeviceID(i))
 			if info == nil {
-				fmt.Fprintln(os.Stderr, "Unable to read default output devices")
+				fmt.Println("Unable to read default output devices")
 				os.Exit(1)
 			}
-			printDevice(info)
+			printDevice(portmidi.DeviceID(i), info)
 		}
 
 		fmt.Println("Default device: ")
 		deviceID := portmidi.DefaultOutputDeviceID()
 		info := portmidi.Info(deviceID)
 		if info == nil {
-			fmt.Fprintln(os.Stderr, "Unable to read default output devices")
+			fmt.Println("Unable to read default output devices")
 			os.Exit(1)
 		}
-		printDevice(info)
+		printDevice(deviceID, info)
 	},
 }
 
@@ -53,6 +53,6 @@ func init() {
 	MidiCmd.AddCommand(MidiDeviceCmd)
 }
 
-func printDevice(info *portmidi.DeviceInfo) {
-	fmt.Printf("%+v \n", info)
+func printDevice(deviceID portmidi.DeviceID, info *portmidi.DeviceInfo) {
+	fmt.Printf("%d: %+v \n", deviceID, info)
 }

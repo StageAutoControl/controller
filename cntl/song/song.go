@@ -5,6 +5,7 @@ import (
 
 	"github.com/StageAutoControl/controller/cntl"
 	"github.com/StageAutoControl/controller/cntl/dmx"
+	"github.com/StageAutoControl/controller/cntl/midi"
 )
 
 // Render renders a given SongID to a list of Commands
@@ -24,12 +25,17 @@ func Render(ds *cntl.DataStore, songID string) ([]cntl.Command, error) {
 	}
 
 	bcs := streamlineBarChanges(s)
+	mcs := midi.StreamlineMidiCommands(s)
 
 	cs := make([]cntl.Command, s.Length)
 	for i := uint64(0); i < s.Length; i++ {
 
 		if bc, ok := bcs[i]; ok {
 			cs[i].BarChange = &bc
+		}
+
+		if mc, ok := mcs[i]; ok {
+			cs[i].MIDICommands = append(cs[i].MIDICommands, mc...)
 		}
 
 		if scs, ok := scs[i]; ok {

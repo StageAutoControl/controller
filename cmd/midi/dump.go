@@ -6,9 +6,14 @@ package midi
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/rakyll/portmidi"
 	"github.com/spf13/cobra"
+)
+
+var (
+	deviceID string
 )
 
 // MidiDumpCmd represents the MidiDevices command
@@ -18,22 +23,37 @@ var MidiDumpCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := portmidi.Initialize(); err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
+			fmt.Println(err)
 			os.Exit(1)
 		}
 		defer portmidi.Terminate()
 
-		deviceID := portmidi.DefaultInputDeviceID()
-		if deviceID == 0 {
-			fmt.Fprintln(os.Stderr, "Unable to find default input interface")
+		var d portmidi.DeviceID
+		if deviceID == "" {
+			d = portmidi.DefaultOutputDeviceID()
+		} else {
+			i, err := strconv.Atoi(deviceID)
+			if err != nil {
+				fmt.Printf("Failed to transform deviceID %q to int: %v\n", deviceID, err)
+			}
+			d = portmidi.DeviceID(i)
+		}
+
+		i := portmidi.Info(d)
+		if i == nil {
+			fmt.Printf("Unable to find input interface %d \n", d)
 			os.Exit(1)
 		}
 
-		in, err := portmidi.NewInputStream(deviceID, 1024)
+		fmt.Printf("Using midi device %d \n", d)
+
+		in, err := portmidi.NewInputStream(d, 1024)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
+			fmt.Println(err)
 			os.Exit(1)
 		}
+
+		fmt.Printf("Starting dump for midi interface %d ... \n", d)
 
 		// or alternatively listen events
 		events := in.Listen()
@@ -45,4 +65,6 @@ var MidiDumpCmd = &cobra.Command{
 
 func init() {
 	MidiCmd.AddCommand(MidiDumpCmd)
+
+	MidiDumpCmd.PersistentFlags().StringVar(&deviceID, "device-id", "", "DeviceID of MIDI output to use (On empty string the default device is used)")
 }
