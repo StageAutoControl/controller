@@ -128,7 +128,7 @@ func (v1 dmxSubSceneList) Equals(v2 dmxSubSceneList) bool {
 	return true
 }
 
-type atList []uint8
+type atList []uint64
 
 func (v1 atList) Equals(v2 atList) bool {
 	if len(v1) != len(v2) {

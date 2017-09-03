@@ -86,7 +86,7 @@ func RenderScene(ds *cntl.DataStore, sc *cntl.DMXScene) ([]cntl.DMXCommands, err
 		}
 
 		for _, at := range ss.At {
-			pos := (sceneLength / sc.NoteCount) * at
+			pos := uint64(sceneLength/sc.NoteCount) * at
 			cmds = MergeAtOffset(cmds, scs, int(pos))
 		}
 	}

@@ -113,7 +113,7 @@ type DMXScene struct {
 
 // DMXSubScene is a sub scene of a light scene
 type DMXSubScene struct {
-	At           []uint8           `json:"at" yaml:"at"`
+	At           []uint64          `json:"at" yaml:"at"`
 	DeviceParams []DMXDeviceParams `json:"deviceParams" yaml:"deviceParams"`
 	Preset       string            `json:"preset" yaml:"preset"`
 }

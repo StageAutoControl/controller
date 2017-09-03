@@ -23,23 +23,20 @@ proto:
 	protoc -I "cntl/transport" --go_out="cntl/transport" cntl/transport/dmx.proto
 
 start-playback-visualizer: build-darwin
-	./bin/controller_darwin playback \
+	./bin/controller_darwin playback song "${SONG}" \
 		--data-dir "${SAC_DATA_DIR}" \
 		--transport visualizer \
-		--visualizer-endpoint localhost:1337 \
-		"${SONG}"
+		--visualizer-endpoint localhost:1337
 
 start-playback-buffer: build-darwin
-	./bin/controller_darwin playback \
+	./bin/controller_darwin playback song "${SONG}" \
 			--data-dir "${SAC_DATA_DIR}" \
-			--transport buffer \
-        	"${SONG}"
+			--transport buffer
 
 start-playback-artnet: build-darwin
-	./bin/controller_darwin playback \
+	./bin/controller_darwin playback song "${SONG}" \
 			--data-dir "${SAC_DATA_DIR}" \
-			--transport artnet \
-        	"${SONG}"
+			--transport artnet
 
 start-api: build-darwin
 	./bin/controller_darwin api \
