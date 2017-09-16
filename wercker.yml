@@ -4,7 +4,7 @@ build:
     - setup-go-workspace
 
     - install-packages:
-        packages: portaudio19-dev
+        packages: portaudio19-dev libportmidi-dev
 
     - glide-install
 
