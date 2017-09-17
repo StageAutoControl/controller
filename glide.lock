@@ -1,5 +1,5 @@
-hash: 794a3f0cc0eeb17dab674aef65df32e7f3d697e1afcba49de8fbce5e0f853e8b
-updated: 2017-06-25T17:52:34.381422243+02:00
+hash: 4f0b6554af119a2eb553e1c2540a09e42d72a3ce9bb9fbd61578f6cd07e61594
+updated: 2017-09-16T12:47:25.673264728+02:00
 imports:
 - name: github.com/cryptix/wav
   version: e5b9c2887ea0fa9da1438557242bf5993d56ddab
@@ -9,6 +9,8 @@ imports:
   version: 6a1fa9404c0aebf36c879bc50152edcc953910d2
   subpackages:
   - proto
+- name: github.com/gordonklaus/portaudio
+  version: e66c30a9c4ca11f93538cf8c004831bfb76f3838
 - name: github.com/gorilla/handlers
   version: a4043c62cc2329bacda331d33fc908ab11ef0ec3
 - name: github.com/gorilla/rpc
