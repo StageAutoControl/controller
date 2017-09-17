@@ -2,9 +2,12 @@
 
 package main
 
-import "github.com/StageAutoControl/controller/cmd"
-import _ "github.com/StageAutoControl/controller/cmd/artnet"
-import _ "github.com/StageAutoControl/controller/cmd/midi"
+import (
+	"github.com/StageAutoControl/controller/cmd"
+	_ "github.com/StageAutoControl/controller/cmd/artnet"
+	_ "github.com/StageAutoControl/controller/cmd/audio"
+	_ "github.com/StageAutoControl/controller/cmd/midi"
+)
 
 func main() {
 	cmd.Execute()
