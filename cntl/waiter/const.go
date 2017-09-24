@@ -4,4 +4,7 @@ package waiter
 const (
 	TYPE_NONE  = "none"
 	TYPE_AUDIO = "audio"
+
+	sampleRate = 44100
+	precision  = 0.9
 )

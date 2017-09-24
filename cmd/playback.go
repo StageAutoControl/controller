@@ -34,7 +34,8 @@ var (
 		waiter.TYPE_NONE,
 		waiter.TYPE_AUDIO,
 	}
-	usedWaiters []string
+	usedWaiters          []string
+	audioWaiterThreshold int32
 )
 
 // playbackCmd represents the playback command
@@ -109,6 +110,8 @@ var playbackCmd = &cobra.Command{
 			default:
 				fmt.Printf("Transport %q is not supported. \n", transportType)
 				os.Exit(1)
+
+				break
 			}
 		}
 
@@ -116,8 +119,19 @@ var playbackCmd = &cobra.Command{
 		for _, waiterType := range usedWaiters {
 			switch waiterType {
 			case waiter.TYPE_NONE:
-
 				waiters = append(waiters, waiter.NewNone())
+
+				break
+
+			case waiter.TYPE_AUDIO:
+				a, err := waiter.NewAudio(audioWaiterThreshold)
+				if err != nil {
+					panic(err)
+				}
+
+				waiters = append(waiters, a)
+
+				break
 			}
 		}
 
@@ -150,4 +164,5 @@ func init() {
 	playbackCmd.PersistentFlags().StringVarP(&midiDeviceID, "midi-device-id", "m", "", "DeviceID of MIDI output to use (On empty string the default device is used)")
 
 	playbackCmd.PersistentFlags().StringSliceVarP(&usedWaiters, "wait-for", "w", []string{waiter.TYPE_NONE}, fmt.Sprintf("Wait for a specific signal before playing a song (required to be used on stage, otherwise the next song would start immediately), one of %s", waiterTypes))
+	playbackCmd.PersistentFlags().Int32Var(&audioWaiterThreshold, "audio-waiter-threshold", 15000, "Threshold frequency for audio waiter to trigger a signal")
 }

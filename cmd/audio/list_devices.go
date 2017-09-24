@@ -11,8 +11,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// AudioDeviceCmd represents the AudioDevices command
-var AudioDeviceCmd = &cobra.Command{
+// DeviceCmd represents the Devices command
+var DeviceCmd = &cobra.Command{
 	Use:   "devices",
 	Short: "Prints info about all devices",
 	Long:  ``,
@@ -64,5 +64,5 @@ func printDevice(info *portaudio.DeviceInfo) {
 }
 
 func init() {
-	AudioCmd.AddCommand(AudioDeviceCmd)
+	AudioCmd.AddCommand(DeviceCmd)
 }
