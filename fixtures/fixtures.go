@@ -116,7 +116,7 @@ var data = &cntl.DataStore{
 			NoteValue: 4,
 			SubScenes: []cntl.DMXSubScene{
 				{
-					At:     []uint8{0, 1, 2, 3},
+					At:     []uint64{0, 1, 2, 3},
 					Preset: "0de258e0-0e7b-11e7-afd4-ebf6036983dc",
 				},
 			},
@@ -128,7 +128,7 @@ var data = &cntl.DataStore{
 			NoteValue: 4,
 			SubScenes: []cntl.DMXSubScene{
 				{
-					At:     []uint8{0, 1},
+					At:     []uint64{0, 1},
 					Preset: "11adf93e-0e7b-11e7-998c-5bd2bd0df396",
 				},
 			},
@@ -140,7 +140,7 @@ var data = &cntl.DataStore{
 			NoteValue: 4,
 			SubScenes: []cntl.DMXSubScene{
 				{
-					At: []uint8{0, 1, 2, 3, 4, 5, 6, 7},
+					At: []uint64{0, 1, 2, 3, 4, 5, 6, 7},
 					DeviceParams: []cntl.DMXDeviceParams{
 						{
 							Device: &cntl.DMXDeviceSelector{
@@ -159,7 +159,7 @@ var data = &cntl.DataStore{
 			NoteValue: 4,
 			SubScenes: []cntl.DMXSubScene{
 				{
-					At:     []uint8{0, 1, 2, 3},
+					At:     []uint64{0, 1, 2, 3},
 					Preset: "0de258e0-0e7b-11e7-afd4-ebf6036983dc",
 				},
 			},
