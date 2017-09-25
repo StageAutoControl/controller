@@ -36,7 +36,7 @@ func NewPlayer(ds *cntl.DataStore, writers []TransportWriter, waiters []Waiter) 
 func (p *Player) checkSetList(setList *cntl.SetList) error {
 	for _, songSel := range setList.Songs {
 		if _, ok := p.dataStore.Songs[songSel.ID]; !ok {
-			return fmt.Errorf("Cannot find Song %q", songSel.ID)
+			return fmt.Errorf("cannot find Song %q", songSel.ID)
 		}
 	}
 
@@ -44,10 +44,10 @@ func (p *Player) checkSetList(setList *cntl.SetList) error {
 }
 
 // PlaySetList plays a full SetList
-func (p *Player) PlaySetList(setListId string) error {
-	setList, ok := p.dataStore.SetLists[setListId]
+func (p *Player) PlaySetList(setListID string) error {
+	setList, ok := p.dataStore.SetLists[setListID]
 	if !ok {
-		return fmt.Errorf("Cannot find SetList %q", setListId)
+		return fmt.Errorf("cannot find SetList %q", setListID)
 	}
 
 	if err := p.checkSetList(setList); err != nil {

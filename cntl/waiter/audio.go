@@ -96,6 +96,7 @@ func (a *Audio) Wait(done chan struct{}, cancel chan struct{}, err chan error) e
 	}
 }
 
+// Stop stops the audio stream
 func (a *Audio) Stop() (err error) {
 	defer portaudio.Terminate()
 
