@@ -11,6 +11,7 @@ import (
 	"sync"
 	"time"
 
+	root "github.com/StageAutoControl/controller/cmd"
 	artnetTransport "github.com/StageAutoControl/controller/cntl/transport/artnet"
 	"github.com/jsimonetti/go-artnet"
 	"github.com/spf13/cobra"
@@ -37,7 +38,7 @@ var Server = &cobra.Command{
 			log.Fatal("No IP found")
 		}
 
-		c := artnet.NewController("controller-1", ip)
+		c := artnet.NewController("controller-1", ip, artnet.NewLogger(root.Logger))
 		var wg sync.WaitGroup
 
 		go func() {

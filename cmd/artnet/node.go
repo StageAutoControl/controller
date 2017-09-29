@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/signal"
 
+	root "github.com/StageAutoControl/controller/cmd"
 	artnetTransport "github.com/StageAutoControl/controller/cntl/transport/artnet"
 	"github.com/jsimonetti/go-artnet"
 	"github.com/jsimonetti/go-artnet/packet/code"
@@ -38,7 +39,7 @@ var Node = &cobra.Command{
 			log.Fatal("No IP found")
 		}
 
-		n := artnet.NewNode(fmt.Sprintf("node-%d", rand.Int()), code.StNode, ip)
+		n := artnet.NewNode(fmt.Sprintf("node-%d", rand.Int()), code.StNode, ip, artnet.NewLogger(root.Logger))
 
 		if err := n.Start(); err != nil {
 			log.Fatal(err)

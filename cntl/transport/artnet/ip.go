@@ -7,15 +7,15 @@ import (
 )
 
 const (
-	// ArtNetCIDR specifies the network CIDR an artnet network should have
-	ArtNetCIDR = "2.0.0.0/8"
+	// addressRange specifies the network CIDR an artnet network should have
+	addressRange = "2.0.0.0/8"
 )
 
-// FindArtNetIP finds the matching interface with an IP address inside of the ArtNetCIDR
+// FindArtNetIP finds the matching interface with an IP address inside of the addressRange
 func FindArtNetIP() (net.IP, error) {
 	var ip net.IP
 
-	_, cidrnet, _ := net.ParseCIDR(ArtNetCIDR)
+	_, cidrnet, _ := net.ParseCIDR(addressRange)
 
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {

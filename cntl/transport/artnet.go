@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/StageAutoControl/controller/cntl"
 	artnetTransport "github.com/StageAutoControl/controller/cntl/transport/artnet"
 	artnet "github.com/jsimonetti/go-artnet"
@@ -17,19 +18,19 @@ type ArtNet struct {
 }
 
 // NewArtNet returns a new ArtNet transport instance
-func NewArtNet(name string) (*ArtNet, error) {
+func NewArtNet(name string, logger *logrus.Entry) (*ArtNet, error) {
 	ip, err := artnetTransport.FindArtNetIP()
 	if err != nil {
-		return nil, fmt.Errorf("Error finding the art-net IP: %v", err)
+		return nil, fmt.Errorf("failed to find the art-net IP: %v", err)
 	}
 
 	if len(ip) == 0 {
-		return nil, errors.New("Error finding the art-net IP: No interface found.")
+		return nil, errors.New("failed to find the art-net IP: No interface found")
 	}
 
-	c := artnet.NewController(name, ip)
+	c := artnet.NewController(name, ip, artnet.NewLogger(logger))
 	if err := c.Start(); err != nil {
-		return nil, fmt.Errorf("Error starting controller: %v", err)
+		return nil, fmt.Errorf("failed to start controller: %v", err)
 	}
 
 	return &ArtNet{

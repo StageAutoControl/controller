@@ -1,8 +1,6 @@
-hash: 4f0b6554af119a2eb553e1c2540a09e42d72a3ce9bb9fbd61578f6cd07e61594
-updated: 2017-09-16T12:47:25.673264728+02:00
+hash: f54b012934d0c85e87976eca0bda90587b682661e0cd02b919bb564c581c2e15
+updated: 2017-09-29T15:35:15.75221579+02:00
 imports:
-- name: github.com/cryptix/wav
-  version: e5b9c2887ea0fa9da1438557242bf5993d56ddab
 - name: github.com/fsnotify/fsnotify
   version: 4da3e2cfbabc9f751898f250b49f2439785783a1
 - name: github.com/golang/protobuf
@@ -18,8 +16,6 @@ imports:
   subpackages:
   - v2
   - v2/json
-- name: github.com/gorilla/websocket
-  version: ea4d1f681babbce9545c9c5f3d5194a789c89f5b
 - name: github.com/hashicorp/hcl
   version: 392dba7d905ed5d04a5794ba89f558b27e2ba1ca
   subpackages:
@@ -34,7 +30,8 @@ imports:
 - name: github.com/inconshreveable/mousetrap
   version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
 - name: github.com/jsimonetti/go-artnet
-  version: 1ce577b05b8e9fc7266cd969ef975a52e606e961
+  version: 429082958bfee4a2e881fd8d255845fded169537
+  repo: https://github.com/StageAutoControl/go-artnet.git
   subpackages:
   - packet
   - packet/code
@@ -52,7 +49,7 @@ imports:
 - name: github.com/satori/go.uuid
   version: 879c5887cd475cd7864858769793b2ceb0d44feb
 - name: github.com/Sirupsen/logrus
-  version: 3d4380f53a34dcdc95f0c1db702615992b38d9a4
+  version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
 - name: github.com/spf13/afero
   version: 9be650865eab0c12963d8753212f4f9c66cdcf12
   subpackages:
@@ -66,11 +63,16 @@ imports:
 - name: github.com/spf13/pflag
   version: e57e3eeb33f795204c1ca35f56c44f83227c6e66
 - name: github.com/spf13/viper
-  version: c1de95864d73a5465492829d7cb2dd422b19ac96
+  version: 25b30aa063fc18e48662b86996252eabdcf2f0c7
+- name: golang.org/x/crypto
+  version: 76eec36fa14229c4b25bb894c2d0e591527af429
+  subpackages:
+  - ssh/terminal
 - name: golang.org/x/sys
   version: c23410a886927bab8ca5e80b08af6a56faeb330d
   subpackages:
   - unix
+  - windows
 - name: golang.org/x/text
   version: 4e9ab9ee170f2a39bd66c92b3e0a47ff47a4bc77
   subpackages:

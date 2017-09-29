@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/StageAutoControl/controller/cntl"
 	"github.com/StageAutoControl/controller/cntl/playback"
 	"github.com/StageAutoControl/controller/cntl/transport"
@@ -35,7 +36,7 @@ var (
 		waiter.TypeAudio,
 	}
 	usedWaiters          []string
-	audioWaiterThreshold int32
+	audioWaiterThreshold float32
 )
 
 // playbackCmd represents the playback command
@@ -44,6 +45,8 @@ var playbackCmd = &cobra.Command{
 	Short: "Plays a given Song or SetList by id",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
+		logrus.SetLevel(logrus.WarnLevel)
+
 		if len(args) != 2 {
 			cmd.Usage()
 			os.Exit(1)
@@ -88,7 +91,7 @@ var playbackCmd = &cobra.Command{
 				break
 
 			case transport.TypeArtNet:
-				w, err := transport.NewArtNet("stage-auto-control")
+				w, err := transport.NewArtNet("stage-auto-control", Logger)
 				if err != nil {
 					fmt.Printf("Unable to connect to the visualizer: %v \n", err)
 					os.Exit(1)
@@ -162,5 +165,5 @@ func init() {
 	playbackCmd.PersistentFlags().StringVarP(&midiDeviceID, "midi-device-id", "m", "", "DeviceID of MIDI output to use (On empty string the default device is used)")
 
 	playbackCmd.PersistentFlags().StringSliceVarP(&usedWaiters, "wait-for", "w", []string{waiter.TypeNone}, fmt.Sprintf("Wait for a specific signal before playing a song (required to be used on stage, otherwise the next song would start immediately), one of %s", waiterTypes))
-	playbackCmd.PersistentFlags().Int32Var(&audioWaiterThreshold, "audio-waiter-threshold", 15000, "Threshold frequency for audio waiter to trigger a signal")
+	playbackCmd.PersistentFlags().Float32Var(&audioWaiterThreshold, "audio-waiter-threshold", 0.9, "Threshold frequency for audio waiter to trigger a signal")
 }

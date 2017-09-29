@@ -40,8 +40,8 @@ var SineCmd = &cobra.Command{
 func init() {
 	AudioCmd.AddCommand(SineCmd)
 
-	AudioCmd.PersistentFlags().IntVarP(&frequency, "frequency", "f", 18000, "Frequency of the sin")
-	AudioCmd.PersistentFlags().IntVarP(&length, "length", "l", 100, "length of the sin in milliseconds")
+	SineCmd.PersistentFlags().IntVarP(&frequency, "frequency", "f", 18000, "Frequency of the sin")
+	SineCmd.PersistentFlags().IntVarP(&length, "length", "l", 100, "length of the sin in milliseconds")
 }
 
 type stereoSine struct {

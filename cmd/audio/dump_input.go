@@ -15,6 +15,7 @@ import (
 
 var (
 	averageSamples int
+	threshold      float32
 )
 
 // DumpInputCmd represents the DumpInputs command
@@ -51,7 +52,7 @@ var DumpInputCmd = &cobra.Command{
 				panic(err)
 			}
 
-			calcAverage(frame, buf)
+			go calcAverage(frame, buf)
 			frame++
 
 			select {
@@ -67,7 +68,9 @@ var DumpInputCmd = &cobra.Command{
 func init() {
 	AudioCmd.AddCommand(DumpInputCmd)
 
-	AudioCmd.PersistentFlags().IntVarP(&averageSamples, "average-samples", "a", 1000, "How many samples to calc the average from")
+	DumpInputCmd.PersistentFlags().IntVarP(&averageSamples, "average-samples", "a", 1000, "How many samples to calc the average from")
+	DumpInputCmd.PersistentFlags().Float32VarP(&threshold, "threshold", "t", 0.8, "Threshold of tick")
+
 }
 
 func calcAverage(frame int64, buf []float32) {
@@ -82,13 +85,19 @@ func calcAverage(frame int64, buf []float32) {
 		}
 	}
 
+	tick := ""
+	if min < (threshold*-1) || max > threshold {
+		tick = "tick"
+	}
+
 	avg = sum / float32(len(buf))
 
-	fmt.Printf(
-		"%10d %14s %14s %14s\n",
+	go fmt.Printf(
+		"%10d %14s %14s %14s %10s\n",
 		frame,
 		fmt.Sprintf("%5.10f", avg),
 		fmt.Sprintf("%5.10f", min),
 		fmt.Sprintf("%5.10f", max),
+		tick,
 	)
 }

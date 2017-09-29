@@ -3,29 +3,27 @@ package waiter
 import (
 	"log"
 
+	"fmt"
+
 	"github.com/gordonklaus/portaudio"
 )
 
 // Audio is a waiter that does nothing
 type Audio struct {
-	threshold int32
+	threshold float32
 	fanOut    []chan struct{}
-	in        []int32
+	buf       []float32
 	stream    *portaudio.Stream
 	stop      chan struct{}
+	err       chan error
 }
 
 // NewAudio creates a new Audio waiter
-func NewAudio(threshold int32) (*Audio, error) {
+func NewAudio(threshold float32) (*Audio, error) {
 	portaudio.Initialize()
 
-	in := make([]int32, 64)
-	stream, err := portaudio.OpenDefaultStream(1, 0, 44100, len(in), in)
-	if err != nil {
-		return nil, err
-	}
-
-	err = stream.Start()
+	buf := make([]float32, 64)
+	stream, err := portaudio.OpenDefaultStream(1, 0, sampleRate, len(buf), buf)
 	if err != nil {
 		return nil, err
 	}
@@ -33,9 +31,10 @@ func NewAudio(threshold int32) (*Audio, error) {
 	a := &Audio{
 		threshold: threshold,
 		fanOut:    make([]chan struct{}, 0),
-		in:        in,
+		buf:       buf,
 		stream:    stream,
 		stop:      make(chan struct{}, 1),
+		err:       make(chan error, 1),
 	}
 
 	go a.readStream()
@@ -44,6 +43,18 @@ func NewAudio(threshold int32) (*Audio, error) {
 }
 
 func (a *Audio) readStream() {
+	if err := a.stream.Start(); err != nil {
+		a.err <- err
+		return
+	}
+
+	defer func() {
+		if err := a.stream.Stop(); err != nil {
+			a.err <- err
+			return
+		}
+	}()
+
 	for {
 		err := a.stream.Read()
 		if err != nil {
@@ -62,8 +73,8 @@ func (a *Audio) readStream() {
 }
 
 func (a *Audio) checkForPeak() {
-	for _, i := range a.in {
-		if i >= a.threshold {
+	for _, i := range a.buf {
+		if i >= a.threshold || i <= (a.threshold*-1) {
 			a.notifyWait()
 			return
 		}
@@ -80,6 +91,8 @@ func (a *Audio) notifyWait() {
 func (a *Audio) Wait(done chan struct{}, cancel chan struct{}, err chan error) error {
 	waitForPeak := make(chan struct{}, 1)
 	a.fanOut = append(a.fanOut, waitForPeak)
+
+	// remove channel from fanout, we don't want to have further updates
 	defer func() {
 		a.fanOut = a.fanOut[:len(a.fanOut)-1]
 	}()
@@ -87,9 +100,13 @@ func (a *Audio) Wait(done chan struct{}, cancel chan struct{}, err chan error) e
 	for {
 		select {
 		case <-waitForPeak:
+			fmt.Println("Found peak. Starting playback!")
 			done <- struct{}{}
+			return nil
 		case <-cancel:
 			return nil
+		case err := <-a.err:
+			return err
 		}
 
 		return nil
