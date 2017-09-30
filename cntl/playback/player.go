@@ -5,8 +5,7 @@ import (
 
 	"fmt"
 
-	"log"
-
+	"github.com/Sirupsen/logrus"
 	"github.com/StageAutoControl/controller/cntl"
 	"github.com/StageAutoControl/controller/cntl/song"
 )
@@ -23,14 +22,15 @@ type Waiter interface {
 
 // Player plays various things from a given data store, for example songs or a whole SetList.
 type Player struct {
+	logger    *logrus.Entry
 	dataStore *cntl.DataStore
 	writers   []TransportWriter
 	waiters   []Waiter
 }
 
 // NewPlayer returns a new Player instance
-func NewPlayer(ds *cntl.DataStore, writers []TransportWriter, waiters []Waiter) *Player {
-	return &Player{ds, writers, waiters}
+func NewPlayer(logger *logrus.Entry, ds *cntl.DataStore, writers []TransportWriter, waiters []Waiter) *Player {
+	return &Player{logger, ds, writers, waiters}
 }
 
 func (p *Player) checkSetList(setList *cntl.SetList) error {
@@ -55,7 +55,7 @@ func (p *Player) PlaySetList(setListID string) error {
 	}
 
 	for _, songSel := range setList.Songs {
-		log.Printf("Playing song %s \n", songSel.ID)
+		p.logger.Infof("Playing song %s", songSel.ID)
 
 		if err := p.PlaySong(songSel.ID); err != nil {
 			return err
@@ -93,7 +93,7 @@ func (p *Player) PlaySong(songID string) error {
 		return err
 	}
 
-	log.Printf("Waiting for waiters before playing song %s \n", songID)
+	p.logger.Infof("Waiting for waiters before playing song %s", songID)
 	if err := p.wait(); err != nil {
 		return err
 	}

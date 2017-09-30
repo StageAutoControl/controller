@@ -4,8 +4,6 @@
 package artnet
 
 import (
-	"fmt"
-	"log"
 	"net"
 	"runtime"
 	"sync"
@@ -26,16 +24,16 @@ var Server = &cobra.Command{
 		var ip net.IP
 		var err error
 
-		log.Println("InterfaceName is empty, searching for suitable one ...")
+		root.Logger.Info("InterfaceName is empty, searching for suitable one ...")
 		ip, err = artnetTransport.FindArtNetIP()
 		if err != nil {
-			log.Fatal(err)
+			root.Logger.Fatal(err)
 		}
 
-		log.Printf("Using interface with IP %s", ip.String())
+		root.Logger.Infof("Using interface with IP %s", ip.String())
 
 		if len(ip) == 0 {
-			log.Fatal("No IP found")
+			root.Logger.Fatal("No IP found")
 		}
 
 		c := artnet.NewController("controller-1", ip, artnet.NewLogger(root.Logger))
@@ -44,7 +42,7 @@ var Server = &cobra.Command{
 		go func() {
 			wg.Add(1)
 			if err := c.Start(); err != nil {
-				log.Fatal(err)
+				root.Logger.Fatal(err)
 			}
 
 			wg.Done()
@@ -63,7 +61,7 @@ var Server = &cobra.Command{
 		c.Stop()
 		wg.Wait()
 
-		fmt.Printf("num: %d", runtime.NumGoroutine())
+		root.Logger.Infof("num: %d", runtime.NumGoroutine())
 	},
 }
 

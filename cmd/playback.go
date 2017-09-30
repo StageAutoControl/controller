@@ -55,22 +55,20 @@ var playbackCmd = &cobra.Command{
 		var loader cntl.Loader
 		switch loaderType {
 		case directoryLoader:
-			fmt.Printf("Loading data directoy %q ... \n", dataDir)
+			Logger.Infof("Loading data directory %q ...", dataDir)
 			loader = files.New(dataDir)
+
 		case databaseLoader:
 			//loader = database.New(),
-			fmt.Println("Database loader is not yet supported.")
-			os.Exit(1)
+			Logger.Fatal("Database loader is not yet supported.")
 
 		default:
-			fmt.Printf("Loader %q is not supported. Choose one of %s \n", loader, loaders)
-			os.Exit(1)
+			Logger.Fatalf("Loader %q is not supported. Choose one of %s", loader, loaders)
 		}
 
 		data, err := loader.Load()
 		if err != nil {
-			fmt.Printf("Failed to load data from %q: %v \n", loaderType, err)
-			os.Exit(1)
+			Logger.Fatalf("Failed to load data from %q: %v", loaderType, err)
 		}
 
 		var writers []playback.TransportWriter
@@ -81,40 +79,34 @@ var playbackCmd = &cobra.Command{
 				break
 
 			case transport.TypeVisualizer:
-				w, err := transport.NewVisualizer(viualizerEndpoint)
+				w, err := transport.NewVisualizer(Logger.WithField("transport", transport.TypeVisualizer), viualizerEndpoint)
 				if err != nil {
-					fmt.Printf("Unable to connect to the visualizer: %v \n", err)
-					os.Exit(1)
+					Logger.Fatalf("Unable to connect to the visualizer: %v", err)
 				}
 
 				writers = append(writers, w)
 				break
 
 			case transport.TypeArtNet:
-				w, err := transport.NewArtNet("stage-auto-control", Logger)
+				w, err := transport.NewArtNet(Logger.WithField("transport", transport.TypeArtNet), "stage-auto-control")
 				if err != nil {
-					fmt.Printf("Unable to connect to the visualizer: %v \n", err)
-					os.Exit(1)
+					Logger.Fatalf("Unable to connect to the visualizer: %v", err)
 				}
 
 				writers = append(writers, w)
 				break
 
 			case transport.TypeMidi:
-				w, err := transport.NewMIDI(midiDeviceID)
+				w, err := transport.NewMIDI(Logger.WithField("transport", transport.TypeMidi), midiDeviceID)
 				if err != nil {
-					fmt.Printf("Unable to connect to midi device: %v \n", err)
-					os.Exit(1)
+					Logger.Fatalf("Unable to connect to midi device: %v", err)
 				}
 
 				writers = append(writers, w)
 				break
 
 			default:
-				fmt.Printf("Transport %q is not supported. \n", transportType)
-				os.Exit(1)
-
-				break
+				Logger.Fatalf("Transport %q is not supported.", transportType)
 			}
 		}
 
@@ -127,9 +119,9 @@ var playbackCmd = &cobra.Command{
 				break
 
 			case waiter.TypeAudio:
-				a, err := waiter.NewAudio(audioWaiterThreshold)
+				a, err := waiter.NewAudio(Logger.WithField("waiter", waiter.TypeAudio), audioWaiterThreshold)
 				if err != nil {
-					panic(err)
+					Logger.Fatal(err)
 				}
 
 				waiters = append(waiters, a)
@@ -138,20 +130,20 @@ var playbackCmd = &cobra.Command{
 			}
 		}
 
-		player := playback.NewPlayer(data, writers, waiters)
+		player := playback.NewPlayer(Logger.Logger.WithField("player", "default"), data, writers, waiters)
 
 		switch args[0] {
 		case playbackTypeSong:
 			songID := args[1]
 			if err = player.PlaySong(songID); err != nil {
-				panic(err)
+				Logger.Fatal(err)
 			}
 
 			break
 		case playbackTypeSetList:
 			setListID := args[2]
 			if err = player.PlaySetList(setListID); err != nil {
-				panic(err)
+				Logger.Fatal(err)
 			}
 		}
 	},

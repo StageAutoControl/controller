@@ -2,29 +2,30 @@ package transport
 
 import (
 	"fmt"
-	"log"
 	"net"
-
 	"strings"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/StageAutoControl/controller/cntl"
 	"github.com/golang/protobuf/proto"
 )
 
 // Visualizer is a writer to the visualizer tool
 type Visualizer struct {
+	logger   *logrus.Entry
 	endpoint string
 	socket   net.Conn
 }
 
 // NewVisualizer creates a new Visualizer
-func NewVisualizer(endpoint string) (*Visualizer, error) {
+func NewVisualizer(logger *logrus.Entry, endpoint string) (*Visualizer, error) {
 	socket, err := net.Dial("tcp", endpoint)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Visualizer{
+		logger:   logger,
 		socket:   socket,
 		endpoint: endpoint,
 	}, nil
@@ -55,7 +56,7 @@ func (t *Visualizer) Write(cmd cntl.Command) error {
 	if n, err := t.socket.Write(b); err != nil {
 		return err
 	} else if n == 0 {
-		return fmt.Errorf("Did not sent anything, sent %d bytes.", n)
+		return fmt.Errorf("did not sent anything, sent %d bytes", n)
 	}
 
 	go t.debug(tc, b)
@@ -76,7 +77,7 @@ func convertBarChange(bc *cntl.BarChange) *BarChange {
 }
 
 func (t *Visualizer) debug(cs Command, b []byte) {
-	log.Printf("Sent %d commands to visualizer: %v", len(cs.DmxCommands), renderDMXCommands(cs))
+	t.logger.Infof("Sent %d commands to visualizer: %v", len(cs.DmxCommands), renderDMXCommands(cs))
 }
 
 func renderDMXCommands(cmds Command) string {

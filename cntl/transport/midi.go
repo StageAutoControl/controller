@@ -5,19 +5,21 @@ import (
 	"log"
 	"strconv"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/StageAutoControl/controller/cntl"
 	"github.com/rakyll/portmidi"
 )
 
 // MIDI is a transport that sends MIDI signals using portmidi.
 type MIDI struct {
+	logger     *logrus.Entry
 	deviceInfo *portmidi.DeviceInfo
 	deviceID   portmidi.DeviceID
 	out        *portmidi.Stream
 }
 
 // NewMIDI creates a new MIDI transport
-func NewMIDI(deviceID string) (*MIDI, error) {
+func NewMIDI(logger *logrus.Entry, deviceID string) (*MIDI, error) {
 	if err := portmidi.Initialize(); err != nil {
 		return nil, err
 	}
@@ -28,7 +30,7 @@ func NewMIDI(deviceID string) (*MIDI, error) {
 	} else {
 		i, err := strconv.Atoi(deviceID)
 		if err != nil {
-			return nil, fmt.Errorf("Failed to transform deviceID %q to int: %v", deviceID, err)
+			return nil, fmt.Errorf("failed to transform deviceID %q to int: %v", deviceID, err)
 		}
 		d = portmidi.DeviceID(i)
 	}
@@ -43,9 +45,9 @@ func NewMIDI(deviceID string) (*MIDI, error) {
 		return nil, err
 	}
 
-	log.Printf("Using midi device %d \n", d)
+	logger.Infof("Using midi device %d", d)
 
-	return &MIDI{info, d, out}, nil
+	return &MIDI{logger, info, d, out}, nil
 }
 
 // Write writes MIDI signals to portmidi
@@ -76,5 +78,5 @@ func (m *MIDI) convertEvents(cmd cntl.Command) (events []portmidi.Event) {
 }
 
 func (m *MIDI) log(events []portmidi.Event) {
-	log.Printf("%#v\n", events)
+	m.logger.Debugf("%#v", events)
 }

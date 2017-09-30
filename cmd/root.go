@@ -34,7 +34,8 @@ var RootCmd = &cobra.Command{
 		logger := logrus.New()
 		level, err := logrus.ParseLevel(logLevel)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Unable to parse log level %q: %v\n", logLevel, err)
+			logger.Panicf("Unable to parse log level %q: %v\n", logLevel, err)
+			os.Exit(1)
 		}
 
 		logger.Infof("Using log level %s", logLevel)

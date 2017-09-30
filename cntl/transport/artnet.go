@@ -18,7 +18,7 @@ type ArtNet struct {
 }
 
 // NewArtNet returns a new ArtNet transport instance
-func NewArtNet(name string, logger *logrus.Entry) (*ArtNet, error) {
+func NewArtNet(logger *logrus.Entry, name string) (*ArtNet, error) {
 	ip, err := artnetTransport.FindArtNetIP()
 	if err != nil {
 		return nil, fmt.Errorf("failed to find the art-net IP: %v", err)
