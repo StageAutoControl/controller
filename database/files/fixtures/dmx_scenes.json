@@ -75,5 +75,24 @@
         "preset": "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
       }
     ]
+  },
+  {
+    "id": "5adec126-6618-42ca-b930-4d18f4524328",
+    "name": "Test-Scene 5",
+    "noteCount": 32,
+    "noteValue": 32,
+    "subScenes": [
+      {
+        "at": [0],
+        "deviceParams": [
+          {
+            "transitionId": "a51f7b2a-0e7b-11e7-bfc8-57da167865d7",
+            "device": {
+              "id": "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
+            }
+          }
+        ]
+      }
+    ]
   }
 ]

@@ -5,6 +5,7 @@ import (
 )
 
 var (
+	value0  = &cntl.DMXValue{0}
 	value31  = &cntl.DMXValue{31}
 	value63  = &cntl.DMXValue{63}
 	value127 = &cntl.DMXValue{127}
@@ -164,6 +165,25 @@ var data = &cntl.DataStore{
 				},
 			},
 		},
+		"5adec126-6618-42ca-b930-4d18f4524328": {
+			ID:        "5adec126-6618-42ca-b930-4d18f4524328",
+			Name:      "Test-Scene 5",
+			NoteCount: 32,
+			NoteValue: 32,
+			SubScenes: []cntl.DMXSubScene{
+				{
+					At: []uint64{0},
+					DeviceParams: []cntl.DMXDeviceParams{
+						{
+							Device: &cntl.DMXDeviceSelector{
+								ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
+							},
+							TransitionID: "a1a02b6c-12dd-4d7b-bc3e-24cc823adf21",
+						},
+					},
+				},
+			},
+		},
 	},
 	DMXDeviceGroups: map[string]*cntl.DMXDeviceGroup{
 		"475b71a0-0b16-11e7-9406-e3f678e8b788": {
@@ -309,6 +329,25 @@ var data = &cntl.DataStore{
 				{At: 1, Params: cntl.DMXParams{LED: 1, Blue: value63}},
 				{At: 2, Params: cntl.DMXParams{LED: 1, Blue: value127}},
 				{At: 3, Params: cntl.DMXParams{LED: 1, Blue: value255}},
+			},
+		},
+	},
+	DMXTransitions: map[string]*cntl.DMXTransition{
+		"a1a02b6c-12dd-4d7b-bc3e-24cc823adf21": {
+			ID:   "a1a02b6c-12dd-4d7b-bc3e-24cc823adf21",
+			Name: "Blue Bar pulsing on",
+			Ease: cntl.EaseInOutQuad,
+			From: []cntl.DMXParams{
+				{
+					LED: 1,
+					Blue: value0,
+				},
+			},
+			To: []cntl.DMXParams{
+				{
+					LED: 1,
+					Blue: value255,
+				},
 			},
 		},
 	},

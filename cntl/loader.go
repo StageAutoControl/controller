@@ -12,6 +12,7 @@ type DataStore struct {
 	DMXScenes       map[string]*DMXScene
 	DMXPresets      map[string]*DMXPreset
 	DMXAnimations   map[string]*DMXAnimation
+	DMXTransitions  map[string]*DMXTransition
 	DMXDevices      map[string]*DMXDevice
 	DMXDeviceTypes  map[string]*DMXDeviceType
 	DMXDeviceGroups map[string]*DMXDeviceGroup
@@ -25,6 +26,7 @@ func NewStore() *DataStore {
 		DMXScenes:       make(map[string]*DMXScene),
 		DMXPresets:      make(map[string]*DMXPreset),
 		DMXAnimations:   make(map[string]*DMXAnimation),
+		DMXTransitions:  make(map[string]*DMXTransition),
 		DMXDevices:      make(map[string]*DMXDevice),
 		DMXDeviceTypes:  make(map[string]*DMXDeviceType),
 		DMXDeviceGroups: make(map[string]*DMXDeviceGroup),

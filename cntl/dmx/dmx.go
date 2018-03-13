@@ -9,10 +9,8 @@ import (
 
 // Render Errors
 var (
-	ErrGroupDeviceUnique                 = errors.New("DMXDeviceParams can only have a group or a Device")
-	ErrGroupDeviceUnset                  = errors.New("DMXDeviceParams must have either a group or a Device")
-	ErrParamsAnimationUnique             = errors.New("DMXDeviceParams can only have an animation or Params")
-	ErrParamsAnimationUnset              = errors.New("DMXDeviceParams must have either an animation or Params")
+	ErrDeviceParamsDevicesInvalid        = errors.New("DMXDeviceParams can only have a group or a Device")
+	ErrDeviceParamsValuesInvalid         = errors.New("DMXDeviceParams must not have more the one of [Animation, Transition, Params]")
 	ErrDeviceParamsNoDevices             = errors.New("DMXDeviceParams matches no device")
 	ErrDeviceSelectorMustHaveTagsOrID    = errors.New("DMXDeviceSelector must have either tags or an ID")
 	ErrDeviceSelectorCannotHaveTagsAndID = errors.New("DMXDeviceSelector cannot have tags and an ID")
@@ -24,7 +22,7 @@ func StreamlineScenes(ds *cntl.DataStore, s *cntl.Song) (map[uint64][]*cntl.DMXS
 	for _, sp := range s.DMXScenes {
 		sc, ok := ds.DMXScenes[sp.ID]
 		if !ok {
-			return map[uint64][]*cntl.DMXScene{}, fmt.Errorf("Cannot find DMXScene %q", sp.ID)
+			return map[uint64][]*cntl.DMXScene{}, fmt.Errorf("cannot find DMXScene %q", sp.ID)
 		}
 
 		l := CalcSceneLength(sc)
@@ -65,7 +63,7 @@ func RenderScene(ds *cntl.DataStore, sc *cntl.DMXScene) ([]cntl.DMXCommands, err
 		if ss.Preset != "" {
 			p, ok := ds.DMXPresets[ss.Preset]
 			if !ok {
-				return []cntl.DMXCommands{}, fmt.Errorf("Cannot find DMXPreset %q", ss.Preset)
+				return []cntl.DMXCommands{}, fmt.Errorf("cannot find DMXPreset %q", ss.Preset)
 			}
 
 			pcs, err := RenderPreset(ds, p)
@@ -79,7 +77,7 @@ func RenderScene(ds *cntl.DataStore, sc *cntl.DMXScene) ([]cntl.DMXCommands, err
 		for _, dp := range ss.DeviceParams {
 			dcs, err := RenderDeviceParams(ds, &dp)
 			if err != nil {
-				return []cntl.DMXCommands{}, fmt.Errorf("Error rendering scene %q: %v", sc.ID, err)
+				return []cntl.DMXCommands{}, fmt.Errorf("failed to render scene %q: %v", sc.ID, err)
 			}
 
 			scs = Merge(scs, dcs)
@@ -100,7 +98,7 @@ func RenderPreset(ds *cntl.DataStore, p *cntl.DMXPreset) ([]cntl.DMXCommands, er
 	for _, dp := range p.DeviceParams {
 		dpcs, err := RenderDeviceParams(ds, &dp)
 		if err != nil {
-			return []cntl.DMXCommands{}, fmt.Errorf("Error handling preset %q: %v", p.ID, err)
+			return []cntl.DMXCommands{}, fmt.Errorf("failed to handle preset %q: %v", p.ID, err)
 		}
 
 		cmds = Merge(cmds, dpcs)
@@ -128,27 +126,48 @@ func MergeAtOffset(cmds []cntl.DMXCommands, cs []cntl.DMXCommands, offset int) [
 	return cmds
 }
 
-// RenderDeviceParams renders the given DMXDeviceParams to an array of DMXCommands to be sent to a DMX device
-func RenderDeviceParams(ds *cntl.DataStore, dp *cntl.DMXDeviceParams) ([]cntl.DMXCommands, error) {
-	if dp.Device != nil && dp.Group != nil {
-		return []cntl.DMXCommands{}, ErrGroupDeviceUnique
+// checkDeviceParams checks a DeviceParams entity to be valid in terms of devices and values
+func checkDeviceParams(dp *cntl.DMXDeviceParams) error {
+	devicesSet := 0
+	if dp.Device != nil {
+		devicesSet++
 	}
-	if dp.Device == nil && dp.Group == nil {
-		return []cntl.DMXCommands{}, ErrGroupDeviceUnset
+	if dp.Group != nil {
+		devicesSet++
+	}
+	if devicesSet != 1 {
+		return ErrDeviceParamsDevicesInvalid
 	}
 
-	if dp.Params != nil && dp.AnimationID != "" {
-		return []cntl.DMXCommands{}, ErrParamsAnimationUnique
+	valuesSet := 0
+	if dp.Params != nil {
+		valuesSet++
 	}
-	if dp.Params == nil && dp.AnimationID == "" {
-		return []cntl.DMXCommands{}, ErrParamsAnimationUnset
+	if dp.AnimationID != "" {
+		valuesSet++
+	}
+	if dp.TransitionID != "" {
+		valuesSet++
+	}
+
+	if valuesSet != 1 {
+		return ErrDeviceParamsValuesInvalid
+	}
+
+	return nil
+}
+
+// RenderDeviceParams renders the given DMXDeviceParams to an array of DMXCommands to be sent to a DMX device
+func RenderDeviceParams(ds *cntl.DataStore, dp *cntl.DMXDeviceParams) ([]cntl.DMXCommands, error) {
+	if err := checkDeviceParams(dp); err != nil {
+		return []cntl.DMXCommands{}, err
 	}
 
 	var dd []*cntl.DMXDevice
 	if dp.Group != nil {
 		g, ok := ds.DMXDeviceGroups[dp.Group.ID]
 		if !ok {
-			return []cntl.DMXCommands{}, fmt.Errorf("Unable to find DMXDeviceGroup %q", dp.Group)
+			return []cntl.DMXCommands{}, fmt.Errorf("failed to find DMXDeviceGroup %q", dp.Group)
 		}
 
 		for _, sel := range g.Devices {
@@ -252,7 +271,7 @@ func RenderAnimation(ds *cntl.DataStore, dd []*cntl.DMXDevice, a *cntl.DMXAnimat
 	for _, f := range a.Frames {
 		ps, err := RenderParams(ds, dd, f.Params)
 		if err != nil {
-			return []cntl.DMXCommands{}, fmt.Errorf("Error rendering animation %q: %v", a.ID, err)
+			return []cntl.DMXCommands{}, fmt.Errorf("failed to render animation %q: %v", a.ID, err)
 		}
 
 		cmds[f.At] = append(cmds[f.At], ps...)

@@ -96,10 +96,11 @@ type DMXDeviceGroup struct {
 
 // DMXDeviceParams is an object storing DMX parameters including the selection of either groups or devices
 type DMXDeviceParams struct {
-	Group       *DMXDeviceGroupSelector `json:"group" yaml:"group"`
-	Device      *DMXDeviceSelector      `json:"device" yaml:"device"`
-	Params      *DMXParams              `json:"params" yaml:"params"`
-	AnimationID string                  `json:"animationId" yaml:"animationId"`
+	Group        *DMXDeviceGroupSelector `json:"group" yaml:"group"`
+	Device       *DMXDeviceSelector      `json:"device" yaml:"device"`
+	Params       *DMXParams              `json:"params" yaml:"params"`
+	AnimationID  string                  `json:"animationId" yaml:"animationId"`
+	TransitionID string                  `json:"transitionId" yaml:"transitionId"`
 }
 
 // DMXScene is a whole light scene
@@ -135,6 +136,19 @@ type DMXAnimation struct {
 	Length uint8               `json:"length" yaml:"length"`
 	Frames []DMXAnimationFrame `json:"frames" yaml:"frames"`
 }
+
+// DMXTransition is a transition from a given state to another one using an ease function
+type DMXTransition struct {
+	ID     string      `json:"id" yaml:"id"`
+	Name   string      `json:"name" yaml:"name"`
+	Ease   EaseFunc    `json:"ease" yaml:"ease"`
+	Length uint8       `json:"length" yaml:"length"`
+	From   []DMXParams `json:"from" yaml:"from"`
+	To     []DMXParams `json:"to" yaml:"to"`
+}
+
+// EaseFunc names a function that is used to ease a transition
+type EaseFunc string
 
 // DMXAnimationFrame is a single frame in an animation
 type DMXAnimationFrame struct {

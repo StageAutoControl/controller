@@ -162,7 +162,7 @@ func TestRenderScene(t *testing.T) {
 		}
 
 		if len(c) != len(e.c) {
-			t.Errorf("Expected to get %d commands, got %d at index %d", len(e.c), len(c), i)
+			t.Fatalf("Expected to get %d commands, got %d at index %d", len(e.c), len(c), i)
 		}
 
 		for j := range e.c {
@@ -222,7 +222,7 @@ func TestRenderPreset(t *testing.T) {
 		}
 
 		if len(c) != len(e.c) {
-			t.Errorf("Expected to get %d commands, got %d at index %d", len(e.c), len(c), i)
+			t.Fatalf("Expected to get %d commands, got %d at index %d", len(e.c), len(c), i)
 		}
 
 		for j := range e.c {
@@ -360,7 +360,7 @@ func TestRenderDeviceParams(t *testing.T) {
 		}
 
 		if len(c) != len(e.c) {
-			t.Errorf("Expected to get %d commands, got %d at index %d", len(e.c), len(c), i)
+			t.Fatalf("Expected to get %d commands, got %d at index %d", len(e.c), len(c), i)
 		}
 
 		for j := range e.c {
@@ -573,6 +573,105 @@ func TestHas(t *testing.T) {
 		ok := has(ds, e.d)
 		if ok != e.has {
 			t.Errorf("Expected to get %v for ID %q, got %v", e.has, e.d.ID, ok)
+		}
+	}
+}
+
+func TestCheckDeviceParams(t *testing.T) {
+	testCases := []struct {
+		dp          *cntl.DMXDeviceParams
+		expectedErr error
+	} {
+		{
+			dp: &cntl.DMXDeviceParams{
+				Device:       &cntl.DMXDeviceSelector{ID: "asdf"},
+				Group:        &cntl.DMXDeviceGroupSelector{ID: "asdf2"},
+				TransitionID: "anim1",
+				AnimationID:  "anim2",
+			},
+			expectedErr: ErrDeviceParamsDevicesInvalid,
+		},
+		{
+			dp: &cntl.DMXDeviceParams{
+				Device:       &cntl.DMXDeviceSelector{ID: "asdf"},
+				Group:        &cntl.DMXDeviceGroupSelector{ID: "asdf2"},
+				TransitionID: "anim1",
+				AnimationID:  "anim2",
+			},
+			expectedErr: ErrDeviceParamsDevicesInvalid,
+		},
+		{
+			dp: &cntl.DMXDeviceParams{
+				Device:       &cntl.DMXDeviceSelector{ID: "asdf"},
+				TransitionID: "anim1",
+				AnimationID:  "anim2",
+			},
+			expectedErr: ErrDeviceParamsValuesInvalid,
+		},
+		{
+			dp: &cntl.DMXDeviceParams{
+				Device:       &cntl.DMXDeviceSelector{ID: "asdf"},
+				TransitionID: "anim1",
+				Params:       &cntl.DMXParams{Blue: &cntl.DMXValue{Value: 255}},
+			},
+			expectedErr: ErrDeviceParamsValuesInvalid,
+		},
+		{
+			dp: &cntl.DMXDeviceParams{
+				Device:      &cntl.DMXDeviceSelector{ID: "asdf"},
+				AnimationID: "anim1",
+				Params:      &cntl.DMXParams{Blue: &cntl.DMXValue{Value: 255}},
+			},
+			expectedErr: ErrDeviceParamsValuesInvalid,
+		},
+		{
+			dp: &cntl.DMXDeviceParams{
+				Device: &cntl.DMXDeviceSelector{ID: "asdf"},
+				Params: &cntl.DMXParams{Blue: &cntl.DMXValue{Value: 255}},
+			},
+			expectedErr: nil,
+		},
+		{
+			dp: &cntl.DMXDeviceParams{
+				Device:      &cntl.DMXDeviceSelector{ID: "asdf"},
+				AnimationID: "anim1",
+			},
+			expectedErr: nil,
+		},
+		{
+			dp: &cntl.DMXDeviceParams{
+				Device:       &cntl.DMXDeviceSelector{ID: "asdf"},
+				TransitionID: "anim1",
+			},
+			expectedErr: nil,
+		},
+		{
+			dp: &cntl.DMXDeviceParams{
+				Group:  &cntl.DMXDeviceGroupSelector{ID: "asdf"},
+				Params: &cntl.DMXParams{Blue: &cntl.DMXValue{Value: 255}},
+			},
+			expectedErr: nil,
+		},
+		{
+			dp: &cntl.DMXDeviceParams{
+				Group:       &cntl.DMXDeviceGroupSelector{ID: "asdf"},
+				AnimationID: "anim1",
+			},
+			expectedErr: nil,
+		},
+		{
+			dp: &cntl.DMXDeviceParams{
+				Group:        &cntl.DMXDeviceGroupSelector{ID: "asdf"},
+				TransitionID: "anim1",
+			},
+			expectedErr: nil,
+		},
+	}
+
+	for index, testCase := range testCases {
+		err := checkDeviceParams(testCase.dp)
+		if err != testCase.expectedErr {
+			t.Errorf("index %d: expected to get error %v, but got %v", index, testCase.expectedErr, err)
 		}
 	}
 }
