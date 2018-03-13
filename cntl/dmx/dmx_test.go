@@ -572,7 +572,7 @@ func TestHas(t *testing.T) {
 	for _, e := range exp {
 		ok := has(ds, e.d)
 		if ok != e.has {
-			t.Errorf("Expected to get %s for ID %q, got %s", e.has, e.d.ID, ok)
+			t.Errorf("Expected to get %v for ID %q, got %v", e.has, e.d.ID, ok)
 		}
 	}
 }

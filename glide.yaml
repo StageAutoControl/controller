@@ -16,6 +16,7 @@ import:
   subpackages:
   - packet/code
 - package: github.com/rakyll/portmidi
+  version: 1246dd47c56089ea2ae791266edb7f4c6b90c045
 - package: github.com/satori/go.uuid
   version: ^1.1.0
 - package: github.com/spf13/cobra
