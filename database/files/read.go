@@ -75,4 +75,8 @@ func expandData(data *cntl.DataStore, fileData *fileData) {
 	for _, a := range fileData.DMXAnimations {
 		data.DMXAnimations[a.ID] = a
 	}
+
+	for _, t := range fileData.DMXTransitions {
+		data.DMXTransitions[t.ID] = t
+	}
 }

@@ -18,6 +18,7 @@ const (
 	fileNameDmxScenes       = "dmx_scenes"
 	fileNameDmxPresets      = "dmx_presets"
 	fileNameDmxAnimations   = "dmx_animations"
+	fileNameDmxTransitions  = "dmx_transitions"
 )
 
 type fileData struct {
@@ -26,6 +27,7 @@ type fileData struct {
 	DMXScenes       []*cntl.DMXScene
 	DMXPresets      []*cntl.DMXPreset
 	DMXAnimations   []*cntl.DMXAnimation
+	DMXTransitions  []*cntl.DMXTransition
 	DMXDevices      []*cntl.DMXDevice
 	DMXDeviceTypes  []*cntl.DMXDeviceType
 	DMXDeviceGroups []*cntl.DMXDeviceGroup
@@ -80,6 +82,7 @@ func makefileTargets(data *fileData) map[string]interface{} {
 		fileNameDmxScenes:       &data.DMXScenes,
 		fileNameDmxPresets:      &data.DMXPresets,
 		fileNameDmxAnimations:   &data.DMXAnimations,
+		fileNameDmxTransitions:  &data.DMXTransitions,
 	}
 	return fileTargets
 }

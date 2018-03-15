@@ -4,13 +4,14 @@ import (
 	"github.com/StageAutoControl/controller/cntl"
 )
 
+// fixture values
 var (
-	value0  = &cntl.DMXValue{0}
-	value31  = &cntl.DMXValue{31}
-	value63  = &cntl.DMXValue{63}
-	value127 = &cntl.DMXValue{127}
-	value200 = &cntl.DMXValue{200}
-	value255 = &cntl.DMXValue{255}
+	Value0   = &cntl.DMXValue{0}
+	Value31  = &cntl.DMXValue{31}
+	Value63  = &cntl.DMXValue{63}
+	Value127 = &cntl.DMXValue{127}
+	Value200 = &cntl.DMXValue{200}
+	Value255 = &cntl.DMXValue{255}
 )
 
 var data = &cntl.DataStore{
@@ -52,7 +53,7 @@ var data = &cntl.DataStore{
 						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
 					},
 					Params: &cntl.DMXParams{
-						Red: value255,
+						Red: Value255,
 					},
 				},
 			}},
@@ -65,7 +66,7 @@ var data = &cntl.DataStore{
 						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
 					},
 					Params: &cntl.DMXParams{
-						Blue: value255,
+						Blue: Value255,
 					},
 				},
 			}},
@@ -78,7 +79,7 @@ var data = &cntl.DataStore{
 						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
 					},
 					Params: &cntl.DMXParams{
-						Green: value255,
+						Green: Value255,
 					},
 				},
 			}},
@@ -91,7 +92,7 @@ var data = &cntl.DataStore{
 					ID: "cb58bc10-0b16-11e7-b45a-7bee591b0adb",
 				},
 					Params: &cntl.DMXParams{
-						Strobe: value255,
+						Strobe: Value255,
 					},
 				},
 			},
@@ -103,7 +104,7 @@ var data = &cntl.DataStore{
 				{
 					Group: &cntl.DMXDeviceGroupSelector{ID: "475b71a0-0b16-11e7-9406-e3f678e8b788"},
 					Params: &cntl.DMXParams{
-						Red: value200,
+						Red: Value200,
 					},
 				},
 			},
@@ -325,10 +326,10 @@ var data = &cntl.DataStore{
 			ID:     "a51f7b2a-0e7b-11e7-bfc8-57da167865d7",
 			Length: 4,
 			Frames: []cntl.DMXAnimationFrame{
-				{At: 0, Params: cntl.DMXParams{LED: 1, Blue: value31}},
-				{At: 1, Params: cntl.DMXParams{LED: 1, Blue: value63}},
-				{At: 2, Params: cntl.DMXParams{LED: 1, Blue: value127}},
-				{At: 3, Params: cntl.DMXParams{LED: 1, Blue: value255}},
+				{At: 0, Params: cntl.DMXParams{LED: 1, Blue: Value31}},
+				{At: 1, Params: cntl.DMXParams{LED: 1, Blue: Value63}},
+				{At: 2, Params: cntl.DMXParams{LED: 1, Blue: Value127}},
+				{At: 3, Params: cntl.DMXParams{LED: 1, Blue: Value255}},
 			},
 		},
 	},
@@ -337,16 +338,27 @@ var data = &cntl.DataStore{
 			ID:   "a1a02b6c-12dd-4d7b-bc3e-24cc823adf21",
 			Name: "Blue Bar pulsing on",
 			Ease: cntl.EaseInOutQuad,
-			From: []cntl.DMXParams{
+			Length: 8,
+			Params: []cntl.DMXTransitionParams{
 				{
-					LED: 1,
-					Blue: value0,
+					From: cntl.DMXParams{
+						LED:  1,
+						Blue: Value0,
+					},
+					To: cntl.DMXParams{
+						LED:  1,
+						Blue: Value255,
+					},
 				},
-			},
-			To: []cntl.DMXParams{
 				{
-					LED: 1,
-					Blue: value255,
+					From: cntl.DMXParams{
+						LED:  2,
+						Blue: Value0,
+					},
+					To: cntl.DMXParams{
+						LED:  2,
+						Blue: Value255,
+					},
 				},
 			},
 		},

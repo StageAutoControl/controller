@@ -1,0 +1,30 @@
+[
+  {
+    "id": "a1a02b6c-12dd-4d7b-bc3e-24cc823adf21",
+    "name": "Blue Bar pulsing on",
+    "ease": "InOutQuad",
+    "length": 8,
+    "params": [
+      {
+        "from": {
+          "led": 1,
+          "blue": 0
+        },
+        "to": {
+          "led": 1,
+          "blue": 255
+        }
+      },
+      {
+        "from": {
+          "led": 2,
+          "blue": 0
+        },
+        "to": {
+          "led": 2,
+          "blue": 255
+        }
+      }
+    ]
+  }
+]

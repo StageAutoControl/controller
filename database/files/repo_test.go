@@ -71,6 +71,17 @@ func TestRepository_Load(t *testing.T) {
 		}
 	}
 
+	for key, tr := range fix.DMXTransitions {
+		dt, ok := data.DMXTransitions[key]
+		if !ok {
+			t.Fatalf("ID %q not found \n", key)
+		}
+
+		if dt.ID != tr.ID {
+			t.Errorf("ID %q is not equal \n", key)
+		}
+	}
+
 	for key, dg := range fix.DMXDeviceGroups {
 		ddg, ok := data.DMXDeviceGroups[key]
 		if !ok {

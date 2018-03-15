@@ -16,13 +16,13 @@ func (r *Repository) writeDir(data *fileData, dir string) error {
 		file := getFileName(dir, fileName)
 
 		if stat, err := os.Stat(file); err != nil && !os.IsNotExist(err) {
-			return fmt.Errorf("Error checking file %q: %v", file, err)
+			return fmt.Errorf("error checking file %q: %v", file, err)
 		} else if stat.IsDir() {
-			return fmt.Errorf("Error checking file %q: It's a dir.", file)
+			return fmt.Errorf("error checking file %q: It's a dir", file)
 		}
 
 		if err := r.writeFile(file, target); err != nil {
-			return fmt.Errorf("Error writing file %q: %v", file, err)
+			return fmt.Errorf("error writing file %q: %v", file, err)
 		}
 	}
 
@@ -73,5 +73,9 @@ func flattenData(store *cntl.DataStore, fileData *fileData) {
 
 	for _, a := range store.DMXAnimations {
 		fileData.DMXAnimations = append(fileData.DMXAnimations, a)
+	}
+
+	for _, t := range store.DMXTransitions {
+		fileData.DMXTransitions = append(fileData.DMXTransitions, t)
 	}
 }
