@@ -21,32 +21,32 @@ func TestRenderTransition(t *testing.T) {
 			t: ds.DMXTransitions["a1a02b6c-12dd-4d7b-bc3e-24cc823adf21"],
 			c: []cntl.DMXCommands{
 				{
-					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 31}},
-					{Universe: 1, Channel: 232, Value: cntl.DMXValue{Value: 31}},
+					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 0}},
+					{Universe: 1, Channel: 232, Value: cntl.DMXValue{Value: 0}},
 				},
 				{
-					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 63}},
-					{Universe: 1, Channel: 232, Value: cntl.DMXValue{Value: 63}},
+					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 10}},
+					{Universe: 1, Channel: 232, Value: cntl.DMXValue{Value: 10}},
 				},
 				{
-					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 127}},
-					{Universe: 1, Channel: 232, Value: cntl.DMXValue{Value: 127}},
+					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 41}},
+					{Universe: 1, Channel: 232, Value: cntl.DMXValue{Value: 41}},
 				},
 				{
-					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 255}},
-					{Universe: 1, Channel: 232, Value: cntl.DMXValue{Value: 255}},
+					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 93}},
+					{Universe: 1, Channel: 232, Value: cntl.DMXValue{Value: 93}},
 				},
 				{
-					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 255}},
-					{Universe: 1, Channel: 232, Value: cntl.DMXValue{Value: 255}},
+					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 161}},
+					{Universe: 1, Channel: 232, Value: cntl.DMXValue{Value: 161}},
 				},
 				{
-					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 255}},
-					{Universe: 1, Channel: 232, Value: cntl.DMXValue{Value: 255}},
+					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 213}},
+					{Universe: 1, Channel: 232, Value: cntl.DMXValue{Value: 213}},
 				},
 				{
-					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 255}},
-					{Universe: 1, Channel: 232, Value: cntl.DMXValue{Value: 255}},
+					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 244}},
+					{Universe: 1, Channel: 232, Value: cntl.DMXValue{Value: 244}},
 				},
 				{
 					{Universe: 1, Channel: 228, Value: cntl.DMXValue{Value: 255}},

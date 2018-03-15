@@ -337,7 +337,7 @@ var data = &cntl.DataStore{
 		"a1a02b6c-12dd-4d7b-bc3e-24cc823adf21": {
 			ID:   "a1a02b6c-12dd-4d7b-bc3e-24cc823adf21",
 			Name: "Blue Bar pulsing on",
-			Ease: cntl.EaseInOutQuad,
+			Ease: cntl.EaseQuadInOut,
 			Length: 8,
 			Params: []cntl.DMXTransitionParams{
 				{

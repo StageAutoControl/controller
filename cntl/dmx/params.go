@@ -154,3 +154,14 @@ func RenderParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, p cntl.DMXParams) (c
 
 	return
 }
+
+func copyParams(p cntl.DMXParams) cntl.DMXParams {
+	return cntl.DMXParams{
+		LED: p.LED,
+		Blue: p.Blue,
+		Red: p.Red,
+		Green: p.Green,
+		Strobe: p.Strobe,
+		Preset: p.Preset,
+	}
+}
