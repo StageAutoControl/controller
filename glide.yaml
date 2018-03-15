@@ -22,3 +22,4 @@ import:
 - package: github.com/spf13/cobra
 - package: github.com/spf13/viper
   version: ^1.0.0
+- package: github.com/creasty/go-easing

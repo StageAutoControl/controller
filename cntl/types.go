@@ -143,8 +143,13 @@ type DMXTransition struct {
 	Name   string      `json:"name" yaml:"name"`
 	Ease   EaseFunc    `json:"ease" yaml:"ease"`
 	Length uint8       `json:"length" yaml:"length"`
-	From   []DMXParams `json:"from" yaml:"from"`
-	To     []DMXParams `json:"to" yaml:"to"`
+	Params []DMXTransitionParams `json:"params" yaml:"params"`
+}
+
+// DMXTransitionParams hold the params for a transition
+type DMXTransitionParams struct {
+	From   DMXParams `json:"from" yaml:"from"`
+	To     DMXParams `json:"to" yaml:"to"`
 }
 
 // EaseFunc names a function that is used to ease a transition
