@@ -1,6 +1,7 @@
 package dmx
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/StageAutoControl/controller/cntl"
@@ -216,9 +217,10 @@ func TestRenderDeviceParams(t *testing.T) {
 func TestRenderParams(t *testing.T) {
 	ds := fixtures.DataStore()
 	exp := []struct {
-		ds []*cntl.DMXDevice
-		p  cntl.DMXParams
-		c  int
+		ds    []*cntl.DMXDevice
+		p     cntl.DMXParams
+		count int
+		cmds  cntl.DMXCommands
 	}{
 		{
 			ds: []*cntl.DMXDevice{
@@ -227,7 +229,10 @@ func TestRenderParams(t *testing.T) {
 			p: cntl.DMXParams{
 				Red: fixtures.Value255,
 			},
-			c: 1,
+			count: 1,
+			cmds: cntl.DMXCommands{
+				{Universe: 2, Channel: 14, Value: cntl.DMXValue{Value: 255}},
+			},
 		},
 		{
 			ds: []*cntl.DMXDevice{
@@ -239,7 +244,15 @@ func TestRenderParams(t *testing.T) {
 				Green: fixtures.Value255,
 				Blue:  fixtures.Value255,
 			},
-			c: 6,
+			count: 6,
+			cmds: cntl.DMXCommands{
+				{Universe: 2, Channel: 14, Value: cntl.DMXValue{Value: 255}},
+				{Universe: 2, Channel: 15, Value: cntl.DMXValue{Value: 255}},
+				{Universe: 2, Channel: 16, Value: cntl.DMXValue{Value: 255}},
+				{Universe: 2, Channel: 26, Value: cntl.DMXValue{Value: 255}},
+				{Universe: 2, Channel: 27, Value: cntl.DMXValue{Value: 255}},
+				{Universe: 2, Channel: 28, Value: cntl.DMXValue{Value: 255}},
+			},
 		},
 	}
 
@@ -249,8 +262,16 @@ func TestRenderParams(t *testing.T) {
 			t.Fatalf("Unexpected error: %s", err)
 		}
 
-		if len(c) != e.c {
-			t.Errorf("Expected to get %d commands, got %d.", e.c, len(c))
+		if len(c) != e.count {
+			t.Errorf("Expected to get %d commands, got %d.", e.count, len(c))
+		}
+
+		fmt.Printf("%+v\n", c)
+
+		for i, cmd := range e.cmds {
+			if !c.Contains(cmd) {
+				t.Errorf("Expected command list to contain %v at index %v, but doesn't.", cmd, i)
+			}
 		}
 	}
 }

@@ -125,6 +125,7 @@ type DMXParams struct {
 	Red    *DMXValue `json:"red" yaml:"red"`
 	Green  *DMXValue `json:"green" yaml:"green"`
 	Blue   *DMXValue `json:"blue" yaml:"blue"`
+	White  *DMXValue `json:"white" yaml:"white"`
 	Strobe *DMXValue `json:"strobe" yaml:"strobe"`
 	Preset *DMXValue `json:"preset" yaml:"preset"`
 }

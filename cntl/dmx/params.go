@@ -107,6 +107,12 @@ func RenderDeviceParams(ds *cntl.DataStore, dp *cntl.DMXDeviceParams) ([]cntl.DM
 func RenderParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, p cntl.DMXParams) (cmds cntl.DMXCommands, err error) {
 	var channels cntl.DMXCommands
 
+	if p.White != nil {
+		channels = append(channels, cntl.DMXCommand{
+			Channel: ChannelWhite,
+			Value:   *p.White,
+		})
+	}
 	if p.Red != nil {
 		channels = append(channels, cntl.DMXCommand{
 			Channel: ChannelRed,
@@ -153,15 +159,4 @@ func RenderParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, p cntl.DMXParams) (c
 	}
 
 	return
-}
-
-func copyParams(p cntl.DMXParams) cntl.DMXParams {
-	return cntl.DMXParams{
-		LED: p.LED,
-		Blue: p.Blue,
-		Red: p.Red,
-		Green: p.Green,
-		Strobe: p.Strobe,
-		Preset: p.Preset,
-	}
 }

@@ -137,6 +137,7 @@ func (v1 DMXParams) Equals(v2 DMXParams) bool {
 	return v1.LED == v2.LED &&
 		(v1.Preset == nil && v2.Preset == nil || v1.Preset != nil && v2.Preset != nil && v1.Preset.Equals(v2.Preset)) &&
 		(v1.Strobe == nil && v2.Strobe == nil || v1.Strobe != nil && v2.Strobe != nil && v1.Strobe.Equals(v2.Strobe)) &&
+		(v1.White == nil && v2.White == nil || v1.White != nil && v2.White != nil && v1.White.Equals(v2.White)) &&
 		(v1.Red == nil && v2.Red == nil || v1.Red != nil && v2.Red != nil && v1.Red.Equals(v2.Red)) &&
 		(v1.Green == nil && v2.Green == nil || v1.Green != nil && v2.Green != nil && v1.Green.Equals(v2.Green)) &&
 		(v1.Blue == nil && v2.Blue == nil || v1.Blue != nil && v2.Blue != nil && v1.Blue.Equals(v2.Blue))
