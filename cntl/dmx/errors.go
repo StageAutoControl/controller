@@ -4,9 +4,9 @@ import "errors"
 
 // Render Errors
 var (
-	ErrDeviceHasDisabledModeChannel   = errors.New("device has disabled Model channel")
-	ErrDeviceHasDisabledStrobeChannel = errors.New("device has disabled Strobel channel")
-	ErrDeviceHasDisabledDimmerChannel = errors.New("device has disabled Dimmerl channel")
+	ErrDeviceHasDisabledModeChannel   = errors.New("device has disabled Mode channel")
+	ErrDeviceHasDisabledStrobeChannel = errors.New("device has disabled Strobe channel")
+	ErrDeviceHasDisabledDimmerChannel = errors.New("device has disabled Dimmer channel")
 
 	ErrDeviceParamsDevicesInvalid         = errors.New("DMXDeviceParams can only have a group or a Device")
 	ErrDeviceParamsValuesInvalid          = errors.New("DMXDeviceParams must not have more the one of [Animation, Transition, Params]")

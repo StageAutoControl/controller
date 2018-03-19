@@ -6,8 +6,11 @@ package artnet
 import (
 	"net"
 	"os"
+	"os/signal"
 	"runtime"
+	"strings"
 	"sync"
+	"syscall"
 	"time"
 
 	root "github.com/StageAutoControl/controller/cmd"
@@ -16,10 +19,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Server represents the ArtNetTest command
-var Server = &cobra.Command{
-	Use:   "server",
-	Short: "ArtNet server to test network communication",
+// Listen represents the ArtNetTest command
+var Listen = &cobra.Command{
+	Use:   "listen",
+	Short: "ArtNet server to listen for devices and print them",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		var ip net.IP
@@ -54,14 +57,28 @@ var Server = &cobra.Command{
 		}()
 
 		time.Sleep(10 * time.Second)
-		c.SendDMXToAddress([512]byte{0x00, 0xff, 0x00, 0xff, 0x00}, artnet.Address{Net: 0, SubUni: 0})
-		time.Sleep(2 * time.Second)
-		c.SendDMXToAddress([512]byte{0xff, 0x00, 0x00, 0xff, 0x00}, artnet.Address{Net: 0, SubUni: 0})
-		time.Sleep(2 * time.Second)
-		c.SendDMXToAddress([512]byte{0x00, 0x00, 0xff, 0xff, 0x00}, artnet.Address{Net: 0, SubUni: 0})
-		time.Sleep(2 * time.Second)
-		c.SendDMXToAddress([512]byte{}, artnet.Address{Net: 0, SubUni: 0})
-		time.Sleep(2 * time.Second)
+
+		cancel := make(chan os.Signal, 2)
+		signal.Notify(cancel, syscall.SIGTERM, syscall.SIGKILL)
+		var builder strings.Builder
+
+	LOOP:
+		for {
+			select {
+			case <-cancel:
+				break LOOP
+			default:
+			}
+
+			for _, n := range c.Nodes {
+				builder.WriteString(artnetTransport.NodeToString(n))
+			}
+
+			root.Logger.Infof(builder.String())
+			builder.Reset()
+
+			time.Sleep(10 * time.Second)
+		}
 
 		c.Stop()
 		wg.Wait()
@@ -71,5 +88,5 @@ var Server = &cobra.Command{
 }
 
 func init() {
-	ArtNetCmd.AddCommand(Server)
+	ArtNetCmd.AddCommand(Listen)
 }

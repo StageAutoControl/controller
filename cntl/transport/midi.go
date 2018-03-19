@@ -2,7 +2,6 @@ package transport
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 
 	"github.com/Sirupsen/logrus"
@@ -37,7 +36,7 @@ func NewMIDI(logger *logrus.Entry, deviceID string) (*MIDI, error) {
 
 	info := portmidi.Info(d)
 	if info == nil {
-		log.Fatal("Unable to read default output device")
+		logger.Fatal("Unable to read default output device")
 	}
 
 	out, err := portmidi.NewOutputStream(d, 10, 0)

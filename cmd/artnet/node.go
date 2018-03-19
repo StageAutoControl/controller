@@ -4,9 +4,7 @@
 package artnet
 
 import (
-	"fmt"
 	"log"
-	"math/rand"
 	"net"
 	"os"
 	"os/signal"
@@ -39,7 +37,11 @@ var Node = &cobra.Command{
 			log.Fatal("No IP found")
 		}
 
-		n := artnet.NewNode(fmt.Sprintf("node-%d", rand.Int()), code.StNode, ip, artnet.NewLogger(root.Logger))
+		host, err := os.Hostname()
+		if err != nil {
+			panic(err)
+		}
+		n := artnet.NewNode(host, code.StNode, ip, artnet.NewLogger(root.Logger))
 
 		if err := n.Start(); err != nil {
 			log.Fatal(err)
