@@ -64,6 +64,22 @@ func (v1 dmxDeviceParamsList) Equals(v2 dmxDeviceParamsList) bool {
 	return true
 }
 
+type dmxParamsList []DMXParams
+
+func (v1 dmxParamsList) Equals(v2 dmxParamsList) bool {
+	if len(v1) != len(v2) {
+		return false
+	}
+
+	for i := range v1 {
+		if !v1[i].Equals(v2[i]) {
+			return false
+		}
+	}
+
+	return true
+}
+
 type tagList []Tag
 
 func (v1 tagList) Equals(v2 tagList) bool {

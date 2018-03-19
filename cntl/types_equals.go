@@ -110,10 +110,7 @@ func (v1 DMXDeviceParams) Equals(v2 DMXDeviceParams) bool {
 		return false
 	}
 
-	return (v1.Group == nil && v2.Group == nil || (*v1.Group).Equals(*v2.Group)) &&
-		(v1.Device == nil && v2.Device == nil || (*v1.Device).Equals(*v2.Device)) &&
-		(v1.Params == nil && v2.Params == nil || (*v1.Params).Equals(*v2.Params)) &&
-		v1.AnimationID == v2.AnimationID
+	return dmxParamsList(v1.Params).Equals(dmxParamsList(v2.Params))
 }
 
 // Equals returns whether the two given objects are equal

@@ -43,7 +43,9 @@ func TestCheckDeviceParams(t *testing.T) {
 			dp: &cntl.DMXDeviceParams{
 				Device:       &cntl.DMXDeviceSelector{ID: "asdf"},
 				TransitionID: "anim1",
-				Params:       &cntl.DMXParams{Blue: fixtures.Value255},
+				Params: []cntl.DMXParams{
+					{Blue: fixtures.Value255},
+				},
 			},
 			expectedErr: ErrDeviceParamsValuesInvalid,
 		},
@@ -51,14 +53,17 @@ func TestCheckDeviceParams(t *testing.T) {
 			dp: &cntl.DMXDeviceParams{
 				Device:      &cntl.DMXDeviceSelector{ID: "asdf"},
 				AnimationID: "anim1",
-				Params:      &cntl.DMXParams{Blue: fixtures.Value255},
+				Params: []cntl.DMXParams{
+					{Blue: fixtures.Value255},},
 			},
 			expectedErr: ErrDeviceParamsValuesInvalid,
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
 				Device: &cntl.DMXDeviceSelector{ID: "asdf"},
-				Params: &cntl.DMXParams{Blue: fixtures.Value255},
+				Params: []cntl.DMXParams{
+					{Blue: fixtures.Value255},
+				},
 			},
 			expectedErr: nil,
 		},
@@ -78,8 +83,10 @@ func TestCheckDeviceParams(t *testing.T) {
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Group:  &cntl.DMXDeviceGroupSelector{ID: "asdf"},
-				Params: &cntl.DMXParams{Blue: fixtures.Value255},
+				Group: &cntl.DMXDeviceGroupSelector{ID: "asdf"},
+				Params: []cntl.DMXParams{
+					{Blue: fixtures.Value255},
+				},
 			},
 			expectedErr: nil,
 		},
@@ -117,11 +124,13 @@ func TestRenderDeviceParams(t *testing.T) {
 		{
 			dp: &cntl.DMXDeviceParams{
 				Device: &cntl.DMXDeviceSelector{ID: "5e0335e0-0b17-11e7-ad6c-63a7138d926c"},
-				Params: &cntl.DMXParams{
-					Red:   fixtures.Value255,
-					Green: fixtures.Value255,
-					Blue:  fixtures.Value255,
-					LED:   0,
+				Params: []cntl.DMXParams{
+					{
+						Red:   fixtures.Value255,
+						Green: fixtures.Value255,
+						Blue:  fixtures.Value255,
+						LED:   0,
+					},
 				},
 			},
 			c: []cntl.DMXCommands{
@@ -136,11 +145,13 @@ func TestRenderDeviceParams(t *testing.T) {
 		{
 			dp: &cntl.DMXDeviceParams{
 				Group: &cntl.DMXDeviceGroupSelector{ID: "475b71a0-0b16-11e7-9406-e3f678e8b788"},
-				Params: &cntl.DMXParams{
-					Red:   fixtures.Value255,
-					Green: fixtures.Value255,
-					Blue:  fixtures.Value255,
-					LED:   0,
+				Params: []cntl.DMXParams{
+					{
+						Red:   fixtures.Value255,
+						Green: fixtures.Value255,
+						Blue:  fixtures.Value255,
+						LED:   0,
+					},
 				},
 			},
 			c: []cntl.DMXCommands{
@@ -157,8 +168,10 @@ func TestRenderDeviceParams(t *testing.T) {
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Group:  &cntl.DMXDeviceGroupSelector{ID: "cb58bc10-0b16-11e7-b45a-7bee591b0adb"},
-				Params: &cntl.DMXParams{Preset: fixtures.Value200},
+				Group: &cntl.DMXDeviceGroupSelector{ID: "cb58bc10-0b16-11e7-b45a-7bee591b0adb"},
+				Params: []cntl.DMXParams{
+					{Preset: fixtures.Value200},
+				},
 			},
 			c: []cntl.DMXCommands{
 				{

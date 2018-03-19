@@ -52,8 +52,8 @@ var data = &cntl.DataStore{
 					Device: &cntl.DMXDeviceSelector{
 						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
 					},
-					Params: &cntl.DMXParams{
-						Red: Value255,
+					Params: []cntl.DMXParams{
+						{Red: Value255},
 					},
 				},
 			}},
@@ -65,8 +65,8 @@ var data = &cntl.DataStore{
 					Device: &cntl.DMXDeviceSelector{
 						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
 					},
-					Params: &cntl.DMXParams{
-						Blue: Value255,
+					Params: []cntl.DMXParams{
+						{Blue: Value255},
 					},
 				},
 			}},
@@ -78,8 +78,8 @@ var data = &cntl.DataStore{
 					Device: &cntl.DMXDeviceSelector{
 						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
 					},
-					Params: &cntl.DMXParams{
-						Green: Value255,
+					Params: []cntl.DMXParams{
+						{Green: Value255},
 					},
 				},
 			}},
@@ -91,8 +91,8 @@ var data = &cntl.DataStore{
 				{Group: &cntl.DMXDeviceGroupSelector{
 					ID: "cb58bc10-0b16-11e7-b45a-7bee591b0adb",
 				},
-					Params: &cntl.DMXParams{
-						Strobe: Value255,
+					Params: []cntl.DMXParams{
+						{Strobe: Value255},
 					},
 				},
 			},
@@ -103,8 +103,8 @@ var data = &cntl.DataStore{
 			DeviceParams: []cntl.DMXDeviceParams{
 				{
 					Group: &cntl.DMXDeviceGroupSelector{ID: "475b71a0-0b16-11e7-9406-e3f678e8b788"},
-					Params: &cntl.DMXParams{
-						Red: Value200,
+					Params: []cntl.DMXParams{
+						{Red: Value200},
 					},
 				},
 			},
@@ -335,9 +335,9 @@ var data = &cntl.DataStore{
 	},
 	DMXTransitions: map[string]*cntl.DMXTransition{
 		"a1a02b6c-12dd-4d7b-bc3e-24cc823adf21": {
-			ID:   "a1a02b6c-12dd-4d7b-bc3e-24cc823adf21",
-			Name: "Blue Bar pulsing on",
-			Ease: cntl.EaseQuadInOut,
+			ID:     "a1a02b6c-12dd-4d7b-bc3e-24cc823adf21",
+			Name:   "Blue Bar pulsing on",
+			Ease:   cntl.EaseQuadInOut,
 			Length: 8,
 			Params: []cntl.DMXTransitionParams{
 				{

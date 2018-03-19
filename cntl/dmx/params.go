@@ -92,12 +92,18 @@ func RenderDeviceParams(ds *cntl.DataStore, dp *cntl.DMXDeviceParams) ([]cntl.DM
 	}
 
 	if dp.Params != nil {
-		c, err := RenderParams(ds, dd, *dp.Params)
-		if err != nil {
-			return []cntl.DMXCommands{}, err
+		cs := make([]cntl.DMXCommands, 1)
+
+		for _, p := range dp.Params {
+			c, err := RenderParams(ds, dd, p)
+			if err != nil {
+				return []cntl.DMXCommands{}, err
+			}
+
+			cs[0] = append(cs[0], c...)
 		}
 
-		return []cntl.DMXCommands{c}, nil
+		return cs, nil
 	}
 
 	return []cntl.DMXCommands{}, errors.New("this code should be unreachable. If you see this message please reset the world spin")

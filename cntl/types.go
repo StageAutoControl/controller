@@ -98,7 +98,7 @@ type DMXDeviceGroup struct {
 type DMXDeviceParams struct {
 	Group        *DMXDeviceGroupSelector `json:"group" yaml:"group"`
 	Device       *DMXDeviceSelector      `json:"device" yaml:"device"`
-	Params       *DMXParams              `json:"params" yaml:"params"`
+	Params       []DMXParams             `json:"params" yaml:"params"`
 	AnimationID  string                  `json:"animationId" yaml:"animationId"`
 	TransitionID string                  `json:"transitionId" yaml:"transitionId"`
 }
