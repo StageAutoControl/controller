@@ -35,3 +35,8 @@ func (v *DMXValue) Equals(v2 *DMXValue) bool {
 func (v *DMXValue) Byte() byte {
 	return byte(v.Value)
 }
+
+// Uint8 returns the original uint8 representation of the value
+func (v *DMXValue) Uint8() uint8 {
+	return v.Value
+}

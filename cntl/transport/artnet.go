@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/StageAutoControl/controller/cntl"
@@ -15,6 +16,7 @@ import (
 type ArtNet struct {
 	name string
 	c    *artnet.Controller
+	state artnetTransport.State
 }
 
 // NewArtNet returns a new ArtNet transport instance
@@ -33,17 +35,23 @@ func NewArtNet(logger *logrus.Entry, name string) (*ArtNet, error) {
 		return nil, fmt.Errorf("failed to start controller: %v", err)
 	}
 
+	logger.Warn("Waiting 10 seconds for nodes to register")
+	time.Sleep(10 * time.Second)
+
 	return &ArtNet{
 		name: name,
 		c:    c,
+		state: artnetTransport.NewState(),
 	}, nil
 }
 
 func (a *ArtNet) Write(cmd cntl.Command) error {
 	for _, c := range cmd.DMXCommands {
-		dmx := [512]byte{}
-		dmx[c.Channel] = c.Value.Byte()
-		a.c.SendDMXToAddress(dmx, universeToAddress(c.Universe))
+		a.state.Set(uint16(c.Universe), uint8(c.Channel), c.Value.Uint8())
+	}
+
+	for u, dmx := range a.state {
+		a.c.SendDMXToAddress(dmx, universeToAddress(cntl.DMXUniverse(u)))
 	}
 
 	return nil
