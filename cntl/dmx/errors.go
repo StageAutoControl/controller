@@ -7,6 +7,7 @@ var (
 	ErrDeviceHasDisabledModeChannel   = errors.New("device has disabled Mode channel")
 	ErrDeviceHasDisabledStrobeChannel = errors.New("device has disabled Strobe channel")
 	ErrDeviceHasDisabledDimmerChannel = errors.New("device has disabled Dimmer channel")
+	ErrDeviceIsNotMoving              = errors.New("device is not moving, cannot use tilt and pan")
 
 	ErrDeviceParamsDevicesInvalid         = errors.New("DMXDeviceParams can only have a group or a Device")
 	ErrDeviceParamsValuesInvalid          = errors.New("DMXDeviceParams must not have more the one of [Animation, Transition, Params]")

@@ -143,10 +143,22 @@ func RenderParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, p cntl.DMXParams) (c
 			Value:   *p.Strobe,
 		})
 	}
-	if p.Preset != nil {
+	if p.Mode != nil {
 		channels = append(channels, cntl.DMXCommand{
 			Channel: ChannelMode,
-			Value:   *p.Preset,
+			Value:   *p.Mode,
+		})
+	}
+	if p.Tilt != nil {
+		channels = append(channels, cntl.DMXCommand{
+			Channel: ChannelTilt,
+			Value:   *p.Tilt,
+		})
+	}
+	if p.Pan != nil {
+		channels = append(channels, cntl.DMXCommand{
+			Channel: ChannelPan,
+			Value:   *p.Pan,
 		})
 	}
 

@@ -62,7 +62,7 @@ func renderDmxCommands(cmds cntl.DMXCommands) string {
 	s := make([]string, len(cmds))
 
 	for i, c := range cmds {
-		s[i] = fmt.Sprintf("%d:%d -> %d", c.Universe, c.Channel, c.Value)
+		s[i] = fmt.Sprintf("%d:%d -> %d", c.Universe, c.Channel, c.Value.Value)
 	}
 
 	return strings.Join(s, " | ")

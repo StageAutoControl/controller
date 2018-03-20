@@ -20,40 +20,56 @@ func getDeviceChannel(ds *cntl.DataStore, d *cntl.DMXDevice, c cntl.DMXChannel, 
 		return cntl.DMXChannel(0), fmt.Errorf("given device has insufficient biggest index of LEDs %d to handle the given LED index %d", ledLen-1, led)
 	}
 
+	var channel cntl.DMXChannel
+
 	switch c {
 	case ChannelRed:
-		return d.StartChannel + getLED(dt, led).Red, nil
+		channel = getLED(dt, led).Red
 
 	case ChannelGreen:
-		return d.StartChannel + getLED(dt, led).Green, nil
+		channel = getLED(dt, led).Green
 
 	case ChannelBlue:
-		return d.StartChannel + getLED(dt, led).Blue, nil
+		channel = getLED(dt, led).Blue
 
 	case ChannelWhite:
-		return d.StartChannel + getLED(dt, led).White, nil
+		channel = getLED(dt, led).White
 
 	case ChannelStrobe:
 		if !dt.StrobeEnabled {
 			return cntl.DMXChannel(0), ErrDeviceHasDisabledStrobeChannel
 		}
-		return d.StartChannel + dt.StrobeChannel, nil
+		channel = dt.StrobeChannel
 
 	case ChannelMode:
 		if !dt.ModeEnabled {
 			return cntl.DMXChannel(0), ErrDeviceHasDisabledModeChannel
 		}
-		return d.StartChannel + dt.ModeChannel, nil
+		channel = dt.ModeChannel
 
 	case ChannelDimmer:
 		if !dt.DimmerEnabled {
 			return cntl.DMXChannel(0), ErrDeviceHasDisabledDimmerChannel
 		}
-		return d.StartChannel + dt.DimmerChannel, nil
+		channel = dt.DimmerChannel
+
+	case ChannelTilt:
+		if !dt.Moving {
+			return cntl.DMXChannel(0), ErrDeviceIsNotMoving
+		}
+		channel = dt.TiltChannel
+
+	case ChannelPan:
+		if !dt.Moving {
+			return cntl.DMXChannel(0), ErrDeviceIsNotMoving
+		}
+		channel = dt.PanChannel
 
 	default:
 		return cntl.DMXChannel(0), fmt.Errorf("channel %q is unknown", c)
 	}
+
+	return d.StartChannel + channel, nil
 }
 
 func getLED(dt *cntl.DMXDeviceType, led uint16) *cntl.LED {

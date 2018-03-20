@@ -11,4 +11,6 @@ const (
 	ChannelStrobe
 	ChannelMode
 	ChannelDimmer
+	ChannelTilt
+	ChannelPan
 )

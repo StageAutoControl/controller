@@ -170,7 +170,7 @@ func TestRenderDeviceParams(t *testing.T) {
 			dp: &cntl.DMXDeviceParams{
 				Group: &cntl.DMXDeviceGroupSelector{ID: "cb58bc10-0b16-11e7-b45a-7bee591b0adb"},
 				Params: []cntl.DMXParams{
-					{Preset: fixtures.Value200},
+					{Mode: fixtures.Value200},
 				},
 			},
 			c: []cntl.DMXCommands{

@@ -62,8 +62,11 @@ type DMXDeviceType struct {
 	StrobeChannel  DMXChannel `json:"strobeChannel" yaml:"strobeChannel"`
 	DimmerEnabled  bool       `json:"dimmerEnabled" yaml:"dimmerEnabled"`
 	DimmerChannel  DMXChannel `json:"dimmerChannel" yaml:"dimmerChannel"`
-	ModeEnabled    bool       `json:"presetEnabled" yaml:"presetEnabled"`
-	ModeChannel    DMXChannel `json:"presetChannel" yaml:"presetChannel"`
+	ModeEnabled    bool       `json:"modeEnabled" yaml:"modeEnabled"`
+	ModeChannel    DMXChannel `json:"modeChannel" yaml:"modeChannel"`
+	Moving         bool       `json:"moving" yaml:"moving"`
+	TiltChannel    DMXChannel `json:"tiltChannel" yaml:"tiltChannel"`
+	PanChannel     DMXChannel `json:"panChannel" yaml:"panChannel"`
 	LEDs           []LED      `json:"leds"`
 }
 
@@ -126,8 +129,10 @@ type DMXParams struct {
 	Green  *DMXValue `json:"green" yaml:"green"`
 	Blue   *DMXValue `json:"blue" yaml:"blue"`
 	White  *DMXValue `json:"white" yaml:"white"`
+	Pan    *DMXValue `json:"pan" yaml:"pan"`
+	Tilt   *DMXValue `json:"tilt" yaml:"tilt"`
 	Strobe *DMXValue `json:"strobe" yaml:"strobe"`
-	Preset *DMXValue `json:"preset" yaml:"preset"`
+	Mode   *DMXValue `json:"preset" yaml:"preset"`
 }
 
 // DMXAnimation is an animation of dmx params in relation to time
@@ -140,17 +145,17 @@ type DMXAnimation struct {
 
 // DMXTransition is a transition from a given state to another one using an ease function
 type DMXTransition struct {
-	ID     string      `json:"id" yaml:"id"`
-	Name   string      `json:"name" yaml:"name"`
-	Ease   EaseFunc    `json:"ease" yaml:"ease"`
-	Length uint8       `json:"length" yaml:"length"`
+	ID     string                `json:"id" yaml:"id"`
+	Name   string                `json:"name" yaml:"name"`
+	Ease   EaseFunc              `json:"ease" yaml:"ease"`
+	Length uint8                 `json:"length" yaml:"length"`
 	Params []DMXTransitionParams `json:"params" yaml:"params"`
 }
 
 // DMXTransitionParams hold the params for a transition
 type DMXTransitionParams struct {
-	From   DMXParams `json:"from" yaml:"from"`
-	To     DMXParams `json:"to" yaml:"to"`
+	From DMXParams `json:"from" yaml:"from"`
+	To   DMXParams `json:"to" yaml:"to"`
 }
 
 // EaseFunc names a function that is used to ease a transition

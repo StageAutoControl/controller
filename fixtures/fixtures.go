@@ -362,6 +362,56 @@ var data = &cntl.DataStore{
 				},
 			},
 		},
+		"525eaa7e-fb2d-4608-b413-559d284b3c85": {
+			ID:     "525eaa7e-fb2d-4608-b413-559d284b3c85",
+			Name:   "Blue Bar pulsing off",
+			Ease:   cntl.EaseQuadInOut,
+			Length: 8,
+			Params: []cntl.DMXTransitionParams{
+				{
+					From: cntl.DMXParams{
+						LED:  1,
+						Blue: Value255,
+					},
+					To: cntl.DMXParams{
+						LED:  1,
+						Blue: Value0,
+					},
+				},
+				{
+					From: cntl.DMXParams{
+						LED:  2,
+						Blue: Value255,
+					},
+					To: cntl.DMXParams{
+						LED:  2,
+						Blue: Value0,
+					},
+				},
+			},
+		},
+		"e683873b-20da-4fd4-ac62-271925c68047": {
+			ID:     "e683873b-20da-4fd4-ac62-271925c68047",
+			Name:   "From Red to Green and a little blue",
+			Ease:   cntl.EaseQuadInOut,
+			Length: 8,
+			Params: []cntl.DMXTransitionParams{
+				{
+					From: cntl.DMXParams{
+						LED:  1,
+						Red: Value255,
+						Green: Value0,
+						Blue: Value31,
+					},
+					To: cntl.DMXParams{
+						LED:  1,
+						Red: Value0,
+						Green: Value255,
+						Blue: Value127,
+					},
+				},
+			},
+		},
 	},
 }
 

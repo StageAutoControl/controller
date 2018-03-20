@@ -132,7 +132,7 @@ func (v1 DMXSubScene) Equals(v2 DMXSubScene) bool {
 // Equals returns whether the two given objects are equal
 func (v1 DMXParams) Equals(v2 DMXParams) bool {
 	return v1.LED == v2.LED &&
-		(v1.Preset == nil && v2.Preset == nil || v1.Preset != nil && v2.Preset != nil && v1.Preset.Equals(v2.Preset)) &&
+		(v1.Mode == nil && v2.Mode == nil || v1.Mode != nil && v2.Mode != nil && v1.Mode.Equals(v2.Mode)) &&
 		(v1.Strobe == nil && v2.Strobe == nil || v1.Strobe != nil && v2.Strobe != nil && v1.Strobe.Equals(v2.Strobe)) &&
 		(v1.White == nil && v2.White == nil || v1.White != nil && v2.White != nil && v1.White.Equals(v2.White)) &&
 		(v1.Red == nil && v2.Red == nil || v1.Red != nil && v2.Red != nil && v1.Red.Equals(v2.Red)) &&
