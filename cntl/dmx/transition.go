@@ -41,8 +41,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 		}
 
 		for i, step := range steps {
-			//stepParam := copyParams(p.From)
-			stepParam := p.From
+			stepParam := cntl.DMXParams{LED: p.From.LED}
 			stepParam.Red = &cntl.DMXValue{Value: step}
 
 			cmd, err := RenderParams(ds, dd, stepParam)
@@ -53,6 +52,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 			result[i] = append(result[i], cmd...)
 		}
 	}
+
 	if p.From.Green != nil && p.To.Green != nil && p.From.Green.Value != p.To.Green.Value {
 		steps, err := calcTransitionSteps(p.From.Green.Value, p.To.Green.Value, t.Length, ease)
 		if err != nil {
@@ -60,8 +60,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 		}
 
 		for i, step := range steps {
-			//stepParam := copyParams(p.From)
-			stepParam := p.From
+			stepParam := cntl.DMXParams{LED: p.From.LED}
 			stepParam.Green = &cntl.DMXValue{Value: step}
 
 			cmd, err := RenderParams(ds, dd, stepParam)
@@ -72,6 +71,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 			result[i] = append(result[i], cmd...)
 		}
 	}
+
 	if p.From.Blue != nil && p.To.Blue != nil && p.From.Blue.Value != p.To.Blue.Value {
 		steps, err := calcTransitionSteps(p.From.Blue.Value, p.To.Blue.Value, t.Length, ease)
 		if err != nil {
@@ -79,8 +79,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 		}
 
 		for i, step := range steps {
-			//stepParam := copyParams(p.From)
-			stepParam := p.From
+			stepParam := cntl.DMXParams{LED: p.From.LED}
 			stepParam.Blue = &cntl.DMXValue{Value: step}
 
 			cmd, err := RenderParams(ds, dd, stepParam)
@@ -91,6 +90,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 			result[i] = append(result[i], cmd...)
 		}
 	}
+
 	if p.From.White != nil && p.To.White != nil && p.From.White.Value != p.To.White.Value {
 		steps, err := calcTransitionSteps(p.From.White.Value, p.To.White.Value, t.Length, ease)
 		if err != nil {
@@ -98,8 +98,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 		}
 
 		for i, step := range steps {
-			//stepParam := copyParams(p.From)
-			stepParam := p.From
+			stepParam := cntl.DMXParams{LED: p.From.LED}
 			stepParam.White = &cntl.DMXValue{Value: step}
 
 			cmd, err := RenderParams(ds, dd, stepParam)
@@ -110,6 +109,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 			result[i] = append(result[i], cmd...)
 		}
 	}
+
 	if p.From.Pan != nil && p.To.Pan != nil && p.From.Pan.Value != p.To.Pan.Value {
 		steps, err := calcTransitionSteps(p.From.Pan.Value, p.To.Pan.Value, t.Length, ease)
 		if err != nil {
@@ -117,8 +117,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 		}
 
 		for i, step := range steps {
-			//stepParam := copyParams(p.From)
-			stepParam := p.From
+			stepParam := cntl.DMXParams{LED: p.From.LED}
 			stepParam.Pan = &cntl.DMXValue{Value: step}
 
 			cmd, err := RenderParams(ds, dd, stepParam)
@@ -129,6 +128,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 			result[i] = append(result[i], cmd...)
 		}
 	}
+
 	if p.From.Tilt != nil && p.To.Tilt != nil && p.From.Tilt.Value != p.To.Tilt.Value {
 		steps, err := calcTransitionSteps(p.From.Tilt.Value, p.To.Tilt.Value, t.Length, ease)
 		if err != nil {
@@ -136,8 +136,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 		}
 
 		for i, step := range steps {
-			//stepParam := copyParams(p.From)
-			stepParam := p.From
+			stepParam := cntl.DMXParams{LED: p.From.LED}
 			stepParam.Tilt = &cntl.DMXValue{Value: step}
 
 			cmd, err := RenderParams(ds, dd, stepParam)
@@ -163,7 +162,6 @@ func calcTransitionSteps(from, to, steps uint8, easingFunc easingFunc) ([]uint8,
 
 	for i := float64(0); i < float64(steps); i++ {
 		value := uint8(math.Floor(floatFrom + diff*easingFunc(i*step)))
-		fmt.Printf("i=%v steps=%v floatFrom=%v diff=%v value=%v step=%v easeValue=%v\n", i, steps, floatFrom, diff, value, i*step, easingFunc(i*step))
 		result[int(i)] = value
 	}
 

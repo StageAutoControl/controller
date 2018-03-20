@@ -60,6 +60,7 @@ func RenderDeviceParams(ds *cntl.DataStore, dp *cntl.DMXDeviceParams) ([]cntl.DM
 			dd = append(dd, d...)
 		}
 	}
+
 	if dp.Device != nil {
 		d, err := ResolveDeviceSelector(ds, dp.Device)
 		if err != nil {

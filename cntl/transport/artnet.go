@@ -35,8 +35,8 @@ func NewArtNet(logger *logrus.Entry, name string) (*ArtNet, error) {
 		return nil, fmt.Errorf("failed to start controller: %v", err)
 	}
 
-	logger.Warn("Waiting 10 seconds for nodes to register")
-	time.Sleep(10 * time.Second)
+	logger.Warn("Waiting 5 seconds for nodes to register")
+	time.Sleep(5 * time.Second)
 
 	return &ArtNet{
 		name: name,
