@@ -7,8 +7,8 @@ import (
 )
 
 func TestToNet(t *testing.T) {
-	cases := []struct{
-		net uint16
+	cases := []struct {
+		net    uint16
 		artnet artnet.Address
 	}{
 		{net: 0, artnet: artnet.Address{Net: 0, SubUni: 0}},

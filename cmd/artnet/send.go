@@ -15,6 +15,8 @@ import (
 	"time"
 
 	root "github.com/StageAutoControl/controller/cmd"
+	"github.com/StageAutoControl/controller/cntl"
+	"github.com/StageAutoControl/controller/cntl/transport"
 	artnetTransport "github.com/StageAutoControl/controller/cntl/transport/artnet"
 	"github.com/jsimonetti/go-artnet"
 	"github.com/spf13/cobra"
@@ -69,6 +71,8 @@ var Send = &cobra.Command{
 		reader := bufio.NewReader(os.Stdin)
 		var universe, channel, value uint64
 
+		state := artnetTransport.NewState()
+
 		for {
 			fmt.Print("> ")
 			text, _ := reader.ReadString('\n')
@@ -93,14 +97,11 @@ var Send = &cobra.Command{
 				continue
 			}
 
-			cmds := [512]byte{}
-			cmds[channel] = uint8(value)
+			state.Set(uint16(universe), uint8(channel), uint8(value))
 
-			net := artnetTransport.ToNet(uint16(universe))
-			root.Logger.Debug("Sending commands: %v", cmds)
-			root.Logger.Infof("Sending commands to %+v", net)
-
-			c.SendDMXToAddress(cmds, net)
+			for u, dmx := range state {
+				c.SendDMXToAddress(dmx, transport.UniverseToAddress(cntl.DMXUniverse(u)))
+			}
 		}
 
 		c.Stop()

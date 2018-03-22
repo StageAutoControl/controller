@@ -9,13 +9,13 @@ import (
 	"github.com/Sirupsen/logrus"
 	"github.com/StageAutoControl/controller/cntl"
 	artnetTransport "github.com/StageAutoControl/controller/cntl/transport/artnet"
-	artnet "github.com/jsimonetti/go-artnet"
+	"github.com/jsimonetti/go-artnet"
 )
 
 // ArtNet is a transport for the ArtNet protocol (DMX over UDP/IP)
 type ArtNet struct {
-	name string
-	c    *artnet.Controller
+	name  string
+	c     *artnet.Controller
 	state artnetTransport.State
 }
 
@@ -39,8 +39,8 @@ func NewArtNet(logger *logrus.Entry, name string) (*ArtNet, error) {
 	time.Sleep(5 * time.Second)
 
 	return &ArtNet{
-		name: name,
-		c:    c,
+		name:  name,
+		c:     c,
 		state: artnetTransport.NewState(),
 	}, nil
 }
@@ -51,13 +51,14 @@ func (a *ArtNet) Write(cmd cntl.Command) error {
 	}
 
 	for u, dmx := range a.state {
-		a.c.SendDMXToAddress(dmx, universeToAddress(cntl.DMXUniverse(u)))
+		a.c.SendDMXToAddress(dmx, UniverseToAddress(cntl.DMXUniverse(u)))
 	}
 
 	return nil
 }
 
-func universeToAddress(u cntl.DMXUniverse) artnet.Address {
+// UniverseToAddress converts a dmx universe to a artnet address
+func UniverseToAddress(u cntl.DMXUniverse) artnet.Address {
 	// https://play.golang.org/p/pdQPC5u7JX
 
 	v := make([]uint8, 2)

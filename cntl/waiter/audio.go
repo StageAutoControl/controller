@@ -73,7 +73,7 @@ func (a *Audio) readStream() {
 
 func (a *Audio) checkForPeak() {
 	for _, i := range a.buf {
-		if i >= a.threshold || i <= (a.threshold*-1) {
+		if i >= a.threshold || i <= (a.threshold * -1) {
 			a.notifyWait()
 			return
 		}
