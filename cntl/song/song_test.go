@@ -60,11 +60,11 @@ func TestCalcBarLength(t *testing.T) {
 		bc     cntl.BarChange
 		length uint64
 	}{
-		{cntl.BarChange{At: 0, NoteCount: 3, NoteValue: 4}, 24},
-		{cntl.BarChange{At: 63, NoteCount: 12, NoteValue: 8}, 48},
-		{cntl.BarChange{At: 10, NoteCount: 11, NoteValue: 4}, 88},
-		{cntl.BarChange{At: 104, NoteCount: 4, NoteValue: 4}, 32},
-		{cntl.BarChange{At: 5, NoteCount: 9, NoteValue: 8}, 36},
+		{cntl.BarChange{At: 0, NoteCount: 3, NoteValue: 4}, 48},
+		{cntl.BarChange{At: 63, NoteCount: 12, NoteValue: 8}, 96},
+		{cntl.BarChange{At: 10, NoteCount: 11, NoteValue: 4}, 176},
+		{cntl.BarChange{At: 104, NoteCount: 4, NoteValue: 4}, 64},
+		{cntl.BarChange{At: 5, NoteCount: 9, NoteValue: 8}, 72},
 	}
 
 	for i, e := range exp {

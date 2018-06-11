@@ -36,7 +36,7 @@ var data = &cntl.DataStore{
 				{At: 1632, NoteCount: 4, NoteValue: 4},
 			},
 			DMXScenes: []cntl.ScenePosition{
-				{At: 0, ID: "492cef2e-0b14-11e7-be89-c3fa25f9cabb", Repeat: 4},
+				{At: 0, ID: "492cef2e-0b14-11e7-be89-c3fa25f9cabb", Repeat: 3},
 				{At: 512, ID: "a44f8dee-0b14-11e7-b5b9-bf1015384192", Repeat: 3},
 				{At: 1408, ID: "99b86a5e-0e7a-11e7-a01a-5b5fbdeba3d6", Repeat: 2},
 				{At: 1920, ID: "b82f4750-0e7a-11e7-9522-0f9d6d69958a"},

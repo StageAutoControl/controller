@@ -36,4 +36,4 @@ const (
 )
 
 // RenderFrames defines the smallest render unit of a bar. Has to be multiplier of 4.
-const RenderFrames uint8 = 32
+const RenderFrames uint8 = 64
