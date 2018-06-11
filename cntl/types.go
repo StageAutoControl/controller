@@ -111,7 +111,7 @@ type DMXScene struct {
 	ID        string        `json:"id" yaml:"id"`
 	Name      string        `json:"name" yaml:"name"`
 	NoteValue uint8         `json:"noteValue" yaml:"noteValue"`
-	NoteCount uint8         `json:"noteCount" yaml:"noteCount"`
+	NoteCount uint16        `json:"noteCount" yaml:"noteCount"`
 	SubScenes []DMXSubScene `json:"subScenes" yaml:"subScenes"`
 }
 

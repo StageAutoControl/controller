@@ -33,14 +33,14 @@ func StreamlineScenes(ds *cntl.DataStore, s *cntl.Song) (map[uint64][]*cntl.DMXS
 
 // CalcSceneLength calculates the length of a given scene in render frames
 func CalcSceneLength(sc *cntl.DMXScene) uint64 {
-	return uint64(sc.NoteCount * (cntl.RenderFrames / sc.NoteValue))
+	return uint64(sc.NoteCount * uint16(cntl.RenderFrames / sc.NoteValue))
 }
 
 // RenderScene renders the given dmx scene to dmx commands and returns them.
 // The first array dimension contains the render frames, the second dimension contains all
 // dmx commands for a render frame.
 func RenderScene(ds *cntl.DataStore, sc *cntl.DMXScene) ([]cntl.DMXCommands, error) {
-	sceneLength := uint8(CalcSceneLength(sc))
+	sceneLength := uint16(CalcSceneLength(sc))
 	cmds := make([]cntl.DMXCommands, sceneLength)
 
 	for i, ss := range sc.SubScenes {
