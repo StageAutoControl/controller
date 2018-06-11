@@ -101,6 +101,8 @@ func (p *Player) PlaySong(songID string) error {
 	l := len(cmds)
 	t := time.NewTicker(1 * time.Nanosecond)
 
+	p.logger.Infof("Playing song %s", songID)
+
 	var i int
 	var cmd cntl.Command
 	for {
@@ -124,8 +126,6 @@ func (p *Player) PlaySong(songID string) error {
 			i++
 		}
 	}
-
-	return nil
 }
 
 // CalcRenderSpeed calculates the render speed of a BarChange to a time.Duration
