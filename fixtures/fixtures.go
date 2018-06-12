@@ -138,11 +138,11 @@ var data = &cntl.DataStore{
 		"99b86a5e-0e7a-11e7-a01a-5b5fbdeba3d6": {
 			ID:        "99b86a5e-0e7a-11e7-a01a-5b5fbdeba3d6",
 			Name:      "Test-Scene 3",
-			NoteCount: 8,
-			NoteValue: 4,
+			NoteCount: 16,
+			NoteValue: 8,
 			SubScenes: []cntl.DMXSubScene{
 				{
-					At: []uint64{0, 1, 2, 3, 4, 5, 6, 7},
+					At: []uint64{0, 4, 8, 12},
 					DeviceParams: []cntl.DMXDeviceParams{
 						{
 							Device: &cntl.DMXDeviceSelector{

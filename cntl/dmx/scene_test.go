@@ -86,72 +86,32 @@ func TestRenderScene(t *testing.T) {
 	}{
 		{
 			s: ds.DMXScenes["492cef2e-0b14-11e7-be89-c3fa25f9cabb"],
-			c: []cntl.DMXCommands{
+			c: repeat(4, []cntl.DMXCommands{
 				{{Universe: 1, Channel: 222, Value: *fixtures.Value255}},
 				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-				{{Universe: 1, Channel: 222, Value: *fixtures.Value255}},
-				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-				{{Universe: 1, Channel: 222, Value: *fixtures.Value255}},
-				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-				{{Universe: 1, Channel: 222, Value: *fixtures.Value255}},
-				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-			},
+			}),
 			err: nil,
 		},
 		{
 			s: ds.DMXScenes["a44f8dee-0b14-11e7-b5b9-bf1015384192"],
-			c: []cntl.DMXCommands{
+			c: repeat(2, []cntl.DMXCommands{
 				{{Universe: 1, Channel: 224, Value: *fixtures.Value255}},
 				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-				{{Universe: 1, Channel: 224, Value: *fixtures.Value255}},
-				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-			},
+			}),
 			err: nil,
 		},
 		{
 			s: ds.DMXScenes["99b86a5e-0e7a-11e7-a01a-5b5fbdeba3d6"],
-			c: []cntl.DMXCommands{
+			c: repeat(4, []cntl.DMXCommands{
 				{{Universe: 1, Channel: 228, Value: *fixtures.Value31}},
+				{}, {}, {}, {}, {}, {}, {},
 				{{Universe: 1, Channel: 228, Value: *fixtures.Value63}},
+				{}, {}, {}, {}, {}, {}, {},
 				{{Universe: 1, Channel: 228, Value: *fixtures.Value127}},
+				{}, {}, {}, {}, {}, {}, {},
 				{{Universe: 1, Channel: 228, Value: *fixtures.Value255}},
-				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value31}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value63}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value127}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value255}},
-				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value31}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value63}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value127}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value255}},
-				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value31}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value63}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value127}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value255}},
-				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value31}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value63}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value127}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value255}},
-				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value31}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value63}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value127}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value255}},
-				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value31}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value63}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value127}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value255}},
-				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value31}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value63}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value127}},
-				{{Universe: 1, Channel: 228, Value: *fixtures.Value255}},
-				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-			},
+				{}, {}, {}, {}, {}, {}, {},
+			}),
 			err: nil,
 		},
 	}
@@ -159,7 +119,7 @@ func TestRenderScene(t *testing.T) {
 	for i, e := range exp {
 		c, err := RenderScene(ds, e.s)
 
-		t.Log(c)
+		t.Log("result index", i, c)
 
 		if e.err != nil && (err == nil || err.Error() != e.err.Error()) {
 			t.Fatalf("Expected to get error %v, got %v at case index %d", e.err, err, i)

@@ -11,3 +11,14 @@ func repeat(count uint, cmds []cntl.DMXCommands) []cntl.DMXCommands {
 
 	return result
 }
+
+func resize(length uint, cmds []cntl.DMXCommands) []cntl.DMXCommands {
+	if length <= uint(len(cmds)) {
+		return cmds
+	}
+
+	res := make([]cntl.DMXCommands, length)
+	copy(res, cmds)
+
+	return res
+}
