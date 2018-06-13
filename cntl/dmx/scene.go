@@ -71,10 +71,7 @@ func RenderScene(ds *cntl.DataStore, sc *cntl.DMXScene) ([]cntl.DMXCommands, err
 				return []cntl.DMXCommands{}, fmt.Errorf("failed to render scene %q: %v", sc.ID, err)
 			}
 
-			fmt.Printf("aaaa dcs %v %+v\n", sc.NoteValue, dcs)
-			fmt.Printf("bbbb scs %v %+v\n", sc.NoteValue, scs)
 			scs = MergeWithFrameChange(scs, dcs, sc.NoteValue)
-			fmt.Printf("cccc scs %v %+v\n", sc.NoteValue, scs)
 		}
 
 		for _, at := range ss.At {
