@@ -7,6 +7,7 @@ import (
 	"github.com/jsimonetti/go-artnet"
 )
 
+// NodeToString returns a string representation of the given Node
 func NodeToString(n *artnet.ControlledNode) string {
 	var inputs, outputs []string
 

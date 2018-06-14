@@ -9,11 +9,7 @@ func (v *DMXValue) MarshalYAML() (interface{}, error) {
 
 // UnmarshalYAML takes the value from YAML
 func (v *DMXValue) UnmarshalYAML(unmarshal func(interface{}) error) error {
-	if err := unmarshal(&v.Value); err != nil {
-		return err
-	}
-
-	return nil
+	return unmarshal(&v.Value)
 }
 
 // MarshalJSON converts the value to a json byte array

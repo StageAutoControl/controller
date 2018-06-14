@@ -65,11 +65,7 @@ func (r *Repository) Save(store *cntl.DataStore) error {
 	data := &fileData{}
 	flattenData(store, data)
 
-	if err := r.writeDir(data, r.dataDir); err != nil {
-		return err
-	}
-
-	return nil
+	return r.writeDir(data, r.dataDir)
 }
 
 func makefileTargets(data *fileData) map[string]interface{} {

@@ -22,6 +22,8 @@ var (
 	dataDir    string
 	cfgFile    string
 	logLevel   string
+
+	// The Logger used by the whole application
 	Logger     *logrus.Entry
 )
 

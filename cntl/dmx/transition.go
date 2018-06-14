@@ -27,6 +27,7 @@ func RenderTransition(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DMXTrans
 	return cmds, nil
 }
 
+// RenderTransitionParams renders the params of given transition
 func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DMXTransition, p cntl.DMXTransitionParams) ([]cntl.DMXCommands, error) {
 	result := make([]cntl.DMXCommands, t.Length)
 	ease, err := getEasingFunc(t.Ease)

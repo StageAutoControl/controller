@@ -35,11 +35,7 @@ func (r *Repository) writeFile(file string, content interface{}) error {
 		return err
 	}
 
-	if err := ioutil.WriteFile(file, b, 0755); err != nil {
-		return err
-	}
-
-	return nil
+	return ioutil.WriteFile(file, b, 0755)
 }
 
 func flattenData(store *cntl.DataStore, fileData *fileData) {

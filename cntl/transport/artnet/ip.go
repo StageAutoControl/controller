@@ -19,7 +19,7 @@ func FindArtNetIP() (net.IP, error) {
 
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {
-		return ip, fmt.Errorf("error getting ips: %s\n", err)
+		return ip, fmt.Errorf("error getting ips: %s", err)
 	}
 
 	for _, addr := range addrs {

@@ -16,13 +16,13 @@ func (r *Repository) readDir(data *fileData, dir string) error {
 		file := getFileName(dir, fileName)
 
 		if _, err := os.Stat(file); os.IsNotExist(err) {
-			return fmt.Errorf("Expected to find %q but does not exist.", file)
+			return fmt.Errorf("expected to find %q but does not exist.", file)
 		} else if err != nil {
-			return fmt.Errorf("Error checking file %q: %v", file, err)
+			return fmt.Errorf("error checking file %q: %v", file, err)
 		}
 
 		if err := r.readFile(file, target); err != nil {
-			return fmt.Errorf("Error reading file %q: %v", file, err)
+			return fmt.Errorf("error reading file %q: %v", file, err)
 		}
 	}
 
@@ -32,12 +32,12 @@ func (r *Repository) readDir(data *fileData, dir string) error {
 func (r *Repository) readFile(file string, target interface{}) error {
 	b, err := ioutil.ReadFile(file)
 	if err != nil {
-		return fmt.Errorf("Error reading file %q: %v", file, err)
+		return fmt.Errorf("error reading file %q: %v", file, err)
 	}
 
 	err = json.Unmarshal(b, target)
 	if err != nil {
-		return fmt.Errorf("Unable to parse content of %q: %v", file, err)
+		return fmt.Errorf("unable to parse content of %q: %v", file, err)
 	}
 
 	return nil
