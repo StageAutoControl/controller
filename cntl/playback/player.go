@@ -1,6 +1,7 @@
 package playback
 
 import (
+	"context"
 	"time"
 
 	"fmt"
@@ -9,16 +10,6 @@ import (
 	"github.com/StageAutoControl/controller/cntl"
 	"github.com/StageAutoControl/controller/cntl/song"
 )
-
-// TransportWriter is a writer to an output stream, for example a websocket or Stdout.
-type TransportWriter interface {
-	Write(cntl.Command) error
-}
-
-// Waiter waits for a trigger to happen
-type Waiter interface {
-	Wait(done chan struct{}, cancel chan struct{}, err chan error) error
-}
 
 // Player plays various things from a given data store, for example songs or a whole SetList.
 type Player struct {
@@ -44,7 +35,7 @@ func (p *Player) checkSetList(setList *cntl.SetList) error {
 }
 
 // PlaySetList plays a full SetList
-func (p *Player) PlaySetList(setListID string) error {
+func (p *Player) PlaySetList(ctx context.Context, setListID string) error {
 	setList, ok := p.dataStore.SetLists[setListID]
 	if !ok {
 		return fmt.Errorf("cannot find SetList %q", setListID)
@@ -55,9 +46,16 @@ func (p *Player) PlaySetList(setListID string) error {
 	}
 
 	for _, songSel := range setList.Songs {
+		select {
+		case <-ctx.Done():
+			p.logger.Warn("Aborting")
+			return nil
+		default:
+		}
+
 		p.logger.Infof("Playing song %s", songSel.ID)
 
-		if err := p.PlaySong(songSel.ID); err != nil {
+		if err := p.PlaySong(ctx, songSel.ID); err != nil {
 			return err
 		}
 	}
@@ -65,7 +63,7 @@ func (p *Player) PlaySetList(setListID string) error {
 	return nil
 }
 
-func (p *Player) wait() error {
+func (p *Player) wait(ctx context.Context) error {
 	done := make(chan struct{}, len(p.waiters))
 	cancel := make(chan struct{}, len(p.waiters))
 	err := make(chan error, len(p.waiters))
@@ -79,6 +77,8 @@ func (p *Player) wait() error {
 	}
 
 	select {
+	case <-ctx.Done():
+		return ErrCancelled
 	case <-done:
 		return nil
 	case err := <-err:
@@ -87,14 +87,14 @@ func (p *Player) wait() error {
 }
 
 // PlaySong plays a full song
-func (p *Player) PlaySong(songID string) error {
+func (p *Player) PlaySong(ctx context.Context, songID string) error {
 	cmds, err := song.Render(p.dataStore, songID)
 	if err != nil {
 		return err
 	}
 
 	p.logger.Infof("Waiting for waiters before playing song %s", songID)
-	if err := p.wait(); err != nil {
+	if err := p.wait(ctx); err != nil {
 		return err
 	}
 
@@ -107,6 +107,9 @@ func (p *Player) PlaySong(songID string) error {
 	var cmd cntl.Command
 	for {
 		select {
+		case <-ctx.Done():
+			return ErrCancelled
+
 		case <-t.C:
 			if i >= l {
 				t.Stop()

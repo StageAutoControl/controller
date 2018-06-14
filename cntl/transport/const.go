@@ -2,8 +2,9 @@ package transport
 
 // transport types
 const (
-	TypeBuffer     = "buffer"
+	TypeStream     = "stream"
 	TypeVisualizer = "visualizer"
 	TypeArtNet     = "artnet"
 	TypeMidi       = "midi"
+	TypeBarLogger  = "barLogger"
 )

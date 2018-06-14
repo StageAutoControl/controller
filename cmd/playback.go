@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/Sirupsen/logrus"
+	"github.com/StageAutoControl/controller/cmd/internal"
 	"github.com/StageAutoControl/controller/cntl"
 	"github.com/StageAutoControl/controller/cntl/playback"
 	"github.com/StageAutoControl/controller/cntl/transport"
@@ -22,7 +23,7 @@ const (
 
 var (
 	transportTypes = []string{
-		transport.TypeBuffer,
+		transport.TypeStream,
 		transport.TypeVisualizer,
 		transport.TypeArtNet,
 		transport.TypeMidi,
@@ -74,12 +75,17 @@ var playbackCmd = &cobra.Command{
 		var writers []playback.TransportWriter
 		for _, transportType := range usedTransports {
 			switch transportType {
-			case transport.TypeBuffer:
-				writers = append(writers, transport.NewBuffer(os.Stdout))
+
+			case transport.TypeStream:
+				writers = append(writers, transport.NewStream(Logger.WithField(cntl.LoggerFieldTransport, transport.TypeStream), os.Stdout))
+				break
+
+			case transport.TypeBarLogger:
+				writers = append(writers, transport.NewBarLogger(Logger.WithField(cntl.LoggerFieldTransport, transport.TypeBarLogger)))
 				break
 
 			case transport.TypeVisualizer:
-				w, err := transport.NewVisualizer(Logger.WithField("transport", transport.TypeVisualizer), viualizerEndpoint)
+				w, err := transport.NewVisualizer(Logger.WithField(cntl.LoggerFieldTransport, transport.TypeVisualizer), viualizerEndpoint)
 				if err != nil {
 					Logger.Fatalf("Unable to connect to the visualizer: %v", err)
 				}
@@ -88,7 +94,7 @@ var playbackCmd = &cobra.Command{
 				break
 
 			case transport.TypeArtNet:
-				w, err := transport.NewArtNet(Logger.WithField("transport", transport.TypeArtNet), "stage-auto-control")
+				w, err := transport.NewArtNet(Logger.WithField(cntl.LoggerFieldTransport, transport.TypeArtNet), "stage-auto-control")
 				if err != nil {
 					Logger.Fatalf("Unable to connect to the visualizer: %v", err)
 				}
@@ -97,7 +103,7 @@ var playbackCmd = &cobra.Command{
 				break
 
 			case transport.TypeMidi:
-				w, err := transport.NewMIDI(Logger.WithField("transport", transport.TypeMidi), midiDeviceID)
+				w, err := transport.NewMIDI(Logger.WithField(cntl.LoggerFieldTransport, transport.TypeMidi), midiDeviceID)
 				if err != nil {
 					Logger.Fatalf("Unable to connect to midi device: %v", err)
 				}
@@ -114,12 +120,12 @@ var playbackCmd = &cobra.Command{
 		for _, waiterType := range usedWaiters {
 			switch waiterType {
 			case waiter.TypeNone:
-				waiters = append(waiters, waiter.NewNone())
+				waiters = append(waiters, waiter.NewNone(Logger.WithField(cntl.LoggerFieldWaiter, waiter.TypeNone)))
 
 				break
 
 			case waiter.TypeAudio:
-				a, err := waiter.NewAudio(Logger.WithField("waiter", waiter.TypeAudio), audioWaiterThreshold)
+				a, err := waiter.NewAudio(Logger.WithField(cntl.LoggerFieldWaiter, waiter.TypeAudio), audioWaiterThreshold)
 				if err != nil {
 					Logger.Fatal(err)
 				}
@@ -130,19 +136,20 @@ var playbackCmd = &cobra.Command{
 			}
 		}
 
+		ctx := internal.NewExitHandlerContext(Logger.Logger)
 		player := playback.NewPlayer(Logger.Logger.WithField("player", "default"), data, writers, waiters)
 
 		switch args[0] {
 		case playbackTypeSong:
 			songID := args[1]
-			if err = player.PlaySong(songID); err != nil {
+			if err = player.PlaySong(ctx, songID); err != nil {
 				Logger.Fatal(err)
 			}
 
 			break
 		case playbackTypeSetList:
-			setListID := args[2]
-			if err = player.PlaySetList(setListID); err != nil {
+			setListID := args[1]
+			if err = player.PlaySetList(ctx, setListID); err != nil {
 				Logger.Fatal(err)
 			}
 		}
@@ -152,7 +159,7 @@ var playbackCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(playbackCmd)
 
-	playbackCmd.PersistentFlags().StringSliceVarP(&usedTransports, "transport", "t", []string{transport.TypeBuffer}, fmt.Sprintf("Which usedTransports to use from %s.", transportTypes))
+	playbackCmd.PersistentFlags().StringSliceVarP(&usedTransports, "transport", "t", []string{}, fmt.Sprintf("Which usedTransports to use from %s.", transportTypes))
 	playbackCmd.PersistentFlags().StringVar(&viualizerEndpoint, "visualizer-endpoint", "localhost:1337", "Endpoint of the visualizer backend if visualizer transport is chosen.")
 	playbackCmd.PersistentFlags().StringVarP(&midiDeviceID, "midi-device-id", "m", "", "DeviceID of MIDI output to use (On empty string the default device is used)")
 

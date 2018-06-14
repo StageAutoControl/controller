@@ -12,11 +12,11 @@ import (
 func Render(ds *cntl.DataStore, songID string) ([]cntl.Command, error) {
 	s, ok := ds.Songs[songID]
 	if !ok {
-		return []cntl.Command{}, fmt.Errorf("Cannot find Song %q", songID)
+		return []cntl.Command{}, fmt.Errorf("cannot find Song %q", songID)
 	}
 
 	if s.Length == 0 {
-		return []cntl.Command{}, fmt.Errorf("Song %q has no length set", songID)
+		return []cntl.Command{}, fmt.Errorf("song %q has no length set", songID)
 	}
 
 	scs, err := dmx.StreamlineScenes(ds, s)
@@ -27,18 +27,22 @@ func Render(ds *cntl.DataStore, songID string) ([]cntl.Command, error) {
 	bcs := streamlineBarChanges(s)
 	mcs := midi.StreamlineMidiCommands(s)
 
+	fb := &frameBrain{}
 	cs := make([]cntl.Command, s.Length)
-	for i := uint64(0); i < s.Length; i++ {
 
-		if bc, ok := bcs[i]; ok {
-			cs[i].BarChange = &bc
+	for frame := uint64(0); frame < s.Length; frame++ {
+		if bc, ok := bcs[frame]; ok {
+			cs[frame].BarChange = &bc
+			fb.setBarChange(&bc)
 		}
 
-		if mc, ok := mcs[i]; ok {
-			cs[i].MIDICommands = append(cs[i].MIDICommands, mc...)
+		fb.update(frame, &cs[frame])
+
+		if mc, ok := mcs[frame]; ok {
+			cs[frame].MIDICommands = append(cs[frame].MIDICommands, mc...)
 		}
 
-		if scs, ok := scs[i]; ok {
+		if scs, ok := scs[frame]; ok {
 			for _, sc := range scs {
 				dcs, err := dmx.RenderScene(ds, sc)
 				if err != nil {
@@ -50,7 +54,7 @@ func Render(ds *cntl.DataStore, songID string) ([]cntl.Command, error) {
 						continue
 					}
 
-					cmdIndex := uint64(j) + i
+					cmdIndex := uint64(j) + frame
 
 					if cmdIndex >= uint64(len(cs)) {
 						cs = append(cs, cntl.Command{DMXCommands: dc})
@@ -79,5 +83,10 @@ func streamlineBarChanges(s *cntl.Song) map[uint64]cntl.BarChange {
 
 // CalcBarLength calculates the length of a bar by given BarChange
 func CalcBarLength(bc *cntl.BarChange) uint64 {
-	return uint64(bc.NoteCount * (cntl.RenderFrames / bc.NoteValue))
+	return uint64(bc.NoteCount) * CalcNoteLength(bc)
+}
+
+// CalcNoteLength calculates the amount of frames in a single note of given barChange
+func CalcNoteLength(bc *cntl.BarChange) uint64 {
+	return uint64(cntl.RenderFrames / bc.NoteValue)
 }

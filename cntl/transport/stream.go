@@ -6,24 +6,26 @@ import (
 
 	"strings"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/StageAutoControl/controller/cntl"
 )
 
-// Buffer is an output channel that can render to a buffer
-type Buffer struct {
+// Stream is an output channel that can render to a buffer
+type Stream struct {
+	logger *logrus.Entry
 	w io.Writer
 	i uint64
 }
 
-// NewBuffer returns a new Buffer instance
-func NewBuffer(w io.Writer) *Buffer {
+// NewStream returns a new Stream instance
+func NewStream(logger *logrus.Entry, w io.Writer) *Stream {
 	fmt.Fprint(w, "          Position  [      BarChange     ] [ Midi ] [ DMX ] \n")
 
-	return &Buffer{w, 0}
+	return &Stream{logger,w, 0}
 }
 
 // Write writes to the buffer
-func (b *Buffer) Write(cmd cntl.Command) error {
+func (b *Stream) Write(cmd cntl.Command) error {
 	fmt.Fprintf(
 		b.w, "%s [%s] [%s] [%s]\n",
 		renderPosition(b.i),

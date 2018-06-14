@@ -176,9 +176,17 @@ type DMXPreset struct {
 
 // Command is a container to set settings
 type Command struct {
+	FrameState
 	DMXCommands  DMXCommands  `json:"dmxCommands" yaml:"dmxCommands"`
 	MIDICommands MIDICommands `json:"midiCommands" yaml:"midiCommands"`
 	BarChange    *BarChange   `json:"barChange" yaml:"barChange"`
+}
+
+// FrameState stores information about which bar and note the command is in
+type FrameState struct {
+	Frame        uint64       `json:"frame" yaml:"frame"`
+	Bar          uint16       `json:"bar" yaml:"bar"`
+	Note         uint8        `json:"note" yaml:"note"`
 }
 
 // DMXCommand tells a DMX controller to set a channel on a universe to a specific value
