@@ -1,10 +1,5 @@
 package cntl
 
-// A Loader is responsible for loading the applications data. This could either be a remote or a local store.
-type Loader interface {
-	Load() (*DataStore, error)
-}
-
 // A DataStore holds the applications data state
 type DataStore struct {
 	SetLists        map[string]*SetList

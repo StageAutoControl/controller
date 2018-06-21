@@ -9,6 +9,7 @@ import (
 	"github.com/Sirupsen/logrus"
 	"github.com/StageAutoControl/controller/cmd/internal"
 	"github.com/StageAutoControl/controller/cntl"
+	"github.com/StageAutoControl/controller/cntl/enhance"
 	"github.com/StageAutoControl/controller/cntl/playback"
 	"github.com/StageAutoControl/controller/cntl/transport"
 	"github.com/StageAutoControl/controller/cntl/waiter"
@@ -71,6 +72,17 @@ var playbackCmd = &cobra.Command{
 		if err != nil {
 			Logger.Fatalf("Failed to load data from %q: %v", loaderType, err)
 		}
+
+		Logger.Print("enhancing data ...")
+		for _, e := range enhance.Enhancers {
+			if es := e.Enhance(data); len(es) > 0 {
+				for _, e := range es {
+					Logger.Error(e)
+				}
+				Logger.Fatalf("Errors occurred enhancing data store")
+			}
+		}
+		Logger.Print("Done. No errors found.")
 
 		var writers []playback.TransportWriter
 		for _, transportType := range usedTransports {

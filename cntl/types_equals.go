@@ -154,10 +154,10 @@ func (v1 DMXAnimationFrame) Equals(v2 DMXAnimationFrame) bool {
 }
 
 // Equals returns whether the two given objects are equal
-func (v1 DMXPreset) Equals(v2 DMXPreset) bool {
+func (d DMXPreset) Equals(v2 DMXPreset) bool {
 	return v2.ID == v2.ID &&
-		v1.Name == v2.Name &&
-		dmxDeviceParamsList(v1.DeviceParams).Equals(dmxDeviceParamsList(v2.DeviceParams))
+		d.Name == v2.Name &&
+		dmxDeviceParamsList(d.DeviceParams).Equals(dmxDeviceParamsList(v2.DeviceParams))
 }
 
 // Contains returns whether given DMXCommand is in the called collection

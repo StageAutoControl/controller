@@ -119,7 +119,9 @@ var data = &cntl.DataStore{
 			SubScenes: []cntl.DMXSubScene{
 				{
 					At:     []uint64{0, 1, 2, 3},
-					Preset: "0de258e0-0e7b-11e7-afd4-ebf6036983dc",
+					Preset: &cntl.PresetSelector{
+						ID: "0de258e0-0e7b-11e7-afd4-ebf6036983dc",
+					},
 				},
 			},
 		},
@@ -131,7 +133,9 @@ var data = &cntl.DataStore{
 			SubScenes: []cntl.DMXSubScene{
 				{
 					At:     []uint64{0, 1},
-					Preset: "11adf93e-0e7b-11e7-998c-5bd2bd0df396",
+					Preset: &cntl.PresetSelector{
+						ID: "11adf93e-0e7b-11e7-998c-5bd2bd0df396",
+					},
 				},
 			},
 		},
@@ -148,7 +152,9 @@ var data = &cntl.DataStore{
 							Device: &cntl.DMXDeviceSelector{
 								ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
 							},
-							AnimationID: "a51f7b2a-0e7b-11e7-bfc8-57da167865d7",
+							Animation: &cntl.AnimationSelector{
+								ID: "a51f7b2a-0e7b-11e7-bfc8-57da167865d7",
+							},
 						},
 					},
 				},
@@ -162,7 +168,9 @@ var data = &cntl.DataStore{
 			SubScenes: []cntl.DMXSubScene{
 				{
 					At:     []uint64{0, 1, 2, 3},
-					Preset: "0de258e0-0e7b-11e7-afd4-ebf6036983dc",
+					Preset: &cntl.PresetSelector{
+				ID: "0de258e0-0e7b-11e7-afd4-ebf6036983dc",
+					},
 				},
 			},
 		},
@@ -179,7 +187,9 @@ var data = &cntl.DataStore{
 							Device: &cntl.DMXDeviceSelector{
 								ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
 							},
-							TransitionID: "a1a02b6c-12dd-4d7b-bc3e-24cc823adf21",
+							Transition: &cntl.TransitionSelector{
+								ID: "a1a02b6c-12dd-4d7b-bc3e-24cc823adf21",
+							},
 						},
 					},
 				},

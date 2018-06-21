@@ -1,8 +1,19 @@
 package cntl
 
-// SongSelector is a ID selector for a song
+// A Loader is responsible for loading the applications data. This could either be a remote or a local store.
+type Loader interface {
+	Load() (*DataStore, error)
+}
+
+// An Enhancer enhances the given datastore
+type Enhancer interface {
+	Enhance(*DataStore) []error
+}
+
+// SongSelector is a selector for a song
 type SongSelector struct {
-	ID string `json:"id" yaml:"id"`
+	ID   string `json:"id" yaml:"id"`
+	Name string `json:"name" yaml:"name"`
 }
 
 // SetList is a set of songs in a specific order
@@ -23,6 +34,7 @@ type BarChange struct {
 // ScenePosition describes the position of a DMX scene within a song
 type ScenePosition struct {
 	ID     string `json:"id" yaml:"id"`
+	Name   string `json:"name" yaml:"name"`
 	At     uint64 `json:"at" yaml:"at"`
 	Repeat uint8  `json:"repeat" yaml:"repeat"`
 }
@@ -82,12 +94,14 @@ type LED struct {
 // DMXDeviceSelector is a selector for DMX devices
 type DMXDeviceSelector struct {
 	ID   string `json:"id" yaml:"id"`
+	Name string `json:"name" yaml:"name"`
 	Tags []Tag  `json:"tags" yaml:"tags"`
 }
 
 // DMXDeviceGroupSelector is a selector for DMX device groups
 type DMXDeviceGroupSelector struct {
-	ID string `json:"id" yaml:"id"`
+	ID   string `json:"id" yaml:"id"`
+	Name string `json:"name" yaml:"name"`
 }
 
 // DMXDeviceGroup is a DMX device group
@@ -97,13 +111,25 @@ type DMXDeviceGroup struct {
 	Devices []DMXDeviceSelector `json:"devices" yaml:"devices"`
 }
 
+// AnimationSelector selects an animation
+type AnimationSelector struct {
+	ID   string `json:"id" yaml:"id"`
+	Name string `json:"name" yaml:"name"`
+}
+
+// TransitionSelector selects a transition
+type TransitionSelector struct {
+	ID   string `json:"id" yaml:"id"`
+	Name string `json:"name" yaml:"name"`
+}
+
 // DMXDeviceParams is an object storing DMX parameters including the selection of either groups or devices
 type DMXDeviceParams struct {
-	Group        *DMXDeviceGroupSelector `json:"group" yaml:"group"`
-	Device       *DMXDeviceSelector      `json:"device" yaml:"device"`
-	Params       []DMXParams             `json:"params" yaml:"params"`
-	AnimationID  string                  `json:"animationId" yaml:"animationId"`
-	TransitionID string                  `json:"transitionId" yaml:"transitionId"`
+	Group      *DMXDeviceGroupSelector `json:"group" yaml:"group"`
+	Device     *DMXDeviceSelector      `json:"device" yaml:"device"`
+	Params     []DMXParams             `json:"params" yaml:"params"`
+	Animation  *AnimationSelector      `json:"animation" yaml:"animation"`
+	Transition *TransitionSelector     `json:"transition" yaml:"transition"`
 }
 
 // DMXScene is a whole light scene
@@ -115,11 +141,17 @@ type DMXScene struct {
 	SubScenes []DMXSubScene `json:"subScenes" yaml:"subScenes"`
 }
 
+// PresetSelector is a selector for a preset
+type PresetSelector struct {
+	ID   string `json:"id" yaml:"id"`
+	Name string `json:"name" yaml:"name"`
+}
+
 // DMXSubScene is a sub scene of a light scene
 type DMXSubScene struct {
 	At           []uint64          `json:"at" yaml:"at"`
 	DeviceParams []DMXDeviceParams `json:"deviceParams" yaml:"deviceParams"`
-	Preset       string            `json:"preset" yaml:"preset"`
+	Preset       *PresetSelector   `json:"preset" yaml:"preset"`
 }
 
 // DMXParams is a DMX parameter object
@@ -184,9 +216,9 @@ type Command struct {
 
 // FrameState stores information about which bar and note the command is in
 type FrameState struct {
-	Frame        uint64       `json:"frame" yaml:"frame"`
-	Bar          uint16       `json:"bar" yaml:"bar"`
-	Note         uint8        `json:"note" yaml:"note"`
+	Frame uint64 `json:"frame" yaml:"frame"`
+	Bar   uint16 `json:"bar" yaml:"bar"`
+	Note  uint8  `json:"note" yaml:"note"`
 }
 
 // DMXCommand tells a DMX controller to set a channel on a universe to a specific value

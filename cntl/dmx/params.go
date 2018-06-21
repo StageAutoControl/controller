@@ -24,10 +24,10 @@ func checkDeviceParams(dp *cntl.DMXDeviceParams) error {
 	if dp.Params != nil {
 		valuesSet++
 	}
-	if dp.AnimationID != "" {
+	if dp.Animation != nil {
 		valuesSet++
 	}
-	if dp.TransitionID != "" {
+	if dp.Transition != nil {
 		valuesSet++
 	}
 
@@ -48,7 +48,7 @@ func RenderDeviceParams(ds *cntl.DataStore, dp *cntl.DMXDeviceParams) ([]cntl.DM
 	if dp.Group != nil {
 		g, ok := ds.DMXDeviceGroups[dp.Group.ID]
 		if !ok {
-			return []cntl.DMXCommands{}, fmt.Errorf("failed to find DMXDeviceGroup %q", dp.Group)
+			return []cntl.DMXCommands{}, fmt.Errorf("failed to find DMXDeviceGroup %q", dp.Group.ID)
 		}
 
 		for _, sel := range g.Devices {
@@ -74,19 +74,19 @@ func RenderDeviceParams(ds *cntl.DataStore, dp *cntl.DMXDeviceParams) ([]cntl.DM
 		return []cntl.DMXCommands{}, ErrDeviceParamsNoDevices
 	}
 
-	if dp.AnimationID != "" {
-		a, ok := ds.DMXAnimations[dp.AnimationID]
+	if dp.Animation != nil {
+		a, ok := ds.DMXAnimations[dp.Animation.ID]
 		if !ok {
-			return []cntl.DMXCommands{}, fmt.Errorf("unable to find DMXAnimation %q", dp.AnimationID)
+			return []cntl.DMXCommands{}, fmt.Errorf("unable to find DMXAnimation %q", dp.Animation.ID)
 		}
 
 		return RenderAnimation(ds, dd, a)
 	}
 
-	if dp.TransitionID != "" {
-		t, ok := ds.DMXTransitions[dp.TransitionID]
+	if dp.Transition != nil {
+		t, ok := ds.DMXTransitions[dp.Transition.ID]
 		if !ok {
-			return []cntl.DMXCommands{}, fmt.Errorf("unable to find DMXTransition %q", dp.AnimationID)
+			return []cntl.DMXCommands{}, fmt.Errorf("unable to find DMXTransition %q", dp.Animation.ID)
 		}
 
 		return RenderTransition(ds, dd, t)

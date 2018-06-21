@@ -16,7 +16,8 @@ func (r *Repository) readDir(data *fileData, dir string) error {
 		file := getFileName(dir, fileName)
 
 		if _, err := os.Stat(file); os.IsNotExist(err) {
-			return fmt.Errorf("expected to find %q but does not exist.", file)
+			continue
+
 		} else if err != nil {
 			return fmt.Errorf("error checking file %q: %v", file, err)
 		}

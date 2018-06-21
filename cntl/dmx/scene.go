@@ -46,14 +46,14 @@ func RenderScene(ds *cntl.DataStore, sc *cntl.DMXScene) ([]cntl.DMXCommands, err
 	for i, ss := range sc.SubScenes {
 		var scs []cntl.DMXCommands
 
-		if len(ss.DeviceParams) > 0 && ss.Preset != "" {
+		if len(ss.DeviceParams) > 0 && ss.Preset != nil {
 			return []cntl.DMXCommands{}, fmt.Errorf("SubScene %d of scene %q cannot have both params and a preset", i, sc.ID)
 		}
 
-		if ss.Preset != "" {
-			p, ok := ds.DMXPresets[ss.Preset]
+		if ss.Preset != nil {
+			p, ok := ds.DMXPresets[ss.Preset.ID]
 			if !ok {
-				return []cntl.DMXCommands{}, fmt.Errorf("cannot find DMXPreset %q", ss.Preset)
+				return []cntl.DMXCommands{}, fmt.Errorf("cannot find DMXPreset %q", ss.Preset.ID)
 			}
 
 			pcs, err := RenderPreset(ds, p)

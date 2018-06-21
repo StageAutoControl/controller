@@ -15,34 +15,34 @@ func TestCheckDeviceParams(t *testing.T) {
 	}{
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:       &cntl.DMXDeviceSelector{ID: "asdf"},
-				Group:        &cntl.DMXDeviceGroupSelector{ID: "asdf2"},
-				TransitionID: "anim1",
-				AnimationID:  "anim2",
+				Device:     &cntl.DMXDeviceSelector{ID: "asdf"},
+				Group:      &cntl.DMXDeviceGroupSelector{ID: "asdf2"},
+				Transition: &cntl.TransitionSelector{ID: "anim1"},
+				Animation:  &cntl.AnimationSelector{ID: "anim2"},
 			},
 			expectedErr: ErrDeviceParamsDevicesInvalid,
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:       &cntl.DMXDeviceSelector{ID: "asdf"},
-				Group:        &cntl.DMXDeviceGroupSelector{ID: "asdf2"},
-				TransitionID: "anim1",
-				AnimationID:  "anim2",
+				Device:     &cntl.DMXDeviceSelector{ID: "asdf"},
+				Group:      &cntl.DMXDeviceGroupSelector{ID: "asdf2"},
+				Transition: &cntl.TransitionSelector{ID: "anim1"},
+				Animation:  &cntl.AnimationSelector{ID: "anim2"},
 			},
 			expectedErr: ErrDeviceParamsDevicesInvalid,
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:       &cntl.DMXDeviceSelector{ID: "asdf"},
-				TransitionID: "anim1",
-				AnimationID:  "anim2",
+				Device:     &cntl.DMXDeviceSelector{ID: "asdf"},
+				Transition: &cntl.TransitionSelector{ID: "anim1"},
+				Animation:  &cntl.AnimationSelector{ID: "anim2"},
 			},
 			expectedErr: ErrDeviceParamsValuesInvalid,
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:       &cntl.DMXDeviceSelector{ID: "asdf"},
-				TransitionID: "anim1",
+				Device:     &cntl.DMXDeviceSelector{ID: "asdf"},
+				Transition: &cntl.TransitionSelector{ID: "anim1"},
 				Params: []cntl.DMXParams{
 					{Blue: fixtures.Value255},
 				},
@@ -51,8 +51,8 @@ func TestCheckDeviceParams(t *testing.T) {
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:      &cntl.DMXDeviceSelector{ID: "asdf"},
-				AnimationID: "anim1",
+				Device:    &cntl.DMXDeviceSelector{ID: "asdf"},
+				Animation: &cntl.AnimationSelector{ID: "anim1"},
 				Params: []cntl.DMXParams{
 					{Blue: fixtures.Value255},},
 			},
@@ -69,15 +69,15 @@ func TestCheckDeviceParams(t *testing.T) {
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:      &cntl.DMXDeviceSelector{ID: "asdf"},
-				AnimationID: "anim1",
+				Device:    &cntl.DMXDeviceSelector{ID: "asdf"},
+				Animation: &cntl.AnimationSelector{ID: "anim1"},
 			},
 			expectedErr: nil,
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:       &cntl.DMXDeviceSelector{ID: "asdf"},
-				TransitionID: "anim1",
+				Device:     &cntl.DMXDeviceSelector{ID: "asdf"},
+				Transition: &cntl.TransitionSelector{ID: "anim1"},
 			},
 			expectedErr: nil,
 		},
@@ -92,15 +92,15 @@ func TestCheckDeviceParams(t *testing.T) {
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Group:       &cntl.DMXDeviceGroupSelector{ID: "asdf"},
-				AnimationID: "anim1",
+				Group:     &cntl.DMXDeviceGroupSelector{ID: "asdf"},
+				Animation: &cntl.AnimationSelector{ID: "anim1"},
 			},
 			expectedErr: nil,
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Group:        &cntl.DMXDeviceGroupSelector{ID: "asdf"},
-				TransitionID: "anim1",
+				Group:      &cntl.DMXDeviceGroupSelector{ID: "asdf"},
+				Transition: &cntl.TransitionSelector{ID: "anim1"},
 			},
 			expectedErr: nil,
 		},
@@ -182,8 +182,8 @@ func TestRenderDeviceParams(t *testing.T) {
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:      &cntl.DMXDeviceSelector{ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e"},
-				AnimationID: "a51f7b2a-0e7b-11e7-bfc8-57da167865d7",
+				Device:    &cntl.DMXDeviceSelector{ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e"},
+				Animation: &cntl.AnimationSelector{ID: "a51f7b2a-0e7b-11e7-bfc8-57da167865d7"},
 			},
 			c: []cntl.DMXCommands{
 				{
