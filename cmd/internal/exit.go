@@ -12,7 +12,7 @@ import (
 // NewExitHandlerContext creates a trap for termination signals
 func NewExitHandlerContext(logger *logrus.Logger) context.Context {
 	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM, syscall.SIGKILL)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM, syscall.SIGKILL, os.Interrupt)
 	ctx, cancel := context.WithCancel(context.Background())
 
 	go func() {

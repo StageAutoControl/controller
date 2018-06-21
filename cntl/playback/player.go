@@ -64,9 +64,10 @@ func (p *Player) PlaySetList(ctx context.Context, setListID string) error {
 }
 
 func (p *Player) wait(ctx context.Context) error {
-	done := make(chan struct{}, len(p.waiters))
-	cancel := make(chan struct{}, len(p.waiters))
-	err := make(chan error, len(p.waiters))
+	chanLen := len(p.waiters) + 1
+	done := make(chan struct{}, chanLen)
+	cancel := make(chan struct{}, chanLen)
+	err := make(chan error, chanLen)
 
 	defer func() {
 		cancel <- struct{}{}
