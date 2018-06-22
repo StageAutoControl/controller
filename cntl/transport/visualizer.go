@@ -1,13 +1,13 @@
 package transport
 
 import (
+	"encoding/json"
 	"fmt"
 	"net"
 	"strings"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/StageAutoControl/controller/cntl"
-	"github.com/golang/protobuf/proto"
 )
 
 // Visualizer is a writer to the visualizer tool
@@ -33,20 +33,7 @@ func NewVisualizer(logger *logrus.Entry, endpoint string) (*Visualizer, error) {
 
 // Write writes to the visualizer stream
 func (t *Visualizer) Write(cmd cntl.Command) error {
-	tc := Command{
-		DmxCommands:  make([]*DMXCommand, len(cmd.DMXCommands)),
-		MidiCommands: make([]*MIDICommand, len(cmd.MIDICommands)),
-		BarChange:    convertBarChange(cmd.BarChange),
-	}
-	for i, c := range cmd.DMXCommands {
-		tc.DmxCommands[i] = &DMXCommand{
-			Universe: uint32(c.Universe),
-			Channel:  uint32(c.Channel),
-			Value:    uint32(c.Value.Value),
-		}
-	}
-
-	b, err := proto.Marshal(&tc)
+	b, err := json.Marshal(&cmd)
 	if err != nil {
 		return err
 	}
@@ -59,38 +46,26 @@ func (t *Visualizer) Write(cmd cntl.Command) error {
 		return fmt.Errorf("did not sent anything, sent %d bytes", n)
 	}
 
-	go t.debug(tc, b)
+	go t.debug(cmd, b)
 
 	return nil
 }
 
-func convertBarChange(bc *cntl.BarChange) *BarChange {
-	if bc == nil {
-		return nil
-	}
-	return &BarChange{
-		At:        bc.At,
-		NoteCount: uint32(bc.NoteCount),
-		NoteValue: uint32(bc.NoteValue),
-		Speed:     uint32(bc.Speed),
-	}
+func (t *Visualizer) debug(cs cntl.Command, b []byte) {
+	t.logger.Infof("Sent %d commands to visualizer: %v", len(cs.DMXCommands), renderDMXCommands(cs))
 }
 
-func (t *Visualizer) debug(cs Command, b []byte) {
-	t.logger.Infof("Sent %d commands to visualizer: %v", len(cs.DmxCommands), renderDMXCommands(cs))
-}
+func renderDMXCommands(cmds cntl.Command) string {
+	s := make([]string, len(cmds.DMXCommands))
 
-func renderDMXCommands(cmds Command) string {
-	s := make([]string, len(cmds.DmxCommands))
-
-	for i, c := range cmds.DmxCommands {
+	for i, c := range cmds.DMXCommands {
 		s[i] = fmt.Sprintf("%d:%d -> %d", c.Universe, c.Channel, c.Value)
 	}
 
 	return fmt.Sprintf("%s --> %s", renderBarChange(cmds.BarChange), strings.Join(s, " | "))
 }
 
-func renderBarChange(bc *BarChange) string {
+func renderBarChange(bc *cntl.BarChange) string {
 	if bc == nil {
 		return strings.Repeat(" ", 20)
 	}

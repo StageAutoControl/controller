@@ -38,8 +38,8 @@ func (v1 *Song) Equals(v2 *Song) bool {
 }
 
 // Equals returns whether the two given objects are equal
-func (v1 Tag) Equals(v2 Tag) bool {
-	return v1 == v2
+func (t Tag) Equals(v2 Tag) bool {
+	return t == v2
 }
 
 // Equals returns whether the two given objects are equal

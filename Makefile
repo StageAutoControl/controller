@@ -19,9 +19,6 @@ lint:
 test:
 	go test -v $(PACKAGES)
 
-proto:
-	protoc -I "cntl/transport" --go_out="cntl/transport" cntl/transport/dmx.proto
-
 start-playback-visualizer: build-darwin
 	./bin/controller_darwin playback song "${SONG}" \
 		--data-dir "${SAC_DATA_DIR}" \

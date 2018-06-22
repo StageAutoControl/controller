@@ -31,6 +31,9 @@ func Render(ds *cntl.DataStore, songID string) ([]cntl.Command, error) {
 	cs := make([]cntl.Command, s.Length)
 
 	for frame := uint64(0); frame < s.Length; frame++ {
+		cs[frame].MIDICommands = make(cntl.MIDICommands, 0)
+		cs[frame].DMXCommands = make(cntl.DMXCommands, 0)
+
 		if bc, ok := bcs[frame]; ok {
 			cs[frame].BarChange = &bc
 			fb.setBarChange(&bc)

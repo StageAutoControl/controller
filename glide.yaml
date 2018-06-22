@@ -1,9 +1,6 @@
 package: github.com/StageAutoControl/controller
 import:
 - package: github.com/Sirupsen/logrus
-- package: github.com/golang/protobuf
-  subpackages:
-  - proto
 - package: github.com/gordonklaus/portaudio
 - package: github.com/gorilla/handlers
   version: ^1.2.1
