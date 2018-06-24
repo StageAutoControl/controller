@@ -28,12 +28,9 @@ func Render(ds *cntl.DataStore, songID string) ([]cntl.Command, error) {
 	mcs := midi.StreamlineMidiCommands(s)
 
 	fb := &frameBrain{}
-	cs := make([]cntl.Command, s.Length)
+	cs := makeCommandArray(s.Length)
 
 	for frame := uint64(0); frame < s.Length; frame++ {
-		cs[frame].MIDICommands = make(cntl.MIDICommands, 0)
-		cs[frame].DMXCommands = make(cntl.DMXCommands, 0)
-
 		if bc, ok := bcs[frame]; ok {
 			cs[frame].BarChange = &bc
 			fb.setBarChange(&bc)
@@ -60,19 +57,36 @@ func Render(ds *cntl.DataStore, songID string) ([]cntl.Command, error) {
 					cmdIndex := uint64(j) + frame
 
 					if cmdIndex >= uint64(len(cs)) {
-						cs = append(cs, cntl.Command{DMXCommands: dc})
-					} else {
-						cs[cmdIndex].DMXCommands = append(
-							cs[cmdIndex].DMXCommands,
-							dc...,
-						)
+						cs = append(cs, makeCommand())
 					}
+
+					cs[cmdIndex].DMXCommands = append(
+						cs[cmdIndex].DMXCommands,
+						dc...,
+					)
 				}
 			}
 		}
 	}
 
 	return cs, nil
+}
+
+func makeCommand() cntl.Command {
+	return cntl.Command{
+		MIDICommands: make([]cntl.MIDICommand, 0),
+		DMXCommands:  make([]cntl.DMXCommand, 0),
+	}
+}
+
+func makeCommandArray(length uint64) []cntl.Command {
+	cmds := make([]cntl.Command, length)
+
+	for i := range cmds {
+		cmds[i].MIDICommands = make([]cntl.MIDICommand, 0)
+		cmds[i].DMXCommands = make([]cntl.DMXCommand, 0)
+	}
+	return cmds
 }
 
 func streamlineBarChanges(s *cntl.Song) map[uint64]cntl.BarChange {

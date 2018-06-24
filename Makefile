@@ -25,10 +25,14 @@ start-playback-visualizer: build-darwin
 		--transport visualizer \
 		--visualizer-endpoint localhost:1337
 
-start-playback-buffer: build-darwin
+start-playback-stream: build-darwin
 	./bin/controller_darwin playback song "${SONG}" \
 			--data-dir "${SAC_DATA_DIR}" \
-			--transport buffer
+			--transport stream
+
+start-playback-none: build-darwin
+	./bin/controller_darwin playback song "${SONG}" \
+			--data-dir "${SAC_DATA_DIR}"
 
 start-playback-artnet: build-darwin
 	./bin/controller_darwin playback song "${SONG}" \

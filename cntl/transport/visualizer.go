@@ -52,7 +52,7 @@ func (t *Visualizer) Write(cmd cntl.Command) error {
 }
 
 func (t *Visualizer) debug(cs cntl.Command, b []byte) {
-	t.logger.Infof("Sent %d commands to visualizer: %v", len(cs.DMXCommands), renderDMXCommands(cs))
+	t.logger.Debugf("Sent %d commands to visualizer: %v", len(cs.DMXCommands), renderDMXCommands(cs))
 }
 
 func renderDMXCommands(cmds cntl.Command) string {

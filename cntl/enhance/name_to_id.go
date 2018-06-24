@@ -96,7 +96,7 @@ func (e *NameToIDEnhancer) presets(store *cntl.DataStore) []error {
 func (e *NameToIDEnhancer) nestedDeviceParams(params *cntl.DMXDeviceParams, store *cntl.DataStore) []error {
 	errs := make([]error, 0)
 
-	if params.Device != nil && params.Device.ID == "" {
+	if params.Device != nil && params.Device.Name != "" {
 		params.Device.ID = e.findDevice(params.Device.Name, store.DMXDevices)
 		if params.Device.ID == "" {
 			errs = append(errs, fmt.Errorf("cannot find device %q", params.Device.Name))
