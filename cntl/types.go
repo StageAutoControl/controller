@@ -165,6 +165,7 @@ type DMXParams struct {
 	Tilt   *DMXValue `json:"tilt" yaml:"tilt"`
 	Strobe *DMXValue `json:"strobe" yaml:"strobe"`
 	Mode   *DMXValue `json:"preset" yaml:"preset"`
+	Dimmer *DMXValue `json:"dimmer" yaml:"dimmer"`
 }
 
 // DMXAnimation is an animation of dmx params in relation to time

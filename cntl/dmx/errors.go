@@ -9,7 +9,7 @@ var (
 	ErrDeviceHasDisabledDimmerChannel = errors.New("device has disabled Dimmer channel")
 	ErrDeviceIsNotMoving              = errors.New("device is not moving, cannot use tilt and pan")
 
-	ErrDeviceParamsDevicesInvalid         = errors.New("DMXDeviceParams can only have a group or a Device")
+	ErrDeviceParamsDevicesInvalid         = errors.New("DMXDeviceParams must have either a group or a device")
 	ErrDeviceParamsValuesInvalid          = errors.New("DMXDeviceParams must not have more the one of [Animation, Transition, Params]")
 	ErrDeviceParamsNoDevices              = errors.New("DMXDeviceParams matches no device")
 	ErrTransitionDeviceParamsMustMatchLED = errors.New("DMXTransition contains a param set where the LED is not the same")

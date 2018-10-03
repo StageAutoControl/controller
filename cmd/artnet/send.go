@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	form = "<universe 0-65,536> <channel 0-255> <value 0-255> ..."
+	form = "<universe 0-65,536> <channel 0-511> <value 0-255> ..."
 )
 
 // Send represents the ArtNetTest command
@@ -64,8 +64,8 @@ var Send = &cobra.Command{
 			wg.Done()
 		}()
 
-		root.Logger.Info("Waiting 10sec for nodes to register")
-		time.Sleep(10 * time.Second)
+		root.Logger.Info("Waiting 5sec for nodes to register")
+		time.Sleep(5 * time.Second)
 
 		root.Logger.Infof("Entering interactive mode. Please enter the lines in the form %s", form)
 		reader := bufio.NewReader(os.Stdin)
@@ -78,7 +78,7 @@ var Send = &cobra.Command{
 			text, _ := reader.ReadString('\n')
 			text = strings.Replace(text, "\n", "", -1)
 
-			params := strings.Split(text, " ")
+			params := strings.Split(strings.TrimSpace(text), " ")
 			if len(params) != 3 {
 				root.Logger.Errorf("Please enter the form %s", form)
 				continue
@@ -88,7 +88,7 @@ var Send = &cobra.Command{
 				root.Logger.Errorf("Unable to parse universe: %v", err)
 				continue
 			}
-			if channel, err = strconv.ParseUint(params[1], 10, 8); err != nil {
+			if channel, err = strconv.ParseUint(params[1], 10, 16); err != nil {
 				root.Logger.Errorf("Unable to parse channel: %v", err)
 				continue
 			}
@@ -96,6 +96,8 @@ var Send = &cobra.Command{
 				root.Logger.Errorf("Unable to parse value: %v", err)
 				continue
 			}
+
+			// root.Logger.Infof("Sending u=%d, c=%d, v=%d", universe, channel, value)
 
 			state.Set(uint16(universe), uint8(channel), uint8(value))
 

@@ -150,6 +150,12 @@ func RenderParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, p cntl.DMXParams) (c
 			Value:   *p.Mode,
 		})
 	}
+	if p.Dimmer != nil {
+		channels = append(channels, cntl.DMXCommand{
+			Channel: ChannelDimmer,
+			Value:   *p.Dimmer,
+		})
+	}
 	if p.Tilt != nil {
 		channels = append(channels, cntl.DMXCommand{
 			Channel: ChannelTilt,
