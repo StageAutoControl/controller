@@ -20,18 +20,26 @@ import (
 const (
 	playbackTypeSong    = "song"
 	playbackTypeSetList = "setlist"
+
+	directoryLoader = "directory"
+	databaseLoader  = "database"
 )
 
 var (
+	loaders    = []string{directoryLoader, databaseLoader}
+	loaderType string
+
 	transportTypes = []string{
 		transport.TypeStream,
 		transport.TypeVisualizer,
 		transport.TypeArtNet,
 		transport.TypeMidi,
 	}
-	usedTransports    []string
+	usedTransports []string
+
 	viualizerEndpoint string
 	midiDeviceID      string
+	dataDir           string
 
 	waiterTypes = []string{
 		waiter.TypeNone,
@@ -171,10 +179,11 @@ var playbackCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(playbackCmd)
 
-	playbackCmd.PersistentFlags().StringSliceVarP(&usedTransports, "transport", "t", []string{}, fmt.Sprintf("Which usedTransports to use from %s.", transportTypes))
-	playbackCmd.PersistentFlags().StringVar(&viualizerEndpoint, "visualizer-endpoint", "localhost:1337", "Endpoint of the visualizer backend if visualizer transport is chosen.")
-	playbackCmd.PersistentFlags().StringVarP(&midiDeviceID, "midi-device-id", "m", "", "DeviceID of MIDI output to use (On empty string the default device is used)")
-
-	playbackCmd.PersistentFlags().StringSliceVarP(&usedWaiters, "wait-for", "w", []string{waiter.TypeNone}, fmt.Sprintf("Wait for a specific signal before playing a song (required to be used on stage, otherwise the next song would start immediately), one of %s", waiterTypes))
-	playbackCmd.PersistentFlags().Float32Var(&audioWaiterThreshold, "audio-waiter-threshold", 0.9, "Threshold frequency for audio waiter to trigger a signal")
+	playbackCmd.Flags().StringSliceVarP(&usedTransports, "transport", "t", []string{}, fmt.Sprintf("Which usedTransports to use from %s.", transportTypes))
+	playbackCmd.Flags().StringVar(&viualizerEndpoint, "visualizer-endpoint", "localhost:1337", "Endpoint of the visualizer backend if visualizer transport is chosen.")
+	playbackCmd.Flags().StringVarP(&midiDeviceID, "midi-device-id", "m", "", "DeviceID of MIDI output to use (On empty string the default device is used)")
+	playbackCmd.Flags().StringSliceVarP(&usedWaiters, "wait-for", "w", []string{waiter.TypeNone}, fmt.Sprintf("Wait for a specific signal before playing a song (required to be used on stage, otherwise the next song would start immediately), one of %s", waiterTypes))
+	playbackCmd.Flags().Float32Var(&audioWaiterThreshold, "audio-waiter-threshold", 0.9, "Threshold frequency for audio waiter to trigger a signal")
+	playbackCmd.Flags().StringVarP(&dataDir, "data-dir", "d", "", "Data directory to load (when loader is set to directory)")
+	playbackCmd.Flags().StringVar(&loaderType, "loader", directoryLoader, fmt.Sprintf("Which loader to use %s.", loaders))
 }
