@@ -1,157 +1,159 @@
-[
-  {
-    "channelCount": 67,
-    "channelsPerLED": 4,
-    "dimmerChannel": 1,
-    "dimmerEnabled": true,
-    "id": "1555d67e-1187-11e7-8135-9b41038b5b75",
-    "key": "LEDBar67",
-    "leds": [
-      {
-        "blue": 2,
-        "green": 1,
-        "position": 0,
-        "red": 0,
-        "white": 3
-      },
-      {
-        "blue": 6,
-        "green": 5,
-        "position": 1,
-        "red": 4,
-        "white": 7
-      },
-      {
-        "blue": 10,
-        "green": 9,
-        "position": 2,
-        "red": 8,
-        "white": 11
-      },
-      {
-        "blue": 14,
-        "green": 13,
-        "position": 3,
-        "red": 12,
-        "white": 15
-      },
-      {
-        "blue": 18,
-        "green": 17,
-        "position": 4,
-        "red": 16,
-        "white": 19
-      },
-      {
-        "blue": 22,
-        "green": 21,
-        "position": 5,
-        "red": 20,
-        "white": 23
-      },
-      {
-        "blue": 26,
-        "green": 25,
-        "position": 6,
-        "red": 24,
-        "white": 27
-      },
-      {
-        "blue": 30,
-        "green": 29,
-        "position": 7,
-        "red": 28,
-        "white": 31
-      },
-      {
-        "blue": 34,
-        "green": 33,
-        "position": 8,
-        "red": 32,
-        "white": 35
-      },
-      {
-        "blue": 38,
-        "green": 37,
-        "position": 9,
-        "red": 36,
-        "white": 39
-      },
-      {
-        "blue": 42,
-        "green": 41,
-        "position": 10,
-        "red": 40,
-        "white": 43
-      },
-      {
-        "blue": 46,
-        "green": 45,
-        "position": 11,
-        "red": 44,
-        "white": 47
-      },
-      {
-        "blue": 50,
-        "green": 49,
-        "position": 12,
-        "red": 48,
-        "white": 51
-      },
-      {
-        "blue": 54,
-        "green": 53,
-        "position": 13,
-        "red": 52,
-        "white": 55
-      },
-      {
-        "blue": 58,
-        "green": 57,
-        "position": 14,
-        "red": 56,
-        "white": 59
-      },
-      {
-        "blue": 62,
-        "green": 61,
-        "position": 15,
-        "red": 60,
-        "white": 63
-      }
-    ],
-    "modeChannel": 0,
-    "modeEnabled": true,
-    "name": "LED-Bar 67 Channel",
-    "strobeChannel": 2,
-    "strobeEnabled": true
-  },
-  {
-    "channelCount": 5,
-    "channelsPerLED": 3,
-    "dimmerChannel": 3,
-    "dimmerEnabled": true,
-    "id": "628fc3ea-1188-11e7-8824-5f72d80c17b6",
-    "key": "PAR5",
-    "leds": [
-      {
-        "blue": 2,
-        "green": 1,
-        "position": 0,
-        "red": 0
-      }
-    ],
-    "modeChannel": 0,
-    "modeEnabled": false,
-    "name": "PAR 5 channel",
-    "strobeChannel": 4,
-    "strobeEnabled": true
-  },
-  {
-    "id": "5ccc43ee-118c-11e7-8d53-974b41748b71",
-    "key": "Strobe",
-    "name": "Strobe",
-    "strobeChannel": 0,
-    "strobeEnabled": true
-  }
-]
+{
+  "dmx_device_types": [
+    {
+      "channelCount": 67,
+      "channelsPerLED": 4,
+      "dimmerChannel": 1,
+      "dimmerEnabled": true,
+      "id": "1555d67e-1187-11e7-8135-9b41038b5b75",
+      "key": "LEDBar67",
+      "leds": [
+        {
+          "blue": 2,
+          "green": 1,
+          "position": 0,
+          "red": 0,
+          "white": 3
+        },
+        {
+          "blue": 6,
+          "green": 5,
+          "position": 1,
+          "red": 4,
+          "white": 7
+        },
+        {
+          "blue": 10,
+          "green": 9,
+          "position": 2,
+          "red": 8,
+          "white": 11
+        },
+        {
+          "blue": 14,
+          "green": 13,
+          "position": 3,
+          "red": 12,
+          "white": 15
+        },
+        {
+          "blue": 18,
+          "green": 17,
+          "position": 4,
+          "red": 16,
+          "white": 19
+        },
+        {
+          "blue": 22,
+          "green": 21,
+          "position": 5,
+          "red": 20,
+          "white": 23
+        },
+        {
+          "blue": 26,
+          "green": 25,
+          "position": 6,
+          "red": 24,
+          "white": 27
+        },
+        {
+          "blue": 30,
+          "green": 29,
+          "position": 7,
+          "red": 28,
+          "white": 31
+        },
+        {
+          "blue": 34,
+          "green": 33,
+          "position": 8,
+          "red": 32,
+          "white": 35
+        },
+        {
+          "blue": 38,
+          "green": 37,
+          "position": 9,
+          "red": 36,
+          "white": 39
+        },
+        {
+          "blue": 42,
+          "green": 41,
+          "position": 10,
+          "red": 40,
+          "white": 43
+        },
+        {
+          "blue": 46,
+          "green": 45,
+          "position": 11,
+          "red": 44,
+          "white": 47
+        },
+        {
+          "blue": 50,
+          "green": 49,
+          "position": 12,
+          "red": 48,
+          "white": 51
+        },
+        {
+          "blue": 54,
+          "green": 53,
+          "position": 13,
+          "red": 52,
+          "white": 55
+        },
+        {
+          "blue": 58,
+          "green": 57,
+          "position": 14,
+          "red": 56,
+          "white": 59
+        },
+        {
+          "blue": 62,
+          "green": 61,
+          "position": 15,
+          "red": 60,
+          "white": 63
+        }
+      ],
+      "modeChannel": 0,
+      "modeEnabled": true,
+      "name": "LED-Bar 67 Channel",
+      "strobeChannel": 2,
+      "strobeEnabled": true
+    },
+    {
+      "channelCount": 5,
+      "channelsPerLED": 3,
+      "dimmerChannel": 3,
+      "dimmerEnabled": true,
+      "id": "628fc3ea-1188-11e7-8824-5f72d80c17b6",
+      "key": "PAR5",
+      "leds": [
+        {
+          "blue": 2,
+          "green": 1,
+          "position": 0,
+          "red": 0
+        }
+      ],
+      "modeChannel": 0,
+      "modeEnabled": false,
+      "name": "PAR 5 channel",
+      "strobeChannel": 4,
+      "strobeEnabled": true
+    },
+    {
+      "id": "5ccc43ee-118c-11e7-8d53-974b41748b71",
+      "key": "Strobe",
+      "name": "Strobe",
+      "strobeChannel": 0,
+      "strobeEnabled": true
+    }
+  ]
+}

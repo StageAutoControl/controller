@@ -4,33 +4,32 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"os"
+	"path/filepath"
 
 	"github.com/StageAutoControl/controller/cntl"
 )
 
-func (r *Repository) readDir(data *fileData, dir string) error {
-	fileTargets := makefileTargets(data)
-
-	for fileName, target := range fileTargets {
-		file := getFileName(dir, fileName)
-
-		if _, err := os.Stat(file); os.IsNotExist(err) {
-			continue
-
-		} else if err != nil {
-			return fmt.Errorf("error checking file %q: %v", file, err)
-		}
-
-		if err := r.readFile(file, target); err != nil {
-			return fmt.Errorf("error reading file %q: %v", file, err)
-		}
+func (d *Database) readDir(dir string) (*fileData, error) {
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return nil, err
 	}
 
-	return nil
+	data := new(fileData)
+	for _, file := range files {
+		file := filepath.Join(dir, file.Name())
+		fData := new(fileData)
+		if err := d.readFile(file, fData); err != nil {
+			return nil, fmt.Errorf("error reading file %q: %v", file, err)
+		}
+
+		data = mergeFileData(data, fData)
+	}
+
+	return data, nil
 }
 
-func (r *Repository) readFile(file string, target interface{}) error {
+func (d *Database) readFile(file string, target interface{}) error {
 	b, err := ioutil.ReadFile(file)
 	if err != nil {
 		return fmt.Errorf("error reading file %q: %v", file, err)
@@ -42,6 +41,22 @@ func (r *Repository) readFile(file string, target interface{}) error {
 	}
 
 	return nil
+}
+
+func mergeFileData(data, fd *fileData) *fileData {
+	newData := new(fileData)
+
+	newData.SetLists = append(data.SetLists, fd.SetLists...)
+	newData.Songs = append(data.Songs, fd.Songs...)
+	newData.DMXScenes = append(data.DMXScenes, fd.DMXScenes...)
+	newData.DMXPresets = append(data.DMXPresets, fd.DMXPresets...)
+	newData.DMXAnimations = append(data.DMXAnimations, fd.DMXAnimations...)
+	newData.DMXTransitions = append(data.DMXTransitions, fd.DMXTransitions...)
+	newData.DMXDevices = append(data.DMXDevices, fd.DMXDevices...)
+	newData.DMXDeviceTypes = append(data.DMXDeviceTypes, fd.DMXDeviceTypes...)
+	newData.DMXDeviceGroups = append(data.DMXDeviceGroups, fd.DMXDeviceGroups...)
+
+	return newData
 }
 
 func expandData(data *cntl.DataStore, fileData *fileData) {
