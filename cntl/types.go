@@ -43,7 +43,6 @@ type ScenePosition struct {
 type Song struct {
 	ID              string            `json:"id" yaml:"id"`
 	Name            string            `json:"name" yaml:"name"`
-	Length          uint64            `json:"length" yaml:"length"`
 	BarChanges      []BarChange       `json:"barChanges" yaml:"barChanges"`
 	DMXScenes       []ScenePosition   `json:"dmxScenes" yaml:"dmxScenes"`
 	DMXDeviceParams []DMXDeviceParams `json:"dmxDeviceParams" yaml:"dmxDeviceParams"`

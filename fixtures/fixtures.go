@@ -28,7 +28,6 @@ var data = &cntl.DataStore{
 		"3c1065c8-0b14-11e7-96eb-5b134621c411": {
 			ID:     "3c1065c8-0b14-11e7-96eb-5b134621c411",
 			Name:   "Test song",
-			Length: 3200,
 			BarChanges: []cntl.BarChange{
 				{At: 0, NoteCount: 4, NoteValue: 4, Speed: 160},
 				{At: 512, NoteCount: 3, NoteValue: 4},

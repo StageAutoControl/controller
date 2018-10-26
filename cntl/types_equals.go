@@ -31,7 +31,6 @@ func (v1 ScenePosition) Equals(v2 ScenePosition) bool {
 func (v1 *Song) Equals(v2 *Song) bool {
 	return v1.ID == v2.ID &&
 		v1.Name == v2.Name &&
-		v1.Length == v2.Length &&
 		barChangeList(v1.BarChanges).Equals(barChangeList(v2.BarChanges)) &&
 		scenePositionList(v1.DMXScenes).Equals(scenePositionList(v2.DMXScenes)) &&
 		dmxDeviceParamsList(v1.DMXDeviceParams).Equals(dmxDeviceParamsList(v2.DMXDeviceParams))
