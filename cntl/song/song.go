@@ -24,7 +24,7 @@ func Render(ds *cntl.DataStore, songID string) ([]cntl.Command, error) {
 	mcs := midi.StreamlineMidiCommands(s)
 
 	fb := &frameBrain{}
-	numFrames := max(maxKey(scs), maxKey(mcs))
+	numFrames := max(maxKey(scs), maxKey(mcs)) +1
 	cs := makeCommandArray(numFrames)
 
 	for frame := uint64(0); frame < numFrames; frame++ {
