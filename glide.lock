@@ -1,31 +1,19 @@
-hash: 7013dfc5c44141a23e3e6ccba5d8506c38a6c6289ee4433e62cfb2e112b8ba09
-updated: 2018-06-22T18:48:51.515989058+02:00
+hash: 2c54dda8ac4942eb25332cdae5fe2cad1aa6db3f1fcfdb8416e54d6828d8f1f8
+updated: 2019-02-07T20:06:18.147463+01:00
 imports:
 - name: github.com/creasty/go-easing
   version: 0cfd96d3a544aad2e643739e4a4f6c081b12cda0
-- name: github.com/fsnotify/fsnotify
-  version: c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9
+- name: github.com/google/btree
+  version: 4030bb1f1f0c35b30ca7009e9ebd06849dd45306
 - name: github.com/gordonklaus/portaudio
-  version: e66c30a9c4ca11f93538cf8c004831bfb76f3838
+  version: 00e7307ccd93051979a933c6fd5ead641eba5686
 - name: github.com/gorilla/handlers
-  version: 90663712d74cb411cbef281bc1e08c19d1a76145
+  version: 7e0847f9db758cdebd26c149d0ae9d5d0b9c98ce
 - name: github.com/gorilla/rpc
   version: 22c016f3df3febe0c1f6727598b6389507e03a18
   subpackages:
   - v2
   - v2/json
-- name: github.com/hashicorp/hcl
-  version: ef8a98b0bbce4a65b5aa4c368430a80ddc533168
-  subpackages:
-  - hcl/ast
-  - hcl/parser
-  - hcl/printer
-  - hcl/scanner
-  - hcl/strconv
-  - hcl/token
-  - json/parser
-  - json/scanner
-  - json/token
 - name: github.com/inconshreveable/mousetrap
   version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
 - name: github.com/jsimonetti/go-artnet
@@ -35,46 +23,29 @@ imports:
   - packet
   - packet/code
   - version
-- name: github.com/magiconair/properties
-  version: c2353362d570a7bfa228149c62842019201cfb71
-- name: github.com/mitchellh/mapstructure
-  version: bb74f1db0675b241733089d5a1faa5dd8b0ef57b
-- name: github.com/pelletier/go-toml
-  version: c01d1270ff3e442a8a57cddc1c92dc1138598194
+- name: github.com/konsorten/go-windows-terminal-sequences
+  version: 5c8c8bd35d3832f5d134ae1e1e375b69a4d25242
+- name: github.com/peterbourgon/diskv
+  version: 5f041e8faa004a95c88a202771f4cc3e991971e6
 - name: github.com/rakyll/portmidi
   version: 1246dd47c56089ea2ae791266edb7f4c6b90c045
 - name: github.com/satori/go.uuid
   version: f58768cc1a7a7e77a3bd49e98cdd21419399b6a3
 - name: github.com/Sirupsen/logrus
-  version: 75068beb13ada9c0ddde611f678523fda7352650
-- name: github.com/spf13/afero
-  version: 787d034dfe70e44075ccc060d346146ef53270ad
-  subpackages:
-  - mem
-- name: github.com/spf13/cast
-  version: 8965335b8c7107321228e3e3702cab9832751bac
+  version: e1e72e9de974bd926e5c56f83753fba2df402ce5
 - name: github.com/spf13/cobra
-  version: 1e58aa3361fd650121dceeedc399e7189c05674a
-- name: github.com/spf13/jwalterweatherman
-  version: 7c0cea34c8ece3fbeb2b27ab9b59511d360fb394
+  version: 7547e83b2d85fd1893c7d76916f67689d761fecb
 - name: github.com/spf13/pflag
-  version: 3ebe029320b2676d667ae88da602a5f854788a8a
+  version: 24fa6976df40757dce6aea913e7b81ade90530e1
 - name: github.com/spf13/viper
-  version: b5e8006cbee93ec955a89ab31e0e3ce3204f3736
+  version: 6d33b5a963d922d182c91e8a1c88d81fd150cfd4
 - name: golang.org/x/crypto
-  version: a49355c7e3f8fe157a85be2f77e6e269a0f89602
+  version: b8fe1690c61389d7d2a8074a507d1d40c5d30448
   subpackages:
   - ssh/terminal
 - name: golang.org/x/sys
-  version: 63fc586f45fe72d95d5240a5d5eb95e6503907d3
+  version: 41f3e6584952bb034a481797859f6ab34b6803bd
   subpackages:
   - unix
   - windows
-- name: golang.org/x/text
-  version: 5cec4b58c438bd98288aeb248bab2c1840713d21
-  subpackages:
-  - transform
-  - unicode/norm
-- name: gopkg.in/yaml.v2
-  version: 5420a8b6744d3b0345ab293f6fcba19c978f1183
 testImports: []

@@ -21,3 +21,5 @@ import:
 - package: github.com/spf13/viper
   version: ^1.0.0
 - package: github.com/creasty/go-easing
+- package: github.com/peterbourgon/diskv
+  version: ^2.0.1
