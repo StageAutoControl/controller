@@ -13,7 +13,7 @@ import (
 	"github.com/StageAutoControl/controller/cntl/playback"
 	"github.com/StageAutoControl/controller/cntl/transport"
 	"github.com/StageAutoControl/controller/cntl/waiter"
-	"github.com/StageAutoControl/controller/database/files"
+	"github.com/StageAutoControl/controller/loader/files"
 	"github.com/spf13/cobra"
 )
 
