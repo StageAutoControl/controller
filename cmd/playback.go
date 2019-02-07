@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"github.com/StageAutoControl/controller/cmd/internal"
 	"github.com/StageAutoControl/controller/cntl"
 	"github.com/StageAutoControl/controller/cntl/enhance"

@@ -6,7 +6,7 @@ import (
 
 	"strings"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"github.com/StageAutoControl/controller/cntl"
 )
 

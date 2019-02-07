@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"github.com/StageAutoControl/controller/cntl"
 	artnetTransport "github.com/StageAutoControl/controller/cntl/transport/artnet"
 	"github.com/jsimonetti/go-artnet"

@@ -1,6 +1,6 @@
 package: github.com/StageAutoControl/controller
 import:
-- package: github.com/Sirupsen/logrus
+- package: github.com/sirupsen/logrus
 - package: github.com/gordonklaus/portaudio
 - package: github.com/gorilla/handlers
   version: ^1.2.1
@@ -10,7 +10,7 @@ import:
   - v2
   - v2/json
 - package: github.com/jsimonetti/go-artnet
-  repo: https://github.com/StageAutoControl/go-artnet.git
+#  repo: https://github.com/StageAutoControl/go-artnet.git
   subpackages:
   - packet/code
 - package: github.com/rakyll/portmidi

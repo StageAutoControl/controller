@@ -1,5 +1,5 @@
-hash: 2c54dda8ac4942eb25332cdae5fe2cad1aa6db3f1fcfdb8416e54d6828d8f1f8
-updated: 2019-02-07T20:06:18.147463+01:00
+hash: 983effd3e9ab87af045e04b98c0772d1100c2fc7b15f24264dd851be2464082a
+updated: 2019-02-07T21:22:24.230622+01:00
 imports:
 - name: github.com/creasty/go-easing
   version: 0cfd96d3a544aad2e643739e4a4f6c081b12cda0
@@ -17,8 +17,7 @@ imports:
 - name: github.com/inconshreveable/mousetrap
   version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
 - name: github.com/jsimonetti/go-artnet
-  version: 429082958bfee4a2e881fd8d255845fded169537
-  repo: https://github.com/StageAutoControl/go-artnet.git
+  version: f0b9cc962f904f793900f27ba65ffc04b4a942eb
   subpackages:
   - packet
   - packet/code
@@ -31,8 +30,8 @@ imports:
   version: 1246dd47c56089ea2ae791266edb7f4c6b90c045
 - name: github.com/satori/go.uuid
   version: f58768cc1a7a7e77a3bd49e98cdd21419399b6a3
-- name: github.com/Sirupsen/logrus
-  version: e1e72e9de974bd926e5c56f83753fba2df402ce5
+- name: github.com/sirupsen/logrus
+  version: 4ea4861398d99a2d05be29675c5b74caf7bea95e
 - name: github.com/spf13/cobra
   version: 7547e83b2d85fd1893c7d76916f67689d761fecb
 - name: github.com/spf13/pflag

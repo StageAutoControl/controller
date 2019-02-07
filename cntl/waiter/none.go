@@ -1,6 +1,6 @@
 package waiter
 
-import "github.com/Sirupsen/logrus"
+import "github.com/sirupsen/logrus"
 
 // None is a waiter that does nothing
 type None struct{

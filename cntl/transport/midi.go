@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"github.com/StageAutoControl/controller/cntl"
 	"github.com/rakyll/portmidi"
 )
