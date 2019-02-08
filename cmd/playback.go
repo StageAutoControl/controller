@@ -8,7 +8,7 @@ import (
 
 	"github.com/StageAutoControl/controller/cmd/internal"
 	"github.com/StageAutoControl/controller/pkg/cntl"
-	"github.com/StageAutoControl/controller/pkg/cntl/enhance"
+	"github.com/StageAutoControl/controller/pkg/enhance"
 	"github.com/StageAutoControl/controller/pkg/cntl/playback"
 	"github.com/StageAutoControl/controller/pkg/cntl/transport"
 	"github.com/StageAutoControl/controller/pkg/cntl/waiter"
