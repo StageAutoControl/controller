@@ -37,7 +37,6 @@ func New(storageDir string) *Storage {
 
 func (s *Storage) buildFileName(key string, value interface{}) string {
 	return fmt.Sprintf("%s_%s.json", s.getType(value), key)
-
 }
 
 // Write a given value with the given fileName to disk
