@@ -8,10 +8,10 @@ import (
 
 	"github.com/StageAutoControl/controller/cmd/internal"
 	"github.com/StageAutoControl/controller/pkg/cntl"
-	"github.com/StageAutoControl/controller/pkg/enhance"
 	"github.com/StageAutoControl/controller/pkg/cntl/playback"
 	"github.com/StageAutoControl/controller/pkg/cntl/transport"
 	"github.com/StageAutoControl/controller/pkg/cntl/waiter"
+	"github.com/StageAutoControl/controller/pkg/enhance"
 	"github.com/StageAutoControl/controller/pkg/loader/files"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
