@@ -15,9 +15,9 @@ import (
 	"time"
 
 	root "github.com/StageAutoControl/controller/cmd"
-	"github.com/StageAutoControl/controller/cntl"
-	"github.com/StageAutoControl/controller/cntl/transport"
-	artnetTransport "github.com/StageAutoControl/controller/cntl/transport/artnet"
+	"github.com/StageAutoControl/controller/pkg/cntl"
+	"github.com/StageAutoControl/controller/pkg/cntl/transport"
+	artnetTransport "github.com/StageAutoControl/controller/pkg/cntl/transport/artnet"
 	"github.com/jsimonetti/go-artnet"
 	"github.com/spf13/cobra"
 )

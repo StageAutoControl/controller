@@ -1,10 +1,9 @@
 [*]
-indent_count = 2
+indent_size = 2
 indent_style = space
 
 [*.go]
 indent_style = tab
 
-[*.{yml,yaml,json}]
-indent_count = 2
+[*.{yml, yaml, json}]
 indent_style = space

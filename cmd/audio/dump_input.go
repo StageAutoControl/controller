@@ -86,7 +86,7 @@ func calcAverage(frame int64, buf []float32) {
 	}
 
 	tick := ""
-	if min < (threshold * -1) || max > threshold {
+	if min < (threshold*-1) || max > threshold {
 		tick = "tick"
 	}
 

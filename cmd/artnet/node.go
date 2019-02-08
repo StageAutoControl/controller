@@ -10,7 +10,7 @@ import (
 	"os/signal"
 
 	root "github.com/StageAutoControl/controller/cmd"
-	artnetTransport "github.com/StageAutoControl/controller/cntl/transport/artnet"
+	artnetTransport "github.com/StageAutoControl/controller/pkg/cntl/transport/artnet"
 	"github.com/jsimonetti/go-artnet"
 	"github.com/jsimonetti/go-artnet/packet/code"
 	"github.com/spf13/cobra"

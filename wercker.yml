@@ -1,6 +1,6 @@
 build:
-    box: golang
-    steps:
+  box: golang
+  steps:
     - setup-go-workspace
 
     - install-packages:
