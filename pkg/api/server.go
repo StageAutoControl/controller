@@ -37,6 +37,7 @@ func (s *Server) registerControllers() error {
 		"DMXDevice": newDMXDeviceController(s.logger, s.storage),
 		"DMXDeviceGroup": newDMXDeviceGroupController(s.logger, s.storage),
 		"DMXDeviceType": newDMXDeviceTypeController(s.logger, s.storage),
+		"Song": newSongController(s.logger, s.storage),
 	}
 
 	for name, controller := range s.controller {
