@@ -59,7 +59,7 @@ func (s *Server) Run(ctx context.Context, endpoint string) error {
 	s.Server.RegisterCodec(json.NewCodec(), "application/json")
 
 	r := http.NewServeMux()
-	r.Handle("/rpc", s.Server)
+	r.Handle(rpcPath, s.Server)
 	r.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
 		if _, err := fmt.Fprint(rw, "OK"); err != nil {
 			s.logger.Errorf("failed to write content to response: %v", err)

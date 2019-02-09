@@ -4,6 +4,7 @@ import (
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	"github.com/StageAutoControl/controller/pkg/internal/fixtures"
 	"github.com/StageAutoControl/controller/pkg/internal/stringslice"
+	internalTesting "github.com/StageAutoControl/controller/pkg/internal/testing"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -19,11 +20,6 @@ var (
 	expectedContent  = "{\"id\":\"35cae00a-0b17-11e7-8bca-bbf30c56f20e\",\"name\":\"LED-Bar below drums front\",\"typeId\":\"1555d67e-1187-11e7-8135-9b41038b5b75\",\"universe\":1,\"startChannel\":222,\"tags\":[\"bar\",\"drums\"]}"
 )
 
-func cleanup(t *testing.T, path string) {
-	if err := os.RemoveAll(path); err != nil {
-		t.Errorf("failed to remove test storage dir: %v", err)
-	}
-}
 
 func TestStorage_buildFileName(t *testing.T) {
 	storage := New(path)
@@ -45,7 +41,7 @@ func TestStorage_getType(t *testing.T) {
 }
 
 func TestStorage_Write(t *testing.T) {
-	defer cleanup(t, path)
+	defer internalTesting.Cleanup(t, path)
 	storage := New(path)
 
 	err := storage.Write(key, device)
@@ -71,7 +67,7 @@ func TestStorage_Write(t *testing.T) {
 }
 
 func TestStorage_Read(t *testing.T) {
-	defer cleanup(t, path)
+	defer internalTesting.Cleanup(t, path)
 	storage := New(path)
 
 	if err := os.MkdirAll(filepath.Dir(expectedFileName), 0755); err != nil {
@@ -96,7 +92,7 @@ func TestStorage_Read(t *testing.T) {
 }
 
 func TestStorage_Has_Existing(t *testing.T) {
-	defer cleanup(t, path)
+	defer internalTesting.Cleanup(t, path)
 	storage := New(path)
 
 	if err := os.MkdirAll(filepath.Dir(expectedFileName), 0755); err != nil {
@@ -116,7 +112,7 @@ func TestStorage_Has_Existing(t *testing.T) {
 }
 
 func TestStorage_Has_NotExisting(t *testing.T) {
-	defer cleanup(t, path)
+	defer internalTesting.Cleanup(t, path)
 	storage := New(path)
 
 	if err := os.MkdirAll(filepath.Dir(expectedFileName), 0755); err != nil {
@@ -132,7 +128,7 @@ func TestStorage_Has_NotExisting(t *testing.T) {
 }
 
 func TestStorage_List(t *testing.T) {
-	defer cleanup(t, path)
+	defer internalTesting.Cleanup(t, path)
 	storage := New(path)
 
 	for k, dev := range ds.DMXDevices {
@@ -156,7 +152,7 @@ func TestStorage_List(t *testing.T) {
 }
 
 func TestStorage_Delete(t *testing.T) {
-	defer cleanup(t, path)
+	defer internalTesting.Cleanup(t, path)
 	storage := New(path)
 
 	if err := os.MkdirAll(filepath.Dir(expectedFileName), 0755); err != nil {
