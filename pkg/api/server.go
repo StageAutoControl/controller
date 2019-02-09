@@ -38,6 +38,7 @@ func (s *Server) registerControllers() error {
 		"DMXDevice": newDMXDeviceController(s.logger, s.storage),
 		"DMXDeviceGroup": newDMXDeviceGroupController(s.logger, s.storage),
 		"DMXDeviceType": newDMXDeviceTypeController(s.logger, s.storage),
+		"DMXTransition": newDMXTransitionController(s.logger, s.storage),
 		"Song": newSongController(s.logger, s.storage),
 		"SetList": newSetListController(s.logger, s.storage),
 	}
