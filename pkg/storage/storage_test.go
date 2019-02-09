@@ -3,6 +3,7 @@ package storage
 import (
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	"github.com/StageAutoControl/controller/pkg/internal/fixtures"
+	"github.com/StageAutoControl/controller/pkg/internal/stringslice"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -94,6 +95,42 @@ func TestStorage_Read(t *testing.T) {
 	}
 }
 
+func TestStorage_Has_Existing(t *testing.T) {
+	defer cleanup(t, path)
+	storage := New(path)
+
+	if err := os.MkdirAll(filepath.Dir(expectedFileName), 0755); err != nil {
+		t.Fatalf("failed to prepare disk directory path: %v", err)
+	}
+
+	if err := ioutil.WriteFile(expectedFileName, []byte(expectedContent), 0755); err != nil {
+		t.Fatalf("failed to prepare disk file: %v", err)
+	}
+
+	expDevice := &cntl.DMXDevice{}
+	has := storage.Has(key, expDevice)
+	if !has {
+		t.Errorf("expected storage to have id %q, but doesn't.", key)
+		return
+	}
+}
+
+func TestStorage_Has_NotExisting(t *testing.T) {
+	defer cleanup(t, path)
+	storage := New(path)
+
+	if err := os.MkdirAll(filepath.Dir(expectedFileName), 0755); err != nil {
+		t.Fatalf("failed to prepare disk directory path: %v", err)
+	}
+
+	expDevice := &cntl.DMXDevice{}
+	has:= storage.Has(key, expDevice)
+	if has {
+		t.Errorf("expected storage to NOT have id %q, but does.", key)
+		return
+	}
+}
+
 func TestStorage_List(t *testing.T) {
 	defer cleanup(t, path)
 	storage := New(path)
@@ -109,6 +146,13 @@ func TestStorage_List(t *testing.T) {
 	if len(keys) != len(ds.DMXDevices) {
 		t.Errorf("expected to get %d keys, got %d keys", len(ds.DMXDevices), len(keys))
 	}
+
+	for k := range ds.DMXDevices {
+		if !stringslice.Contains(k, keys) {
+			t.Errorf("Ecpected result list %s to have key %s", keys, k)
+		}
+	}
+
 }
 
 func TestStorage_Delete(t *testing.T) {

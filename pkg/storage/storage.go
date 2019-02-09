@@ -3,6 +3,7 @@ package storage
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/StageAutoControl/controller/pkg/internal/stringslice"
 	"os"
 	"reflect"
 	"strings"
@@ -39,6 +40,11 @@ func (s *Storage) buildFileName(key string, value interface{}) string {
 	return fmt.Sprintf("%s_%s.json", s.getType(value), key)
 }
 
+func (s *Storage) Has(key string, kind interface{}) bool {
+	keys := s.listWithPrefix(s.buildFileName(key, kind), kind)
+	return stringslice.Contains(key, keys)
+}
+
 // Write a given value with the given fileName to disk
 func (s *Storage) Write(key string, value interface{}) error {
 	b, err := json.Marshal(value)
@@ -60,11 +66,11 @@ func (s *Storage) Read(key string, value interface{}) error {
 
 	b, err := s.disk.Read(fileName)
 	if err != nil {
-		return fmt.Errorf("failed to read value of type %s from disk: %v", err)
+		return fmt.Errorf("failed to read value of type %s from disk: %v", s.getType(value), err)
 	}
 
 	if err := json.Unmarshal(b, value); err != nil {
-		return fmt.Errorf("failed to unmarshal value of type %s: %v", err)
+		return fmt.Errorf("failed to unmarshal value of type %s: %v", s.getType(value), err)
 	}
 
 	return nil
@@ -72,13 +78,15 @@ func (s *Storage) Read(key string, value interface{}) error {
 
 // List the keys of a given kind
 func (s *Storage) List(kind interface{}) []string {
-	fileName := s.buildFileName("", kind)
+	return s.listWithPrefix("", kind)
+}
 
+func (s *Storage) listWithPrefix(prefix string, kind interface{}) []string {
 	var keys []string
-	for key := range s.disk.Keys(nil) {
+	for key := range s.disk.KeysPrefix(prefix, nil) {
 		// Remove the custom file schema from the name, which should only return the pure key
 		key = strings.TrimSuffix(key, ".json")
-		key = strings.TrimPrefix(key, fileName)
+		key = strings.TrimPrefix(key, fmt.Sprintf("%s_", s.getType(kind)))
 		keys = append(keys, key)
 	}
 
