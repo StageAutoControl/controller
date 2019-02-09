@@ -16,7 +16,12 @@ var apiCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		logger := Logger.WithField("module", "api")
 
-		store := storage.New("/var/controller/data")
+		storagePath, err := cmd.Flags().GetString("storage-path")
+		if err != nil {
+			logger.Fatal(err)
+		}
+
+		store := storage.New(storagePath)
 		server, err := api.NewServer(logger, store)
 		if err != nil {
 			logger.Fatal(err)
@@ -39,4 +44,5 @@ func init() {
 	RootCmd.AddCommand(apiCmd)
 
 	apiCmd.Flags().Uint16P("port", "p", 8080, "TCP port the API should listen on")
+	apiCmd.Flags().StringP("storage-path", "s", "/var/controller/data", "path where the storage should store the data")
 }

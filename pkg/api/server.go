@@ -3,18 +3,17 @@ package api
 import (
 	"context"
 	"fmt"
-	"github.com/StageAutoControl/controller/pkg/cntl"
 	"github.com/gorilla/rpc"
 	"github.com/gorilla/rpc/json"
 	"github.com/sirupsen/logrus"
 	"net/http"
-	"reflect"
 )
 
 type Server struct {
 	*rpc.Server
 	logger  *logrus.Entry
 	storage storage
+	controller map[string]interface{}
 }
 
 func NewServer(logger *logrus.Entry, storage storage) (*Server, error) {
@@ -32,15 +31,13 @@ func NewServer(logger *logrus.Entry, storage storage) (*Server, error) {
 }
 
 func (s *Server) registerControllers() error {
-	types := []interface{}{
-		&cntl.DMXDevice{}, &cntl.DMXDeviceGroup{}, &cntl.DMXDeviceType{},
+	s.controller = map[string]interface{}{
+		"DMXDevice": newDMXDeviceController(s.logger, s.storage),
 	}
 
-	for _, t := range types {
-		name := reflect.TypeOf(t).Elem().Name()
-		err := s.RegisterService(newController(s.logger, s.storage, t), name)
-		if err != nil {
-			return fmt.Errorf("failed to register RPC controller for type %s: %v", name, err)
+	for name, controller := range s.controller {
+		if err := s.Server.RegisterService(controller, name); err != nil {
+			return err
 		}
 	}
 
