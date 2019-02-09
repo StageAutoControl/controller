@@ -35,6 +35,7 @@ func NewServer(logger *logrus.Entry, storage storage) (*Server, error) {
 func (s *Server) registerControllers() error {
 	s.controller = map[string]interface{}{
 		"DMXDevice": newDMXDeviceController(s.logger, s.storage),
+		"DMXDeviceType": newDMXDeviceTypeController(s.logger, s.storage),
 	}
 
 	for name, controller := range s.controller {
