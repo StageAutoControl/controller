@@ -43,12 +43,12 @@ func (s *Storage) buildFileName(key string, value interface{}) string {
 func (s *Storage) Write(key string, value interface{}) error {
 	b, err := json.Marshal(value)
 	if err != nil {
-		return fmt.Errorf("failed to marshal value: %v", err)
+		return fmt.Errorf("failed to marshal value of type %s: %v", s.getType(value), err)
 	}
 
 	fileName := s.buildFileName(key, value)
 	if err := s.disk.Write(fileName, b); err != nil {
-		return fmt.Errorf("failed to write value to disk: %v", err)
+		return fmt.Errorf("failed to write value of type %s to disk: %v", s.getType(value), err)
 	}
 
 	return nil
@@ -60,11 +60,11 @@ func (s *Storage) Read(key string, value interface{}) error {
 
 	b, err := s.disk.Read(fileName)
 	if err != nil {
-		return fmt.Errorf("failed to read value from disk: %v", err)
+		return fmt.Errorf("failed to read value of type %s from disk: %v", err)
 	}
 
 	if err := json.Unmarshal(b, value); err != nil {
-		return fmt.Errorf("failed to unmarshal value: %v", err)
+		return fmt.Errorf("failed to unmarshal value of type %s: %v", err)
 	}
 
 	return nil
