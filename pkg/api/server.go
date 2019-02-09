@@ -9,13 +9,15 @@ import (
 	"net/http"
 )
 
+// Server represents the controllers API server, aware of all the controllers
 type Server struct {
 	*rpc.Server
-	logger  *logrus.Entry
-	storage storage
+	logger     *logrus.Entry
+	storage    storage
 	controller map[string]interface{}
 }
 
+// NewServer returns a new Server instance
 func NewServer(logger *logrus.Entry, storage storage) (*Server, error) {
 	server := &Server{
 		Server:  rpc.NewServer(),
@@ -57,7 +59,7 @@ func (s *Server) Run(ctx context.Context, endpoint string) error {
 	})
 
 	httpServer := http.Server{
-		Addr: endpoint,
+		Addr:    endpoint,
 		Handler: r,
 	}
 

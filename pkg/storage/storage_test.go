@@ -124,7 +124,7 @@ func TestStorage_Has_NotExisting(t *testing.T) {
 	}
 
 	expDevice := &cntl.DMXDevice{}
-	has:= storage.Has(key, expDevice)
+	has := storage.Has(key, expDevice)
 	if has {
 		t.Errorf("expected storage to NOT have id %q, but does.", key)
 		return

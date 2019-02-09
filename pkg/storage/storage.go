@@ -40,6 +40,7 @@ func (s *Storage) buildFileName(key string, value interface{}) string {
 	return fmt.Sprintf("%s_%s.json", s.getType(value), key)
 }
 
+// Has returns weather the storage has the given entity or not
 func (s *Storage) Has(key string, kind interface{}) bool {
 	keys := s.listWithPrefix(s.buildFileName(key, kind), kind)
 	return stringslice.Contains(key, keys)
@@ -104,9 +105,10 @@ func (s *Storage) Delete(key string, kind interface{}) error {
 }
 
 func (s *Storage) getType(kind interface{}) string {
-	if t := reflect.TypeOf(kind); t.Kind() == reflect.Ptr {
+	t := reflect.TypeOf(kind)
+	if t.Kind() == reflect.Ptr {
 		return t.Elem().Name()
-	} else {
-		return t.Name()
 	}
+
+	return t.Name()
 }

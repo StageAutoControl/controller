@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	// The Logger used by the whole application
+	// Logger used by the whole application
 	Logger   *logrus.Entry
 	logLevel string
 )
