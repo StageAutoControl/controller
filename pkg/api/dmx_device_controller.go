@@ -2,10 +2,12 @@ package api
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/StageAutoControl/controller/pkg/cntl"
+	"github.com/jinzhu/copier"
 	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
-	"net/http"
 )
 
 type dmxDeviceController struct {
@@ -24,18 +26,17 @@ func newDMXDeviceController(logger *logrus.Entry, storage storage) *dmxDeviceCon
 func (c *dmxDeviceController) Create(r *http.Request, entity *cntl.DMXDevice, reply *cntl.DMXDevice) error {
 	if entity.ID == "" {
 		entity.ID = uuid.NewV4().String()
-	} else {
-		if c.storage.Has(entity.ID, entity) {
-			return errExists
-		}
+	}
+
+	if c.storage.Has(entity.ID, entity) {
+		return errExists
 	}
 
 	if err := c.storage.Write(entity.ID, entity); err != nil {
 		return fmt.Errorf("failed to write to disk: %v", err)
 	}
 
-	*reply = *entity
-	return nil
+	return copier.Copy(reply, entity)
 }
 
 // Update a new DMXDevice
@@ -48,8 +49,7 @@ func (c *dmxDeviceController) Update(r *http.Request, entity *cntl.DMXDevice, re
 		return fmt.Errorf("failed to update to disk: %v", err)
 	}
 
-	*reply = *entity
-	return nil
+	return copier.Copy(reply, entity)
 }
 
 // Get a DMXDevice
@@ -58,6 +58,7 @@ func (c *dmxDeviceController) Get(r *http.Request, idReq *IDRequest, reply *cntl
 		return errNoIDGiven
 	}
 
+	fmt.Println(idReq.ID)
 	if !c.storage.Has(idReq.ID, &cntl.DMXDevice{}) {
 		return errNotExists
 	}

@@ -1,25 +1,25 @@
 package: github.com/StageAutoControl/controller
 import:
-  - package: github.com/sirupsen/logrus
-  - package: github.com/gordonklaus/portaudio
-  - package: github.com/gorilla/handlers
-    version: ^1.2.1
-  - package: github.com/gorilla/rpc
-    version: ^1.1.0
-    subpackages:
-      - v2
-      - v2/json
-  - package: github.com/jsimonetti/go-artnet
-    #  repo: https://github.com/StageAutoControl/go-artnet.git
-    subpackages:
-      - packet/code
-  - package: github.com/rakyll/portmidi
-    version: 1246dd47c56089ea2ae791266edb7f4c6b90c045
-  - package: github.com/satori/go.uuid
-    version: ^1.1.0
-  - package: github.com/spf13/cobra
-  - package: github.com/spf13/viper
-    version: ^1.0.0
-  - package: github.com/creasty/go-easing
-  - package: github.com/peterbourgon/diskv
-    version: ^2.0.1
+- package: github.com/sirupsen/logrus
+- package: github.com/gordonklaus/portaudio
+- package: github.com/gorilla/handlers
+  version: ^1.2.1
+- package: github.com/gorilla/rpc
+  version: ^1.1.0
+  subpackages:
+  - v2
+  - v2/json
+- package: github.com/jsimonetti/go-artnet
+  subpackages:
+  - packet/code
+- package: github.com/rakyll/portmidi
+  version: 1246dd47c56089ea2ae791266edb7f4c6b90c045
+- package: github.com/satori/go.uuid
+  version: ^1.1.0
+- package: github.com/spf13/cobra
+- package: github.com/spf13/viper
+  version: ^1.0.0
+- package: github.com/creasty/go-easing
+- package: github.com/peterbourgon/diskv
+  version: ^2.0.1
+- package: github.com/jinzhu/copier
