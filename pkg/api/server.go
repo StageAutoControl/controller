@@ -3,10 +3,11 @@ package api
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	"github.com/gorilla/rpc"
 	"github.com/gorilla/rpc/json"
 	"github.com/sirupsen/logrus"
-	"net/http"
 )
 
 // Server represents the controllers API server, aware of all the controllers
@@ -34,15 +35,15 @@ func NewServer(logger *logrus.Entry, storage storage) (*Server, error) {
 
 func (s *Server) registerControllers() error {
 	s.controller = map[string]interface{}{
-		"DMXAnimation": newDMXAnimationController(s.logger, s.storage),
-		"DMXDevice": newDMXDeviceController(s.logger, s.storage),
+		"DMXAnimation":   newDMXAnimationController(s.logger, s.storage),
+		"DMXDevice":      newDMXDeviceController(s.logger, s.storage),
 		"DMXDeviceGroup": newDMXDeviceGroupController(s.logger, s.storage),
-		"DMXDeviceType": newDMXDeviceTypeController(s.logger, s.storage),
-		"DMXPreset": newDMXPresetController(s.logger, s.storage),
-		"DMXScene": newDMXSceneController(s.logger, s.storage),
-		"DMXTransition": newDMXTransitionController(s.logger, s.storage),
-		"Song": newSongController(s.logger, s.storage),
-		"SetList": newSetListController(s.logger, s.storage),
+		"DMXDeviceType":  newDMXDeviceTypeController(s.logger, s.storage),
+		"DMXPreset":      newDMXPresetController(s.logger, s.storage),
+		"DMXScene":       newDMXSceneController(s.logger, s.storage),
+		"DMXTransition":  newDMXTransitionController(s.logger, s.storage),
+		"Song":           newSongController(s.logger, s.storage),
+		"SetList":        newSetListController(s.logger, s.storage),
 	}
 
 	for name, controller := range s.controller {

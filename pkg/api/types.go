@@ -3,7 +3,7 @@ package api
 import "errors"
 
 var (
-	rpcPath = "/rpc"
+	rpcPath      = "/rpc"
 	errNoIDGiven = errors.New("no ID was given with request")
 	errExists    = errors.New("entity with given ID already exists")
 	errNotExists = errors.New("entity with given ID does not exist")

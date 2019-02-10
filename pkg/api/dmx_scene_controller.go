@@ -2,10 +2,11 @@ package api
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
-	"net/http"
 )
 
 type dmxSceneController struct {

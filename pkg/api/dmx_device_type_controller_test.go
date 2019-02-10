@@ -8,13 +8,13 @@ import (
 	"github.com/jinzhu/copier"
 )
 
-func TestDMXDeviceController_Create_WithID(t *testing.T) {
+func TestDMXDeviceTypeController_Create_WithID(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceController(logger, store)
-	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
-	entity := ds.DMXDevices[key]
+	controller := newDMXDeviceTypeController(logger, store)
+	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
+	entity := ds.DMXDeviceTypes[key]
 
-	createReply := &cntl.DMXDevice{}
+	createReply := &cntl.DMXDeviceType{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call controller: %v", err)
 	}
@@ -24,20 +24,20 @@ func TestDMXDeviceController_Create_WithID(t *testing.T) {
 	}
 }
 
-func TestDMXDeviceController_Create_WithoutID(t *testing.T) {
+func TestDMXDeviceTypeController_Create_WithoutID(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceController(logger, store)
-	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
-	entity := ds.DMXDevices[key]
+	controller := newDMXDeviceTypeController(logger, store)
+	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
+	entity := ds.DMXDeviceTypes[key]
 
-	createEntity := &cntl.DMXDevice{}
+	createEntity := &cntl.DMXDeviceType{}
 	if err := copier.Copy(createEntity, entity); err != nil {
 		t.Fatal(err)
 	}
 
 	createEntity.ID = ""
 
-	createReply := &cntl.DMXDevice{}
+	createReply := &cntl.DMXDeviceType{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call controller: %v", err)
 	}
@@ -47,12 +47,12 @@ func TestDMXDeviceController_Create_WithoutID(t *testing.T) {
 	}
 }
 
-func TestDMXDeviceController_Get_NotExisting(t *testing.T) {
+func TestDMXDeviceTypeController_Get_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceController(logger, store)
-	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
+	controller := newDMXDeviceTypeController(logger, store)
+	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
 
-	reply := &cntl.DMXDevice{}
+	reply := &cntl.DMXDeviceType{}
 
 	idReq := &IDRequest{ID: key}
 	if err := controller.Get(req, idReq, reply); err != errNotExists {
@@ -60,13 +60,13 @@ func TestDMXDeviceController_Get_NotExisting(t *testing.T) {
 	}
 }
 
-func TestDMXDeviceController_Get_Existing(t *testing.T) {
+func TestDMXDeviceTypeController_Get_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceController(logger, store)
-	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
-	entity := ds.DMXDevices[key]
+	controller := newDMXDeviceTypeController(logger, store)
+	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
+	entity := ds.DMXDeviceTypes[key]
 
-	createReply := &cntl.DMXDevice{}
+	createReply := &cntl.DMXDeviceType{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call controller: %v", err)
 	}
@@ -75,7 +75,7 @@ func TestDMXDeviceController_Get_Existing(t *testing.T) {
 		t.Errorf("Expected createReply to have id %s, but has %s", key, createReply.ID)
 	}
 
-	reply := &cntl.DMXDevice{}
+	reply := &cntl.DMXDeviceType{}
 	idReq := &IDRequest{ID: key}
 	t.Log("idReq has ID:", idReq.ID)
 	if err := controller.Get(req, idReq, reply); err != nil {
@@ -87,26 +87,26 @@ func TestDMXDeviceController_Get_Existing(t *testing.T) {
 	}
 }
 
-func TestDMXDeviceController_Update_NotExisting(t *testing.T) {
+func TestDMXDeviceTypeController_Update_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceController(logger, store)
-	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
-	entity := ds.DMXDevices[key]
+	controller := newDMXDeviceTypeController(logger, store)
+	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
+	entity := ds.DMXDeviceTypes[key]
 
-	reply := &cntl.DMXDevice{}
+	reply := &cntl.DMXDeviceType{}
 
 	if err := controller.Update(req, entity, reply); err != errNotExists {
 		t.Errorf("expected to get errNotExists, but got %v", err)
 	}
 }
 
-func TestDMXDeviceController_Update_Existing(t *testing.T) {
+func TestDMXDeviceTypeController_Update_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceController(logger, store)
-	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
-	entity := ds.DMXDevices[key]
+	controller := newDMXDeviceTypeController(logger, store)
+	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
+	entity := ds.DMXDeviceTypes[key]
 
-	createReply := &cntl.DMXDevice{}
+	createReply := &cntl.DMXDeviceType{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call controller: %v", err)
 	}
@@ -115,7 +115,7 @@ func TestDMXDeviceController_Update_Existing(t *testing.T) {
 		t.Errorf("Expected createReply to have id %s, but has %s", key, createReply.ID)
 	}
 
-	reply := &cntl.DMXDevice{}
+	reply := &cntl.DMXDeviceType{}
 	if err := controller.Update(req, entity, reply); err != nil {
 		t.Errorf("expected to get no error, but got %v", err)
 	}
@@ -124,10 +124,10 @@ func TestDMXDeviceController_Update_Existing(t *testing.T) {
 		t.Errorf("Expected reply to have id %s, but has %s", key, reply.ID)
 	}
 }
-func TestDMXDeviceController_Delete_NotExisting(t *testing.T) {
+func TestDMXDeviceTypeController_Delete_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceController(logger, store)
-	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
+	controller := newDMXDeviceTypeController(logger, store)
+	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
 
 	reply := &SuccessResponse{}
 	idReq := &IDRequest{ID: key}
@@ -136,13 +136,13 @@ func TestDMXDeviceController_Delete_NotExisting(t *testing.T) {
 	}
 }
 
-func TestDMXDeviceController_Delete_Existing(t *testing.T) {
+func TestDMXDeviceTypeController_Delete_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceController(logger, store)
-	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
-	entity := ds.DMXDevices[key]
+	controller := newDMXDeviceTypeController(logger, store)
+	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
+	entity := ds.DMXDeviceTypes[key]
 
-	createReply := &cntl.DMXDevice{}
+	createReply := &cntl.DMXDeviceType{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call controller: %v", err)
 	}
