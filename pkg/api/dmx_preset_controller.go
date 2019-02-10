@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/StageAutoControl/controller/pkg/cntl"
+	"github.com/jinzhu/copier"
 	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 )
@@ -25,18 +26,17 @@ func newDMXPresetController(logger *logrus.Entry, storage storage) *dmxPresetCon
 func (c *dmxPresetController) Create(r *http.Request, entity *cntl.DMXPreset, reply *cntl.DMXPreset) error {
 	if entity.ID == "" {
 		entity.ID = uuid.NewV4().String()
-	} else {
-		if c.storage.Has(entity.ID, entity) {
-			return errExists
-		}
+	}
+
+	if c.storage.Has(entity.ID, entity) {
+		return errExists
 	}
 
 	if err := c.storage.Write(entity.ID, entity); err != nil {
 		return fmt.Errorf("failed to write to disk: %v", err)
 	}
 
-	*reply = *entity
-	return nil
+	return copier.Copy(reply, entity)
 }
 
 // Update a new DMXPreset
@@ -49,8 +49,7 @@ func (c *dmxPresetController) Update(r *http.Request, entity *cntl.DMXPreset, re
 		return fmt.Errorf("failed to update to disk: %v", err)
 	}
 
-	*reply = *entity
-	return nil
+	return copier.Copy(reply, entity)
 }
 
 // Get a DMXPreset

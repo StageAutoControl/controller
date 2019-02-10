@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/StageAutoControl/controller/pkg/cntl"
+	"github.com/jinzhu/copier"
 	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 )
@@ -25,18 +26,17 @@ func newSongController(logger *logrus.Entry, storage storage) *songController {
 func (c *songController) Create(r *http.Request, entity *cntl.Song, reply *cntl.Song) error {
 	if entity.ID == "" {
 		entity.ID = uuid.NewV4().String()
-	} else {
-		if c.storage.Has(entity.ID, entity) {
-			return errExists
-		}
+	}
+
+	if c.storage.Has(entity.ID, entity) {
+		return errExists
 	}
 
 	if err := c.storage.Write(entity.ID, entity); err != nil {
 		return fmt.Errorf("failed to write to disk: %v", err)
 	}
 
-	*reply = *entity
-	return nil
+	return copier.Copy(reply, entity)
 }
 
 // Update a new Song
@@ -49,8 +49,7 @@ func (c *songController) Update(r *http.Request, entity *cntl.Song, reply *cntl.
 		return fmt.Errorf("failed to update to disk: %v", err)
 	}
 
-	*reply = *entity
-	return nil
+	return copier.Copy(reply, entity)
 }
 
 // Get a Song
