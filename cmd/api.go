@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/StageAutoControl/controller/cmd/internal"
 	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/storage"
@@ -32,13 +33,16 @@ var apiCmd = &cobra.Command{
 			logger.Fatal(err)
 		}
 
+		endpoint := fmt.Sprintf("0.0.0.0:%d", port)
 		ctx := internal.NewExitHandlerContext(logger.Logger)
-		if err := server.Run(ctx, fmt.Sprintf("0.0.0.0:%d", port)); err != nil {
+
+		logger.Infof("listening on %s", endpoint)
+
+		if err := server.Run(ctx, endpoint); err != nil {
 			logger.Fatal(err)
 		}
 	},
 }
-
 
 func init() {
 	RootCmd.AddCommand(apiCmd)
