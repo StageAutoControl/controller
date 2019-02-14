@@ -3,4 +3,5 @@ bin
 .envrc
 /controller
 tmp
+/storage
 .glide

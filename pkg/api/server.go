@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/rpc"
 	"github.com/gorilla/rpc/json"
 	"github.com/sirupsen/logrus"
@@ -67,9 +68,18 @@ func (s *Server) Run(ctx context.Context, endpoint string) error {
 		}
 	})
 
+	h := handlers.LoggingHandler(s.logger.Writer(), r)
+	h = handlers.RecoveryHandler()(h)
+	h = handlers.CORS(
+		handlers.AllowCredentials(),
+		handlers.AllowedOrigins([]string{"*"}),
+		handlers.AllowedMethods([]string{"POST", "GET"}),
+		handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),
+	)(h)
+
 	httpServer := http.Server{
 		Addr:    endpoint,
-		Handler: r,
+		Handler: h,
 	}
 
 	go func() {
