@@ -6,13 +6,18 @@ import (
 
 // fixture values
 var (
-	Value0   = &cntl.DMXValue{0}
-	Value31  = &cntl.DMXValue{31}
-	Value63  = &cntl.DMXValue{63}
-	Value127 = &cntl.DMXValue{127}
-	Value200 = &cntl.DMXValue{200}
-	Value255 = &cntl.DMXValue{255}
+	Value0   = &cntl.DMXValue{Value: 0}
+	Value31  = &cntl.DMXValue{Value: 31}
+	Value63  = &cntl.DMXValue{Value: 63}
+	Value127 = &cntl.DMXValue{Value: 127}
+	Value200 = &cntl.DMXValue{Value: 200}
+	Value255 = &cntl.DMXValue{Value: 255}
 )
+
+// StrPtr returns a pointer to the given string
+func StrPtr(str string) *string {
+	return &str
+}
 
 var data = &cntl.DataStore{
 	SetLists: map[string]*cntl.SetList{
@@ -52,7 +57,7 @@ var data = &cntl.DataStore{
 						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
 					},
 					Params: []cntl.DMXParams{
-						{Red: Value255},
+						{ColorVar: StrPtr("Red255")},
 					},
 				},
 			}},
@@ -65,7 +70,7 @@ var data = &cntl.DataStore{
 						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
 					},
 					Params: []cntl.DMXParams{
-						{Blue: Value255},
+						{ColorVar: StrPtr("Blue255")},
 					},
 				},
 			}},
@@ -78,7 +83,7 @@ var data = &cntl.DataStore{
 						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
 					},
 					Params: []cntl.DMXParams{
-						{Green: Value255},
+						{ColorVar: StrPtr("Green255")},
 					},
 				},
 			}},
@@ -228,7 +233,6 @@ var data = &cntl.DataStore{
 		"1555d67e-1187-11e7-8135-9b41038b5b75": {
 			ID:             "1555d67e-1187-11e7-8135-9b41038b5b75",
 			Name:           "LED-Bar 67 Channel",
-			Key:            "LEDBar67",
 			ChannelCount:   67,
 			ChannelsPerLED: 4,
 			ModeEnabled:    true,
@@ -259,7 +263,6 @@ var data = &cntl.DataStore{
 		"628fc3ea-1188-11e7-8824-5f72d80c17b6": {
 			ID:             "628fc3ea-1188-11e7-8824-5f72d80c17b6",
 			Name:           "PAR 5 channel",
-			Key:            "PAR5",
 			ChannelCount:   5,
 			ChannelsPerLED: 3,
 			ModeEnabled:    false,
@@ -275,7 +278,6 @@ var data = &cntl.DataStore{
 		"5ccc43ee-118c-11e7-8d53-974b41748b71": {
 			ID:            "5ccc43ee-118c-11e7-8d53-974b41748b71",
 			Name:          "Strobe",
-			Key:           "Strobe",
 			StrobeEnabled: true,
 			StrobeChannel: 0,
 		},
@@ -420,6 +422,23 @@ var data = &cntl.DataStore{
 					},
 				},
 			},
+		},
+	},
+	DmxColorVariables: map[string]*cntl.DMXColorVariable{
+		"4b848ea8-5094-4509-a067-09a0e568220d": {
+			ID:   "4b848ea8-5094-4509-a067-09a0e568220d",
+			Name: "Red255",
+			Red:  Value255,
+		},
+		"dbd2dbca-e680-4a25-a758-0dbf5c847932": {
+			ID:   "dbd2dbca-e680-4a25-a758-0dbf5c847932",
+			Name: "Blue255",
+			Blue: Value255,
+		},
+		"10484f74-fc19-47c1-a21c-202d0ffbe66b": {
+			ID:    "10484f74-fc19-47c1-a21c-202d0ffbe66b",
+			Name:  "Green255",
+			Green: Value255,
 		},
 	},
 }

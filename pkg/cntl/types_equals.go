@@ -55,7 +55,6 @@ func (v1 *DMXDevice) Equals(v2 *DMXDevice) bool {
 func (v1 *DMXDeviceType) Equals(v2 *DMXDeviceType) bool {
 	return v1.ID == v2.ID &&
 		v1.Name == v2.Name &&
-		v1.Key == v2.Key &&
 		v1.ChannelCount == v2.ChannelCount &&
 		v1.ChannelsPerLED == v2.ChannelsPerLED &&
 		v1.StrobeEnabled == v2.StrobeEnabled &&

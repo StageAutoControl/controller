@@ -2,8 +2,9 @@ package dmx
 
 import (
 	"fmt"
-	"github.com/StageAutoControl/controller/pkg/cntl"
 	"testing"
+
+	"github.com/StageAutoControl/controller/pkg/cntl"
 
 	"github.com/StageAutoControl/controller/pkg/internal/fixtures"
 )
@@ -54,7 +55,7 @@ func TestCheckDeviceParams(t *testing.T) {
 				Device:    &cntl.DMXDeviceSelector{ID: "asdf"},
 				Animation: &cntl.AnimationSelector{ID: "anim1"},
 				Params: []cntl.DMXParams{
-					{Blue: fixtures.Value255},},
+					{Blue: fixtures.Value255}},
 			},
 			expectedErr: ErrDeviceParamsValuesInvalid,
 		},
@@ -241,6 +242,18 @@ func TestRenderParams(t *testing.T) {
 			},
 			p: cntl.DMXParams{
 				Red: fixtures.Value255,
+			},
+			count: 1,
+			cmds: cntl.DMXCommands{
+				{Universe: 2, Channel: 14, Value: cntl.DMXValue{Value: 255}},
+			},
+		},
+		{
+			ds: []*cntl.DMXDevice{
+				ds.DMXDevices["4a545466-0b17-11e7-9c61-d3c0693099ab"],
+			},
+			p: cntl.DMXParams{
+				ColorVar: fixtures.StrPtr("Red255"),
 			},
 			count: 1,
 			cmds: cntl.DMXCommands{

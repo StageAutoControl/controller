@@ -3,6 +3,7 @@ package dmx
 import (
 	"errors"
 	"fmt"
+
 	"github.com/StageAutoControl/controller/pkg/cntl"
 )
 
@@ -113,6 +114,10 @@ func RenderDeviceParams(ds *cntl.DataStore, dp *cntl.DMXDeviceParams) ([]cntl.DM
 func RenderParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, p cntl.DMXParams) (cmds cntl.DMXCommands, err error) {
 	var channels cntl.DMXCommands
 
+	if err := resolveColorVar(ds, &p); err != nil {
+		return cntl.DMXCommands{}, err
+	}
+
 	if p.Red != nil {
 		channels = append(channels, cntl.DMXCommand{
 			Channel: ChannelRed,
@@ -183,4 +188,36 @@ func RenderParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, p cntl.DMXParams) (c
 	}
 
 	return
+}
+
+func resolveColorVar(ds *cntl.DataStore, p *cntl.DMXParams) error {
+	if p.ColorVar == nil || *p.ColorVar == "" {
+		return nil
+	}
+
+	if p.Red != nil || p.Green != nil || p.Blue != nil || p.White != nil {
+		return ErrDeviceParamsColorVarMustBeExclusive
+	}
+
+	colorVar := getColorVar(ds, *p.ColorVar)
+	if colorVar == nil {
+		return fmt.Errorf("failed to find color variable with the name %q", *p.ColorVar)
+	}
+
+	p.Red = colorVar.Red
+	p.Green = colorVar.Green
+	p.Blue = colorVar.Blue
+	p.White = colorVar.White
+
+	return nil
+}
+
+func getColorVar(ds *cntl.DataStore, name string) *cntl.DMXColorVariable {
+	for _, c := range ds.DmxColorVariables {
+		if c.Name == name {
+			return c
+		}
+	}
+
+	return nil
 }

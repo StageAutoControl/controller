@@ -66,7 +66,6 @@ type DMXDevice struct {
 type DMXDeviceType struct {
 	ID             string     `json:"id" yaml:"id"`
 	Name           string     `json:"name" yaml:"name"`
-	Key            string     `json:"key" yaml:"key"`
 	ChannelCount   uint16     `json:"addressCount" yaml:"addressCount"`
 	ChannelsPerLED uint16     `json:"channelsPerLED" yaml:"channelsPerLED"`
 	StrobeEnabled  bool       `json:"strobeEnabled" yaml:"strobeEnabled"`
@@ -153,18 +152,28 @@ type DMXSubScene struct {
 	Preset       *PresetSelector   `json:"preset" yaml:"preset"`
 }
 
+type DMXColorVariable struct {
+	ID    string    `json:"id" yaml:"id"`
+	Name  string    `json:"name" yaml:"name"`
+	Red   *DMXValue `json:"red" yaml:"red"`
+	Green *DMXValue `json:"green" yaml:"green"`
+	Blue  *DMXValue `json:"blue" yaml:"blue"`
+	White *DMXValue `json:"white" yaml:"white"`
+}
+
 // DMXParams is a DMX parameter object
 type DMXParams struct {
-	LED    uint16    `json:"led" yaml:"led"`
-	Red    *DMXValue `json:"red" yaml:"red"`
-	Green  *DMXValue `json:"green" yaml:"green"`
-	Blue   *DMXValue `json:"blue" yaml:"blue"`
-	White  *DMXValue `json:"white" yaml:"white"`
-	Pan    *DMXValue `json:"pan" yaml:"pan"`
-	Tilt   *DMXValue `json:"tilt" yaml:"tilt"`
-	Strobe *DMXValue `json:"strobe" yaml:"strobe"`
-	Mode   *DMXValue `json:"preset" yaml:"preset"`
-	Dimmer *DMXValue `json:"dimmer" yaml:"dimmer"`
+	LED      uint16    `json:"led" yaml:"led"`
+	ColorVar *string   `json:"$color" yaml:"$color"`
+	Red      *DMXValue `json:"red" yaml:"red"`
+	Green    *DMXValue `json:"green" yaml:"green"`
+	Blue     *DMXValue `json:"blue" yaml:"blue"`
+	White    *DMXValue `json:"white" yaml:"white"`
+	Pan      *DMXValue `json:"pan" yaml:"pan"`
+	Tilt     *DMXValue `json:"tilt" yaml:"tilt"`
+	Strobe   *DMXValue `json:"strobe" yaml:"strobe"`
+	Mode     *DMXValue `json:"preset" yaml:"preset"`
+	Dimmer   *DMXValue `json:"dimmer" yaml:"dimmer"`
 }
 
 // DMXAnimation is an animation of dmx params in relation to time
