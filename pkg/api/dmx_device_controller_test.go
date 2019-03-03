@@ -8,7 +8,15 @@ import (
 	"github.com/jinzhu/copier"
 )
 
+func createDeviceType(t *testing.T) {
+	err := store.Write("1555d67e-1187-11e7-8135-9b41038b5b75", ds.DMXDeviceTypes["1555d67e-1187-11e7-8135-9b41038b5b75"])
+	if err != nil {
+		t.Fatalf("failed to create DMXDeviceType: %v", err)
+	}
+}
+
 func TestDMXDeviceController_Create_WithID(t *testing.T) {
+	createDeviceType(t)
 	defer internalTesting.Cleanup(t, path)
 	controller := newDMXDeviceController(logger, store)
 	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
@@ -25,6 +33,7 @@ func TestDMXDeviceController_Create_WithID(t *testing.T) {
 }
 
 func TestDMXDeviceController_Create_WithoutID(t *testing.T) {
+	createDeviceType(t)
 	defer internalTesting.Cleanup(t, path)
 	controller := newDMXDeviceController(logger, store)
 	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
@@ -48,6 +57,7 @@ func TestDMXDeviceController_Create_WithoutID(t *testing.T) {
 }
 
 func TestDMXDeviceController_Get_NotExisting(t *testing.T) {
+	createDeviceType(t)
 	defer internalTesting.Cleanup(t, path)
 	controller := newDMXDeviceController(logger, store)
 	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
@@ -61,6 +71,7 @@ func TestDMXDeviceController_Get_NotExisting(t *testing.T) {
 }
 
 func TestDMXDeviceController_Get_Existing(t *testing.T) {
+	createDeviceType(t)
 	defer internalTesting.Cleanup(t, path)
 	controller := newDMXDeviceController(logger, store)
 	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
@@ -88,6 +99,7 @@ func TestDMXDeviceController_Get_Existing(t *testing.T) {
 }
 
 func TestDMXDeviceController_Update_NotExisting(t *testing.T) {
+	createDeviceType(t)
 	defer internalTesting.Cleanup(t, path)
 	controller := newDMXDeviceController(logger, store)
 	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
@@ -101,6 +113,7 @@ func TestDMXDeviceController_Update_NotExisting(t *testing.T) {
 }
 
 func TestDMXDeviceController_Update_Existing(t *testing.T) {
+	createDeviceType(t)
 	defer internalTesting.Cleanup(t, path)
 	controller := newDMXDeviceController(logger, store)
 	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
@@ -125,6 +138,7 @@ func TestDMXDeviceController_Update_Existing(t *testing.T) {
 	}
 }
 func TestDMXDeviceController_Delete_NotExisting(t *testing.T) {
+	createDeviceType(t)
 	defer internalTesting.Cleanup(t, path)
 	controller := newDMXDeviceController(logger, store)
 	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
@@ -137,6 +151,7 @@ func TestDMXDeviceController_Delete_NotExisting(t *testing.T) {
 }
 
 func TestDMXDeviceController_Delete_Existing(t *testing.T) {
+	createDeviceType(t)
 	defer internalTesting.Cleanup(t, path)
 	controller := newDMXDeviceController(logger, store)
 	key := "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
