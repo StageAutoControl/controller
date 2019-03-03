@@ -11,7 +11,7 @@ type DataStore struct {
 	DMXDevices        map[string]*DMXDevice
 	DMXDeviceTypes    map[string]*DMXDeviceType
 	DMXDeviceGroups   map[string]*DMXDeviceGroup
-	DmxColorVariables map[string]*DMXColorVariable
+	DMXColorVariables map[string]*DMXColorVariable
 }
 
 // NewStore creates a new DataStore instance
@@ -26,6 +26,6 @@ func NewStore() *DataStore {
 		DMXDevices:        make(map[string]*DMXDevice),
 		DMXDeviceTypes:    make(map[string]*DMXDeviceType),
 		DMXDeviceGroups:   make(map[string]*DMXDeviceGroup),
-		DmxColorVariables: make(map[string]*DMXColorVariable),
+		DMXColorVariables: make(map[string]*DMXColorVariable),
 	}
 }

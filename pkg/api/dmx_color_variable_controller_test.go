@@ -12,7 +12,7 @@ func TestDMXColorVariableController_Create_WithID(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
 	controller := newDMXColorVariableController(logger, store)
 	key := "4b848ea8-5094-4509-a067-09a0e568220d"
-	entity := ds.DmxColorVariables[key]
+	entity := ds.DMXColorVariables[key]
 
 	createReply := &cntl.DMXColorVariable{}
 	if err := controller.Create(req, entity, createReply); err != nil {
@@ -28,7 +28,7 @@ func TestDMXColorVariableController_Create_WithoutID(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
 	controller := newDMXColorVariableController(logger, store)
 	key := "4b848ea8-5094-4509-a067-09a0e568220d"
-	entity := ds.DmxColorVariables[key]
+	entity := ds.DMXColorVariables[key]
 
 	createEntity := &cntl.DMXColorVariable{}
 	if err := copier.Copy(createEntity, entity); err != nil {
@@ -64,7 +64,7 @@ func TestDMXColorVariableController_Get_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
 	controller := newDMXColorVariableController(logger, store)
 	key := "4b848ea8-5094-4509-a067-09a0e568220d"
-	entity := ds.DmxColorVariables[key]
+	entity := ds.DMXColorVariables[key]
 
 	createReply := &cntl.DMXColorVariable{}
 	if err := controller.Create(req, entity, createReply); err != nil {
@@ -91,7 +91,7 @@ func TestDMXColorVariableController_Update_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
 	controller := newDMXColorVariableController(logger, store)
 	key := "4b848ea8-5094-4509-a067-09a0e568220d"
-	entity := ds.DmxColorVariables[key]
+	entity := ds.DMXColorVariables[key]
 
 	reply := &cntl.DMXColorVariable{}
 
@@ -104,7 +104,7 @@ func TestDMXColorVariableController_Update_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
 	controller := newDMXColorVariableController(logger, store)
 	key := "4b848ea8-5094-4509-a067-09a0e568220d"
-	entity := ds.DmxColorVariables[key]
+	entity := ds.DMXColorVariables[key]
 
 	createReply := &cntl.DMXColorVariable{}
 	if err := controller.Create(req, entity, createReply); err != nil {
@@ -140,7 +140,7 @@ func TestDMXColorVariableController_Delete_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
 	controller := newDMXColorVariableController(logger, store)
 	key := "4b848ea8-5094-4509-a067-09a0e568220d"
-	entity := ds.DmxColorVariables[key]
+	entity := ds.DMXColorVariables[key]
 
 	createReply := &cntl.DMXColorVariable{}
 	if err := controller.Create(req, entity, createReply); err != nil {

@@ -424,7 +424,7 @@ var data = &cntl.DataStore{
 			},
 		},
 	},
-	DmxColorVariables: map[string]*cntl.DMXColorVariable{
+	DMXColorVariables: map[string]*cntl.DMXColorVariable{
 		"4b848ea8-5094-4509-a067-09a0e568220d": {
 			ID:   "4b848ea8-5094-4509-a067-09a0e568220d",
 			Name: "Red255",

@@ -213,7 +213,7 @@ func resolveColorVar(ds *cntl.DataStore, p *cntl.DMXParams) error {
 }
 
 func getColorVar(ds *cntl.DataStore, name string) *cntl.DMXColorVariable {
-	for _, c := range ds.DmxColorVariables {
+	for _, c := range ds.DMXColorVariables {
 		if c.Name == name {
 			return c
 		}
