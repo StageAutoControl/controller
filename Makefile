@@ -41,14 +41,14 @@ start-playback-artnet: build-darwin
 
 start-api: build-darwin
 	./bin/controller_darwin api \
-	--data-dir "${SAC_DATA_DIR}"
+	-s ./storage
 
 build-all: build-darwin build-arm build-linux build-docker
 
 build-darwin:
 	go build -o bin/controller_darwin .
 
-build-linux: 
+build-linux:
 	GOOS=linux CGO_ENABLED=0 go build -a -ldflags '-s' -installsuffix cgo -o bin/controller_linux .
 
 build-arm:

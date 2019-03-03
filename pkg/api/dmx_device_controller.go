@@ -22,6 +22,14 @@ func newDMXDeviceController(logger *logrus.Entry, storage storage) *dmxDeviceCon
 	}
 }
 
+func (c *dmxDeviceController) validate(entity *cntl.DMXDevice) error {
+	if !c.storage.Has(entity.TypeID, &cntl.DMXDeviceType{}) {
+		return fmt.Errorf("cannot save DMXDevice with non-existing DMXDeviceType %q", entity.TypeID)
+	}
+
+	return nil
+}
+
 // Create a new DMXDevice
 func (c *dmxDeviceController) Create(r *http.Request, entity *cntl.DMXDevice, reply *cntl.DMXDevice) error {
 	if entity.ID == "" {
@@ -30,6 +38,10 @@ func (c *dmxDeviceController) Create(r *http.Request, entity *cntl.DMXDevice, re
 
 	if c.storage.Has(entity.ID, entity) {
 		return errExists
+	}
+
+	if err := c.validate(entity); err != nil {
+		return fmt.Errorf("failed to validate entity: %v", err)
 	}
 
 	if err := c.storage.Write(entity.ID, entity); err != nil {
@@ -43,6 +55,10 @@ func (c *dmxDeviceController) Create(r *http.Request, entity *cntl.DMXDevice, re
 func (c *dmxDeviceController) Update(r *http.Request, entity *cntl.DMXDevice, reply *cntl.DMXDevice) error {
 	if !c.storage.Has(entity.ID, entity) {
 		return errNotExists
+	}
+
+	if err := c.validate(entity); err != nil {
+		return fmt.Errorf("failed to validate entity: %v", err)
 	}
 
 	if err := c.storage.Write(entity.ID, entity); err != nil {
