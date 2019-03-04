@@ -1,14 +1,15 @@
 package storage
 
 import (
-	"github.com/StageAutoControl/controller/pkg/cntl"
-	"github.com/StageAutoControl/controller/pkg/internal/fixtures"
-	"github.com/StageAutoControl/controller/pkg/internal/stringslice"
-	internalTesting "github.com/StageAutoControl/controller/pkg/internal/testing"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/StageAutoControl/controller/pkg/cntl"
+	"github.com/StageAutoControl/controller/pkg/internal/fixtures"
+	"github.com/StageAutoControl/controller/pkg/internal/stringslice"
+	internalTesting "github.com/StageAutoControl/controller/pkg/internal/testing"
 )
 
 var (
@@ -19,7 +20,6 @@ var (
 	expectedFileName = filepath.Join(path, "DMXDevice", "DMXDevice_35cae00a-0b17-11e7-8bca-bbf30c56f20e.json")
 	expectedContent  = "{\"id\":\"35cae00a-0b17-11e7-8bca-bbf30c56f20e\",\"name\":\"LED-Bar below drums front\",\"typeId\":\"1555d67e-1187-11e7-8135-9b41038b5b75\",\"universe\":1,\"startChannel\":222,\"tags\":[\"bar\",\"drums\"]}"
 )
-
 
 func TestStorage_buildFileName(t *testing.T) {
 	storage := New(path)
@@ -145,7 +145,7 @@ func TestStorage_List(t *testing.T) {
 
 	for k := range ds.DMXDevices {
 		if !stringslice.Contains(k, keys) {
-			t.Errorf("Ecpected result list %s to have key %s", keys, k)
+			t.Errorf("Expected result list %s to have key %s", keys, k)
 		}
 	}
 

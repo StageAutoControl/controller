@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/StageAutoControl/controller/cmd/internal"
 	"github.com/StageAutoControl/controller/pkg/api"
@@ -13,11 +15,19 @@ import (
 var apiCmd = &cobra.Command{
 	Use:   "api",
 	Short: "Opens the RPC API to manage the data and control the processes",
-	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		logger := Logger.WithField("module", "api")
 
 		storagePath, err := cmd.Flags().GetString("storage-path")
+		if err != nil {
+			logger.Fatal(err)
+		}
+
+		cwd, err := os.Getwd()
+		if err != nil {
+			logger.Fatal(err)
+		}
+		storagePath = filepath.Clean(filepath.Join(cwd, storagePath))
 		if err != nil {
 			logger.Fatal(err)
 		}

@@ -3,10 +3,11 @@ package storage
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/StageAutoControl/controller/pkg/internal/stringslice"
 	"os"
 	"reflect"
 	"strings"
+
+	"github.com/StageAutoControl/controller/pkg/internal/stringslice"
 
 	"github.com/peterbourgon/diskv"
 )
@@ -18,7 +19,7 @@ type Storage struct {
 
 func transform(s string) []string {
 	parts := strings.Split(s, "_")
-	if len(parts) == 0 {
+	if len(parts) == 1 {
 		return parts
 	}
 
@@ -42,8 +43,7 @@ func (s *Storage) buildFileName(key string, value interface{}) string {
 
 // Has returns weather the storage has the given entity or not
 func (s *Storage) Has(key string, kind interface{}) bool {
-	keys := s.listWithPrefix(s.buildFileName(key, kind), kind)
-	return stringslice.Contains(key, keys)
+	return stringslice.Contains(key, s.List(kind))
 }
 
 // Write a given value with the given fileName to disk
@@ -79,15 +79,13 @@ func (s *Storage) Read(key string, value interface{}) error {
 
 // List the keys of a given kind
 func (s *Storage) List(kind interface{}) []string {
-	return s.listWithPrefix("", kind)
-}
-
-func (s *Storage) listWithPrefix(prefix string, kind interface{}) []string {
 	var keys []string
-	for key := range s.disk.KeysPrefix(prefix, nil) {
+	kindType := s.getType(kind)
+
+	for key := range s.disk.KeysPrefix(kindType, nil) {
 		// Remove the custom file schema from the name, which should only return the pure key
 		key = strings.TrimSuffix(key, ".json")
-		key = strings.TrimPrefix(key, fmt.Sprintf("%s_", s.getType(kind)))
+		key = strings.TrimPrefix(key, fmt.Sprintf("%s_", kindType))
 		keys = append(keys, key)
 	}
 
