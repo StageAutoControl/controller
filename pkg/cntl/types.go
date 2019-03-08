@@ -66,7 +66,7 @@ type DMXDevice struct {
 type DMXDeviceType struct {
 	ID             string     `json:"id" yaml:"id"`
 	Name           string     `json:"name" yaml:"name"`
-	ChannelCount   uint16     `json:"addressCount" yaml:"addressCount"`
+	ChannelCount   uint16     `json:"channelCount" yaml:"channelCount"`
 	ChannelsPerLED uint16     `json:"channelsPerLED" yaml:"channelsPerLED"`
 	StrobeEnabled  bool       `json:"strobeEnabled" yaml:"strobeEnabled"`
 	StrobeChannel  DMXChannel `json:"strobeChannel" yaml:"strobeChannel"`

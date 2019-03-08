@@ -23,6 +23,10 @@ func newDMXDeviceController(logger *logrus.Entry, storage storage) *dmxDeviceCon
 }
 
 func (c *dmxDeviceController) validate(entity *cntl.DMXDevice) error {
+	if entity.Tags == nil {
+		entity.Tags = make([]cntl.Tag, 0)
+	}
+
 	if !c.storage.Has(entity.TypeID, &cntl.DMXDeviceType{}) {
 		return fmt.Errorf("cannot save DMXDevice with non-existing DMXDeviceType %q", entity.TypeID)
 	}
