@@ -16,7 +16,7 @@ func TestDMXColorVariableController_Create_WithID(t *testing.T) {
 
 	createReply := &cntl.DMXColorVariable{}
 	if err := controller.Create(req, entity, createReply); err != nil {
-		t.Errorf("failed to call controller: %v", err)
+		t.Errorf("failed to call apiController: %v", err)
 	}
 
 	if createReply.ID != key {
@@ -39,7 +39,7 @@ func TestDMXColorVariableController_Create_WithoutID(t *testing.T) {
 
 	createReply := &cntl.DMXColorVariable{}
 	if err := controller.Create(req, entity, createReply); err != nil {
-		t.Errorf("failed to call controller: %v", err)
+		t.Errorf("failed to call apiController: %v", err)
 	}
 
 	if createReply.ID != key {
@@ -68,7 +68,7 @@ func TestDMXColorVariableController_Get_Existing(t *testing.T) {
 
 	createReply := &cntl.DMXColorVariable{}
 	if err := controller.Create(req, entity, createReply); err != nil {
-		t.Errorf("failed to call controller: %v", err)
+		t.Errorf("failed to call apiController: %v", err)
 	}
 
 	if createReply.ID != key {
@@ -79,7 +79,7 @@ func TestDMXColorVariableController_Get_Existing(t *testing.T) {
 	idReq := &IDRequest{ID: key}
 	t.Log("idReq has ID:", idReq.ID)
 	if err := controller.Get(req, idReq, reply); err != nil {
-		t.Errorf("failed to call controller: %v", err)
+		t.Errorf("failed to call apiController: %v", err)
 	}
 
 	if reply.ID != key {
@@ -108,7 +108,7 @@ func TestDMXColorVariableController_Update_Existing(t *testing.T) {
 
 	createReply := &cntl.DMXColorVariable{}
 	if err := controller.Create(req, entity, createReply); err != nil {
-		t.Errorf("failed to call controller: %v", err)
+		t.Errorf("failed to call apiController: %v", err)
 	}
 
 	if createReply.ID != key {
@@ -144,7 +144,7 @@ func TestDMXColorVariableController_Delete_Existing(t *testing.T) {
 
 	createReply := &cntl.DMXColorVariable{}
 	if err := controller.Create(req, entity, createReply); err != nil {
-		t.Errorf("failed to call controller: %v", err)
+		t.Errorf("failed to call apiController: %v", err)
 	}
 
 	if createReply.ID != key {

@@ -2,8 +2,9 @@ package playback
 
 import (
 	"context"
-	"github.com/StageAutoControl/controller/pkg/cntl"
 	"time"
+
+	"github.com/StageAutoControl/controller/pkg/cntl"
 
 	"fmt"
 

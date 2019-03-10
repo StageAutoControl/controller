@@ -27,5 +27,5 @@ type SuccessResponse struct {
 	Success bool `json:"success"`
 }
 
-// EmptyRequest is ... yah, an empty request :shrug:
-type EmptyRequest struct{}
+// Empty is ... yah, an empty request :shrug:
+type Empty struct{}

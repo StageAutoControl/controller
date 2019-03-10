@@ -24,7 +24,7 @@ func TestDMXDeviceController_Create_WithID(t *testing.T) {
 
 	createReply := &cntl.DMXDevice{}
 	if err := controller.Create(req, entity, createReply); err != nil {
-		t.Errorf("failed to call controller: %v", err)
+		t.Errorf("failed to call apiController: %v", err)
 	}
 
 	if createReply.ID != key {
@@ -48,7 +48,7 @@ func TestDMXDeviceController_Create_WithoutID(t *testing.T) {
 
 	createReply := &cntl.DMXDevice{}
 	if err := controller.Create(req, entity, createReply); err != nil {
-		t.Errorf("failed to call controller: %v", err)
+		t.Errorf("failed to call apiController: %v", err)
 	}
 
 	if createReply.ID != key {
@@ -79,7 +79,7 @@ func TestDMXDeviceController_Get_Existing(t *testing.T) {
 
 	createReply := &cntl.DMXDevice{}
 	if err := controller.Create(req, entity, createReply); err != nil {
-		t.Errorf("failed to call controller: %v", err)
+		t.Errorf("failed to call apiController: %v", err)
 	}
 
 	if createReply.ID != key {
@@ -90,7 +90,7 @@ func TestDMXDeviceController_Get_Existing(t *testing.T) {
 	idReq := &IDRequest{ID: key}
 	t.Log("idReq has ID:", idReq.ID)
 	if err := controller.Get(req, idReq, reply); err != nil {
-		t.Errorf("failed to call controller: %v", err)
+		t.Errorf("failed to call apiController: %v", err)
 	}
 
 	if reply.ID != key {
@@ -121,7 +121,7 @@ func TestDMXDeviceController_Update_Existing(t *testing.T) {
 
 	createReply := &cntl.DMXDevice{}
 	if err := controller.Create(req, entity, createReply); err != nil {
-		t.Errorf("failed to call controller: %v", err)
+		t.Errorf("failed to call apiController: %v", err)
 	}
 
 	if createReply.ID != key {
@@ -159,7 +159,7 @@ func TestDMXDeviceController_Delete_Existing(t *testing.T) {
 
 	createReply := &cntl.DMXDevice{}
 	if err := controller.Create(req, entity, createReply); err != nil {
-		t.Errorf("failed to call controller: %v", err)
+		t.Errorf("failed to call apiController: %v", err)
 	}
 
 	if createReply.ID != key {

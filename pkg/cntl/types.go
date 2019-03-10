@@ -1,15 +1,5 @@
 package cntl
 
-// A Loader is responsible for loading the applications data. This could either be a remote or a local store.
-type Loader interface {
-	Load() (*DataStore, error)
-}
-
-// An Enhancer enhances the given datastore
-type Enhancer interface {
-	Enhance(*DataStore) []error
-}
-
 // SongSelector is a selector for a song
 type SongSelector struct {
 	ID   string `json:"id" yaml:"id"`

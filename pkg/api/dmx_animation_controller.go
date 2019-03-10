@@ -70,7 +70,7 @@ func (c *dmxAnimationController) Get(r *http.Request, idReq *IDRequest, reply *c
 }
 
 // GetAll returns all entities of DMXAnimation
-func (c *dmxAnimationController) GetAll(r *http.Request, idReq *EmptyRequest, reply *[]*cntl.DMXAnimation) error {
+func (c *dmxAnimationController) GetAll(r *http.Request, idReq *Empty, reply *[]*cntl.DMXAnimation) error {
 	for _, id := range c.storage.List(&cntl.DMXAnimation{}) {
 		entity := &cntl.DMXAnimation{}
 		if err := c.storage.Read(id, entity); err != nil {

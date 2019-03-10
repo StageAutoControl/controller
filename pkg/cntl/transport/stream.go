@@ -2,8 +2,9 @@ package transport
 
 import (
 	"fmt"
-	"github.com/StageAutoControl/controller/pkg/cntl"
 	"io"
+
+	"github.com/StageAutoControl/controller/pkg/cntl"
 
 	"strings"
 

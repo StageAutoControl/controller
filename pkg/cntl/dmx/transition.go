@@ -2,8 +2,9 @@ package dmx
 
 import (
 	"fmt"
-	"github.com/StageAutoControl/controller/pkg/cntl"
 	"math"
+
+	"github.com/StageAutoControl/controller/pkg/cntl"
 )
 
 // RenderTransition renders the given DMXTransition to an array of DMXCommands to be sent to a DMX device

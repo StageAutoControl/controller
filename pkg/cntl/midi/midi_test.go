@@ -1,8 +1,9 @@
 package midi
 
 import (
-	"github.com/StageAutoControl/controller/pkg/cntl"
 	"testing"
+
+	"github.com/StageAutoControl/controller/pkg/cntl"
 )
 
 func TestStreamlineMidiCommands(t *testing.T) {

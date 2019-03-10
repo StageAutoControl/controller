@@ -6,14 +6,18 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/StageAutoControl/controller/pkg/artnet"
+	"github.com/StageAutoControl/controller/pkg/disk"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
 var (
-	// Logger used by the whole application
-	Logger   *logrus.Entry
-	logLevel string
+	logLevel    string
+	logger      *logrus.Entry
+	storagePath string
+	storage     *disk.Storage
+	controller  artnet.Controller
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -22,17 +26,9 @@ var RootCmd = &cobra.Command{
 	Short: "Stage automatic controlling, triggering state changes.",
 	Long:  `Automatic stage controlling, including midi and DMX, by analyzing audio signals and pre defined light scenes`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		logger := logrus.New()
-		level, err := logrus.ParseLevel(logLevel)
-		if err != nil {
-			logger.Panicf("Unable to parse log level %q: %v\n", logLevel, err)
-			os.Exit(1)
-		}
-
-		logger.Infof("Using log level %s", logLevel)
-
-		logger.SetLevel(level)
-		Logger = logger.WithFields(logrus.Fields{})
+		logger = createLogger(logLevel)
+		storage = createStorage(logger, storagePath)
+		controller = createController(logger)
 	},
 }
 
@@ -47,4 +43,5 @@ func Execute() {
 
 func init() {
 	RootCmd.PersistentFlags().StringVar(&logLevel, "log-level", "info", "Which log level to use")
+	RootCmd.PersistentFlags().StringVarP(&storagePath, "storage-path", "s", "/var/controller/data", "path where the storage should store the data")
 }

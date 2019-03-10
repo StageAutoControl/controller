@@ -91,7 +91,7 @@ func (c *dmxDeviceController) Get(r *http.Request, idReq *IDRequest, reply *cntl
 }
 
 // GetAll returns all entities of DMXDevice
-func (c *dmxDeviceController) GetAll(r *http.Request, idReq *EmptyRequest, reply *[]*cntl.DMXDevice) error {
+func (c *dmxDeviceController) GetAll(r *http.Request, idReq *Empty, reply *[]*cntl.DMXDevice) error {
 	for _, id := range c.storage.List(&cntl.DMXDevice{}) {
 		entity := &cntl.DMXDevice{}
 		if err := c.storage.Read(id, entity); err != nil {

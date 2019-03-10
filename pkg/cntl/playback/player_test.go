@@ -1,9 +1,10 @@
 package playback
 
 import (
-	"github.com/StageAutoControl/controller/pkg/cntl"
 	"testing"
 	"time"
+
+	"github.com/StageAutoControl/controller/pkg/cntl"
 )
 
 func TestCalcRenderSpeed(t *testing.T) {

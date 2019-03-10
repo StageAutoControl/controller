@@ -1,6 +1,8 @@
-hash: ae7cf22751f01b31993152d74c88291f7ee660e0efb4111d0baf28077466857c
-updated: 2019-02-10T11:12:25.802271+01:00
+hash: cf169cddd10a9453d7edb6f4facbf3a022d5581edc3b0f17a20081dd22d2bea0
+updated: 2019-03-09T12:56:06.76403+01:00
 imports:
+- name: github.com/apinnecke/go-exitcontext
+  version: 06015046a58d57f896f5e2ea290e6540c3fba863
 - name: github.com/creasty/go-easing
   version: 0cfd96d3a544aad2e643739e4a4f6c081b12cda0
 - name: github.com/google/btree
@@ -26,7 +28,7 @@ imports:
   - packet/code
   - version
 - name: github.com/konsorten/go-windows-terminal-sequences
-  version: 5c8c8bd35d3832f5d134ae1e1e375b69a4d25242
+  version: f55edac94c9bbba5d6182a4be46d86a2c9b5b50e
 - name: github.com/peterbourgon/diskv
   version: 5f041e8faa004a95c88a202771f4cc3e991971e6
 - name: github.com/rakyll/portmidi
@@ -34,7 +36,7 @@ imports:
 - name: github.com/satori/go.uuid
   version: f58768cc1a7a7e77a3bd49e98cdd21419399b6a3
 - name: github.com/sirupsen/logrus
-  version: 4ea4861398d99a2d05be29675c5b74caf7bea95e
+  version: d7b6bf5e4d26448fd977d07d745a2a66097ddecb
 - name: github.com/spf13/cobra
   version: 7547e83b2d85fd1893c7d76916f67689d761fecb
 - name: github.com/spf13/pflag
@@ -42,11 +44,11 @@ imports:
 - name: github.com/spf13/viper
   version: 6d33b5a963d922d182c91e8a1c88d81fd150cfd4
 - name: golang.org/x/crypto
-  version: 193df9c0f06f8bb35fba505183eaf0acc0136505
+  version: c2843e01d9a2bc60bb26ad24e09734fdc2d9ec58
   subpackages:
   - ssh/terminal
 - name: golang.org/x/sys
-  version: 3b5209105503162ded1863c307ac66fec31120dd
+  version: 584f3b12f43e1e55248c90e84804777009eed0a4
   subpackages:
   - unix
   - windows

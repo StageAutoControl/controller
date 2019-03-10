@@ -70,7 +70,7 @@ func (c *dmxPresetController) Get(r *http.Request, idReq *IDRequest, reply *cntl
 }
 
 // GetAll returns all entities of DMXPreset
-func (c *dmxPresetController) GetAll(r *http.Request, idReq *EmptyRequest, reply *[]*cntl.DMXPreset) error {
+func (c *dmxPresetController) GetAll(r *http.Request, idReq *Empty, reply *[]*cntl.DMXPreset) error {
 	for _, id := range c.storage.List(&cntl.DMXPreset{}) {
 		entity := &cntl.DMXPreset{}
 		if err := c.storage.Read(id, entity); err != nil {

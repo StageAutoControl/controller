@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/StageAutoControl/controller/pkg/artnet"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/rpc"
 	"github.com/gorilla/rpc/json"
@@ -14,13 +15,14 @@ import (
 // Server represents the controllers API server, aware of all the controllers
 type Server struct {
 	*rpc.Server
-	logger     *logrus.Entry
-	storage    storage
-	controller map[string]interface{}
+	logger        *logrus.Entry
+	storage       storage
+	apiController map[string]interface{}
+	controller    artnet.Controller
 }
 
 // NewServer returns a new Server instance
-func NewServer(logger *logrus.Entry, storage storage) (*Server, error) {
+func NewServer(logger *logrus.Entry, storage storage, controller artnet.Controller) (*Server, error) {
 	server := &Server{
 		Server:  rpc.NewServer(),
 		logger:  logger,
@@ -35,7 +37,7 @@ func NewServer(logger *logrus.Entry, storage storage) (*Server, error) {
 }
 
 func (s *Server) registerControllers() error {
-	s.controller = map[string]interface{}{
+	s.apiController = map[string]interface{}{
 		"DMXAnimation":     newDMXAnimationController(s.logger, s.storage),
 		"DMXDevice":        newDMXDeviceController(s.logger, s.storage),
 		"DMXDeviceGroup":   newDMXDeviceGroupController(s.logger, s.storage),
@@ -46,9 +48,10 @@ func (s *Server) registerControllers() error {
 		"DMXColorVariable": newDMXColorVariableController(s.logger, s.storage),
 		"Song":             newSongController(s.logger, s.storage),
 		"SetList":          newSetListController(s.logger, s.storage),
+		"DMXPlayground":    newDMXPlaygroundController(s.logger, s.controller),
 	}
 
-	for name, controller := range s.controller {
+	for name, controller := range s.apiController {
 		if err := s.Server.RegisterService(controller, name); err != nil {
 			return err
 		}

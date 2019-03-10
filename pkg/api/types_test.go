@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 
+	"github.com/StageAutoControl/controller/pkg/disk"
 	"github.com/StageAutoControl/controller/pkg/internal/fixtures"
-	disk "github.com/StageAutoControl/controller/pkg/storage"
 	"github.com/sirupsen/logrus"
 )
 

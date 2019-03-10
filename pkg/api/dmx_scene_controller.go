@@ -70,7 +70,7 @@ func (c *dmxSceneController) Get(r *http.Request, idReq *IDRequest, reply *cntl.
 }
 
 // GetAll returns all entities of DMXScene
-func (c *dmxSceneController) GetAll(r *http.Request, idReq *EmptyRequest, reply *[]*cntl.DMXScene) error {
+func (c *dmxSceneController) GetAll(r *http.Request, idReq *Empty, reply *[]*cntl.DMXScene) error {
 	for _, id := range c.storage.List(&cntl.DMXScene{}) {
 		entity := &cntl.DMXScene{}
 		if err := c.storage.Read(id, entity); err != nil {

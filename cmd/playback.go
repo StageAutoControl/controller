@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/StageAutoControl/controller/cmd/internal"
+	"github.com/StageAutoControl/controller/pkg/artnet"
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	"github.com/StageAutoControl/controller/pkg/cntl/playback"
 	"github.com/StageAutoControl/controller/pkg/cntl/transport"
 	"github.com/StageAutoControl/controller/pkg/cntl/waiter"
-	"github.com/StageAutoControl/controller/pkg/enhance"
-	"github.com/StageAutoControl/controller/pkg/loader/files"
+	"github.com/StageAutoControl/controller/pkg/disk"
+	"github.com/apinnecke/go-exitcontext"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -20,15 +20,9 @@ import (
 const (
 	playbackTypeSong    = "song"
 	playbackTypeSetList = "setlist"
-
-	directoryLoader = "directory"
-	databaseLoader  = "database"
 )
 
 var (
-	loaders    = []string{directoryLoader, databaseLoader}
-	loaderType string
-
 	transportTypes = []string{
 		transport.TypeStream,
 		transport.TypeVisualizer,
@@ -39,7 +33,6 @@ var (
 
 	viualizerEndpoint string
 	midiDeviceID      string
-	dataDir           string
 
 	waiterTypes = []string{
 		waiter.TypeNone,
@@ -58,81 +51,65 @@ var playbackCmd = &cobra.Command{
 		logrus.SetLevel(logrus.WarnLevel)
 
 		if len(args) != 2 {
-			cmd.Usage()
+			if err := cmd.Usage(); err != nil {
+				logrus.Fatal(err)
+			}
 			os.Exit(1)
 		}
 
-		var loader cntl.Loader
-		switch loaderType {
-		case directoryLoader:
-			Logger.Infof("Loading data directory %q ...", dataDir)
-			loader = files.New(dataDir)
-
-		case databaseLoader:
-			//loader = database.New(),
-			Logger.Fatal("Database loader is not yet supported.")
-
-		default:
-			Logger.Fatalf("Loader %q is not supported. Choose one of %s", loader, loaders)
-		}
-
+		store := disk.New(storagePath)
+		loader := disk.NewLoader(store)
 		data, err := loader.Load()
 		if err != nil {
-			Logger.Fatalf("Failed to load data from %q: %v", loaderType, err)
+			logrus.Fatal(err)
 		}
-
-		Logger.Print("enhancing data ...")
-		for _, e := range enhance.Enhancers {
-			if es := e.Enhance(data); len(es) > 0 {
-				for _, e := range es {
-					Logger.Error(e)
-				}
-				Logger.Fatalf("Errors occurred enhancing data store")
-			}
-		}
-		Logger.Print("Done. No errors found.")
 
 		var writers []playback.TransportWriter
 		for _, transportType := range usedTransports {
 			switch transportType {
 
 			case transport.TypeStream:
-				writers = append(writers, transport.NewStream(Logger.WithField(cntl.LoggerFieldTransport, transport.TypeStream), os.Stdout))
+				writers = append(writers, transport.NewStream(logger.WithField(cntl.LoggerFieldTransport, transport.TypeStream), os.Stdout))
 				break
 
 			case transport.TypeBarLogger:
-				writers = append(writers, transport.NewBarLogger(Logger.WithField(cntl.LoggerFieldTransport, transport.TypeBarLogger)))
+				writers = append(writers, transport.NewBarLogger(logger.WithField(cntl.LoggerFieldTransport, transport.TypeBarLogger)))
 				break
 
 			case transport.TypeVisualizer:
-				w, err := transport.NewVisualizer(Logger.WithField(cntl.LoggerFieldTransport, transport.TypeVisualizer), viualizerEndpoint)
+				w, err := transport.NewVisualizer(logger.WithField(cntl.LoggerFieldTransport, transport.TypeVisualizer), viualizerEndpoint)
 				if err != nil {
-					Logger.Fatalf("Unable to connect to the visualizer: %v", err)
+					logger.Fatalf("Unable to connect to the visualizer: %v", err)
 				}
 
 				writers = append(writers, w)
 				break
 
 			case transport.TypeArtNet:
-				w, err := transport.NewArtNet(Logger.WithField(cntl.LoggerFieldTransport, transport.TypeArtNet), "stage-auto-control")
+				controller, err := artnet.NewController(logger.WithField(cntl.LoggerFieldTransport, transport.TypeArtNet))
 				if err != nil {
-					Logger.Fatalf("Unable to connect to the visualizer: %v", err)
+					logger.Fatal(err)
+				}
+
+				w, err := transport.NewArtNet(controller)
+				if err != nil {
+					logger.Fatalf("Unable to open art net controller: %v", err)
 				}
 
 				writers = append(writers, w)
 				break
 
 			case transport.TypeMidi:
-				w, err := transport.NewMIDI(Logger.WithField(cntl.LoggerFieldTransport, transport.TypeMidi), midiDeviceID)
+				w, err := transport.NewMIDI(logger.WithField(cntl.LoggerFieldTransport, transport.TypeMidi), midiDeviceID)
 				if err != nil {
-					Logger.Fatalf("Unable to connect to midi device: %v", err)
+					logger.Fatalf("Unable to connect to midi device: %v", err)
 				}
 
 				writers = append(writers, w)
 				break
 
 			default:
-				Logger.Fatalf("Transport %q is not supported.", transportType)
+				logger.Fatalf("Transport %q is not supported", transportType)
 			}
 		}
 
@@ -140,14 +117,14 @@ var playbackCmd = &cobra.Command{
 		for _, waiterType := range usedWaiters {
 			switch waiterType {
 			case waiter.TypeNone:
-				waiters = append(waiters, waiter.NewNone(Logger.WithField(cntl.LoggerFieldWaiter, waiter.TypeNone)))
+				waiters = append(waiters, waiter.NewNone(logger.WithField(cntl.LoggerFieldWaiter, waiter.TypeNone)))
 
 				break
 
 			case waiter.TypeAudio:
-				a, err := waiter.NewAudio(Logger.WithField(cntl.LoggerFieldWaiter, waiter.TypeAudio), audioWaiterThreshold)
+				a, err := waiter.NewAudio(logger.WithField(cntl.LoggerFieldWaiter, waiter.TypeAudio), audioWaiterThreshold)
 				if err != nil {
-					Logger.Fatal(err)
+					logger.Fatal(err)
 				}
 
 				waiters = append(waiters, a)
@@ -156,21 +133,21 @@ var playbackCmd = &cobra.Command{
 			}
 		}
 
-		ctx := internal.NewExitHandlerContext(Logger.Logger)
-		player := playback.NewPlayer(Logger.Logger.WithField("player", "default"), data, writers, waiters)
+		ctx := exitcontext.New()
+		player := playback.NewPlayer(logger.Logger.WithField("player", "default"), data, writers, waiters)
 
 		switch args[0] {
 		case playbackTypeSong:
 			songID := args[1]
 			if err = player.PlaySong(ctx, songID); err != nil {
-				Logger.Fatal(err)
+				logger.Fatal(err)
 			}
 
 			break
 		case playbackTypeSetList:
 			setListID := args[1]
 			if err = player.PlaySetList(ctx, setListID); err != nil {
-				Logger.Fatal(err)
+				logger.Fatal(err)
 			}
 		}
 	},
@@ -184,6 +161,4 @@ func init() {
 	playbackCmd.Flags().StringVarP(&midiDeviceID, "midi-device-id", "m", "", "DeviceID of MIDI output to use (On empty string the default device is used)")
 	playbackCmd.Flags().StringSliceVarP(&usedWaiters, "wait-for", "w", []string{waiter.TypeNone}, fmt.Sprintf("Wait for a specific signal before playing a song (required to be used on stage, otherwise the next song would start immediately), one of %s", waiterTypes))
 	playbackCmd.Flags().Float32Var(&audioWaiterThreshold, "audio-waiter-threshold", 0.9, "Threshold frequency for audio waiter to trigger a signal")
-	playbackCmd.Flags().StringVarP(&dataDir, "data-dir", "d", "", "Data directory to load (when loader is set to directory)")
-	playbackCmd.Flags().StringVar(&loaderType, "loader", directoryLoader, fmt.Sprintf("Which loader to use %s.", loaders))
 }

@@ -1,8 +1,9 @@
 package song
 
 import (
-	"github.com/StageAutoControl/controller/pkg/cntl"
 	"testing"
+
+	"github.com/StageAutoControl/controller/pkg/cntl"
 )
 
 func TestCalcBarLength(t *testing.T) {

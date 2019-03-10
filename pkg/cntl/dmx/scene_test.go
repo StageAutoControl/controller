@@ -1,9 +1,10 @@
 package dmx
 
 import (
-	"github.com/StageAutoControl/controller/pkg/cntl"
 	"reflect"
 	"testing"
+
+	"github.com/StageAutoControl/controller/pkg/cntl"
 
 	"github.com/StageAutoControl/controller/pkg/internal/fixtures"
 )

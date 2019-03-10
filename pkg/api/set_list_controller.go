@@ -70,7 +70,7 @@ func (c *setListController) Get(r *http.Request, idReq *IDRequest, reply *cntl.S
 }
 
 // GetAll returns all entities of SetList
-func (c *setListController) GetAll(r *http.Request, idReq *EmptyRequest, reply *[]*cntl.SetList) error {
+func (c *setListController) GetAll(r *http.Request, idReq *Empty, reply *[]*cntl.SetList) error {
 	for _, id := range c.storage.List(&cntl.SetList{}) {
 		entity := &cntl.SetList{}
 		if err := c.storage.Read(id, entity); err != nil {

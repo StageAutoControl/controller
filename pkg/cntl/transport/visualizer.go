@@ -3,9 +3,10 @@ package transport
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/StageAutoControl/controller/pkg/cntl"
 	"net"
 	"strings"
+
+	"github.com/StageAutoControl/controller/pkg/cntl"
 
 	"github.com/sirupsen/logrus"
 )

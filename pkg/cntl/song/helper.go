@@ -2,9 +2,10 @@ package song
 
 import (
 	"errors"
-	"github.com/StageAutoControl/controller/pkg/cntl"
 	"log"
 	"reflect"
+
+	"github.com/StageAutoControl/controller/pkg/cntl"
 )
 
 // max returns the bigger of two given uint64 values

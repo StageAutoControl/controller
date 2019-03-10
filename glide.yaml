@@ -23,3 +23,4 @@ import:
 - package: github.com/peterbourgon/diskv
   version: ^2.0.1
 - package: github.com/jinzhu/copier
+- package: github.com/apinnecke/go-exitcontext

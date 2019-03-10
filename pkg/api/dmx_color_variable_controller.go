@@ -71,7 +71,7 @@ func (c *dmxColorVariableController) Get(r *http.Request, idReq *IDRequest, repl
 }
 
 // GetAll returns all entities of DMXColorVariable
-func (c *dmxColorVariableController) GetAll(r *http.Request, idReq *EmptyRequest, reply *[]*cntl.DMXColorVariable) error {
+func (c *dmxColorVariableController) GetAll(r *http.Request, idReq *Empty, reply *[]*cntl.DMXColorVariable) error {
 	for _, id := range c.storage.List(&cntl.DMXColorVariable{}) {
 		entity := &cntl.DMXColorVariable{}
 		if err := c.storage.Read(id, entity); err != nil {

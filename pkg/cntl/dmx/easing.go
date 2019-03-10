@@ -2,6 +2,7 @@ package dmx
 
 import (
 	"fmt"
+
 	"github.com/StageAutoControl/controller/pkg/cntl"
 
 	"github.com/creasty/go-easing"

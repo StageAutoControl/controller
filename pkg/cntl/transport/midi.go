@@ -2,8 +2,9 @@ package transport
 
 import (
 	"fmt"
-	"github.com/StageAutoControl/controller/pkg/cntl"
 	"strconv"
+
+	"github.com/StageAutoControl/controller/pkg/cntl"
 
 	"github.com/rakyll/portmidi"
 	"github.com/sirupsen/logrus"
