@@ -1,35 +1,38 @@
-package api
+package datastore
 
 import (
 	"fmt"
 	"net/http"
 
+	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	"github.com/jinzhu/copier"
 	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 )
 
-type dmxColorVariableController struct {
+// DMXColorVariableController controls the DMXColorVariable entity
+type DMXColorVariableController struct {
 	logger  *logrus.Entry
-	storage storage
+	storage api.Storage
 }
 
-func newDMXColorVariableController(logger *logrus.Entry, storage storage) *dmxColorVariableController {
-	return &dmxColorVariableController{
+// NewDMXColorVariableController returns a new MXColorVariableController instance
+func NewDMXColorVariableController(logger *logrus.Entry, storage api.Storage) *DMXColorVariableController {
+	return &DMXColorVariableController{
 		logger:  logger,
 		storage: storage,
 	}
 }
 
 // Create a new DMXColorVariable
-func (c *dmxColorVariableController) Create(r *http.Request, entity *cntl.DMXColorVariable, reply *cntl.DMXColorVariable) error {
+func (c *DMXColorVariableController) Create(r *http.Request, entity *cntl.DMXColorVariable, reply *cntl.DMXColorVariable) error {
 	if entity.ID == "" {
 		entity.ID = uuid.NewV4().String()
 	}
 
 	if c.storage.Has(entity.ID, entity) {
-		return errExists
+		return api.ErrExists
 	}
 
 	if err := c.storage.Write(entity.ID, entity); err != nil {
@@ -40,9 +43,9 @@ func (c *dmxColorVariableController) Create(r *http.Request, entity *cntl.DMXCol
 }
 
 // Update a new DMXColorVariable
-func (c *dmxColorVariableController) Update(r *http.Request, entity *cntl.DMXColorVariable, reply *cntl.DMXColorVariable) error {
+func (c *DMXColorVariableController) Update(r *http.Request, entity *cntl.DMXColorVariable, reply *cntl.DMXColorVariable) error {
 	if !c.storage.Has(entity.ID, entity) {
-		return errNotExists
+		return api.ErrNotExists
 	}
 
 	if err := c.storage.Write(entity.ID, entity); err != nil {
@@ -53,14 +56,14 @@ func (c *dmxColorVariableController) Update(r *http.Request, entity *cntl.DMXCol
 }
 
 // Get a DMXColorVariable
-func (c *dmxColorVariableController) Get(r *http.Request, idReq *IDRequest, reply *cntl.DMXColorVariable) error {
+func (c *DMXColorVariableController) Get(r *http.Request, idReq *api.IDBody, reply *cntl.DMXColorVariable) error {
 	if idReq.ID == "" {
-		return errNoIDGiven
+		return api.ErrNoIDGiven
 	}
 
 	fmt.Println(idReq.ID)
 	if !c.storage.Has(idReq.ID, &cntl.DMXColorVariable{}) {
-		return errNotExists
+		return api.ErrNotExists
 	}
 
 	if err := c.storage.Read(idReq.ID, reply); err != nil {
@@ -71,7 +74,7 @@ func (c *dmxColorVariableController) Get(r *http.Request, idReq *IDRequest, repl
 }
 
 // GetAll returns all entities of DMXColorVariable
-func (c *dmxColorVariableController) GetAll(r *http.Request, idReq *Empty, reply *[]*cntl.DMXColorVariable) error {
+func (c *DMXColorVariableController) GetAll(r *http.Request, idReq *api.Empty, reply *[]*cntl.DMXColorVariable) error {
 	for _, id := range c.storage.List(&cntl.DMXColorVariable{}) {
 		entity := &cntl.DMXColorVariable{}
 		if err := c.storage.Read(id, entity); err != nil {
@@ -84,13 +87,13 @@ func (c *dmxColorVariableController) GetAll(r *http.Request, idReq *Empty, reply
 }
 
 // Delete a DMXColorVariable
-func (c *dmxColorVariableController) Delete(r *http.Request, idReq *IDRequest, reply *SuccessResponse) error {
+func (c *DMXColorVariableController) Delete(r *http.Request, idReq *api.IDBody, reply *api.SuccessResponse) error {
 	if idReq.ID == "" {
-		return errNoIDGiven
+		return api.ErrNoIDGiven
 	}
 
 	if !c.storage.Has(idReq.ID, &cntl.DMXColorVariable{}) {
-		return errNotExists
+		return api.ErrNotExists
 	}
 
 	if err := c.storage.Delete(idReq.ID, &cntl.DMXColorVariable{}); err != nil {

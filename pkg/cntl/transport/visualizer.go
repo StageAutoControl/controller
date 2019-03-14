@@ -7,19 +7,18 @@ import (
 	"strings"
 
 	"github.com/StageAutoControl/controller/pkg/cntl"
-
-	"github.com/sirupsen/logrus"
+	"github.com/StageAutoControl/controller/pkg/internal/logging"
 )
 
 // Visualizer is a writer to the visualizer tool
 type Visualizer struct {
-	logger   *logrus.Entry
+	logger   logging.Logger
 	endpoint string
 	socket   net.Conn
 }
 
 // NewVisualizer creates a new Visualizer
-func NewVisualizer(logger *logrus.Entry, endpoint string) (*Visualizer, error) {
+func NewVisualizer(logger logging.Logger, endpoint string) (*Visualizer, error) {
 	socket, err := net.Dial("tcp", endpoint)
 	if err != nil {
 		return nil, err

@@ -1,35 +1,38 @@
-package api
+package datastore
 
 import (
 	"fmt"
 	"net/http"
 
+	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	"github.com/jinzhu/copier"
 	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 )
 
-type dmxTransitionController struct {
+// DMXTransitionController controls the DMXTransition entity
+type DMXTransitionController struct {
 	logger  *logrus.Entry
-	storage storage
+	storage api.Storage
 }
 
-func newDMXTransitionController(logger *logrus.Entry, storage storage) *dmxTransitionController {
-	return &dmxTransitionController{
+// NewDMXTransitionController returns a new DMXTransitionController instance
+func NewDMXTransitionController(logger *logrus.Entry, storage api.Storage) *DMXTransitionController {
+	return &DMXTransitionController{
 		logger:  logger,
 		storage: storage,
 	}
 }
 
 // Create a new DMXTransition
-func (c *dmxTransitionController) Create(r *http.Request, entity *cntl.DMXTransition, reply *cntl.DMXTransition) error {
+func (c *DMXTransitionController) Create(r *http.Request, entity *cntl.DMXTransition, reply *cntl.DMXTransition) error {
 	if entity.ID == "" {
 		entity.ID = uuid.NewV4().String()
 	}
 
 	if c.storage.Has(entity.ID, entity) {
-		return errExists
+		return api.ErrExists
 	}
 
 	if err := c.storage.Write(entity.ID, entity); err != nil {
@@ -40,9 +43,9 @@ func (c *dmxTransitionController) Create(r *http.Request, entity *cntl.DMXTransi
 }
 
 // Update a new DMXTransition
-func (c *dmxTransitionController) Update(r *http.Request, entity *cntl.DMXTransition, reply *cntl.DMXTransition) error {
+func (c *DMXTransitionController) Update(r *http.Request, entity *cntl.DMXTransition, reply *cntl.DMXTransition) error {
 	if !c.storage.Has(entity.ID, entity) {
-		return errNotExists
+		return api.ErrNotExists
 	}
 
 	if err := c.storage.Write(entity.ID, entity); err != nil {
@@ -53,13 +56,13 @@ func (c *dmxTransitionController) Update(r *http.Request, entity *cntl.DMXTransi
 }
 
 // Get a DMXTransition
-func (c *dmxTransitionController) Get(r *http.Request, idReq *IDRequest, reply *cntl.DMXTransition) error {
+func (c *DMXTransitionController) Get(r *http.Request, idReq *api.IDBody, reply *cntl.DMXTransition) error {
 	if idReq.ID == "" {
-		return errNoIDGiven
+		return api.ErrNoIDGiven
 	}
 
 	if !c.storage.Has(idReq.ID, &cntl.DMXTransition{}) {
-		return errNotExists
+		return api.ErrNotExists
 	}
 
 	if err := c.storage.Read(idReq.ID, reply); err != nil {
@@ -70,7 +73,7 @@ func (c *dmxTransitionController) Get(r *http.Request, idReq *IDRequest, reply *
 }
 
 // GetAll returns all entities of DMXTransition
-func (c *dmxTransitionController) GetAll(r *http.Request, idReq *Empty, reply *[]*cntl.DMXTransition) error {
+func (c *DMXTransitionController) GetAll(r *http.Request, idReq *api.Empty, reply *[]*cntl.DMXTransition) error {
 	for _, id := range c.storage.List(&cntl.DMXTransition{}) {
 		entity := &cntl.DMXTransition{}
 		if err := c.storage.Read(id, entity); err != nil {
@@ -83,13 +86,13 @@ func (c *dmxTransitionController) GetAll(r *http.Request, idReq *Empty, reply *[
 }
 
 // Delete a DMXTransition
-func (c *dmxTransitionController) Delete(r *http.Request, idReq *IDRequest, reply *SuccessResponse) error {
+func (c *DMXTransitionController) Delete(r *http.Request, idReq *api.IDBody, reply *api.SuccessResponse) error {
 	if idReq.ID == "" {
-		return errNoIDGiven
+		return api.ErrNoIDGiven
 	}
 
 	if !c.storage.Has(idReq.ID, &cntl.DMXTransition{}) {
-		return errNotExists
+		return api.ErrNotExists
 	}
 
 	if err := c.storage.Delete(idReq.ID, &cntl.DMXTransition{}); err != nil {

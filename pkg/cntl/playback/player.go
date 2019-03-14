@@ -5,30 +5,35 @@ import (
 	"time"
 
 	"github.com/StageAutoControl/controller/pkg/cntl"
+	"github.com/StageAutoControl/controller/pkg/internal/logging"
 
 	"fmt"
 
 	"github.com/StageAutoControl/controller/pkg/cntl/song"
-	"github.com/sirupsen/logrus"
 )
 
 // Player plays various things from a given data store, for example songs or a whole SetList.
 type Player struct {
-	logger    *logrus.Entry
+	logger    logging.Logger
 	dataStore *cntl.DataStore
 	writers   []TransportWriter
 	waiters   []Waiter
 }
 
 // NewPlayer returns a new Player instance
-func NewPlayer(logger *logrus.Entry, ds *cntl.DataStore, writers []TransportWriter, waiters []Waiter) *Player {
-	return &Player{logger, ds, writers, waiters}
+func NewPlayer(logger logging.Logger, ds *cntl.DataStore, writers []TransportWriter, waiters []Waiter) *Player {
+	return &Player{
+		logger:    logger,
+		dataStore: ds,
+		writers:   writers,
+		waiters:   waiters,
+	}
 }
 
 func (p *Player) checkSetList(setList *cntl.SetList) error {
 	for _, songSel := range setList.Songs {
 		if _, ok := p.dataStore.Songs[songSel.ID]; !ok {
-			return fmt.Errorf("cannot find Song %q", songSel.ID)
+			return fmt.Errorf("cannot find Process %q", songSel.ID)
 		}
 	}
 
@@ -75,7 +80,11 @@ func (p *Player) wait(ctx context.Context) error {
 	}()
 
 	for _, w := range p.waiters {
-		go w.Wait(done, cancel, err)
+		go func() {
+			if err := w.Wait(done, cancel, err); err != nil {
+				p.logger.Error(err)
+			}
+		}()
 	}
 
 	select {
@@ -125,7 +134,11 @@ func (p *Player) PlaySong(ctx context.Context, songID string) error {
 			}
 
 			for _, w := range p.writers {
-				go w.Write(cmd)
+				go func() {
+					if err := w.Write(cmd); err != nil {
+						p.logger.Error(err)
+					}
+				}()
 			}
 
 			i++

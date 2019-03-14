@@ -1,14 +1,14 @@
 package waiter
 
-import "github.com/sirupsen/logrus"
+import "github.com/StageAutoControl/controller/pkg/internal/logging"
 
 // None is a waiter that does nothing
 type None struct {
-	logger *logrus.Entry
+	logger logging.Logger
 }
 
 // NewNone creates a new None waiter
-func NewNone(logger *logrus.Entry) *None {
+func NewNone(logger logging.Logger) *None {
 	return &None{logger}
 }
 

@@ -3,13 +3,19 @@ package api
 import "errors"
 
 var (
-	rpcPath      = "/rpc"
-	errNoIDGiven = errors.New("no ID was given with request")
-	errExists    = errors.New("entity with given ID already exists")
-	errNotExists = errors.New("entity with given ID does not exist")
+	// RPCPath to where the RPC server should listen on
+	RPCPath = "/rpc"
+
+	// ErrNoIDGiven is returned when the request did not contain a valid ID
+	ErrNoIDGiven = errors.New("no ID was given with request")
+	// ErrExists is returned when the entity which is tried to create already exists
+	ErrExists = errors.New("entity with given ID already exists")
+	// ErrNotExists is returned when the entity tried to manage dies not exist
+	ErrNotExists = errors.New("entity with given ID does not exist")
 )
 
-type storage interface {
+// Storage interface for abstraction in api usage
+type Storage interface {
 	Has(key string, kind interface{}) bool
 	Write(key string, value interface{}) error
 	Read(key string, value interface{}) error
@@ -17,8 +23,8 @@ type storage interface {
 	Delete(key string, kind interface{}) error
 }
 
-// IDRequest is a request object only storing an ID
-type IDRequest struct {
+// IDBody is a request object only storing an ID
+type IDBody struct {
 	ID string `json:"id"`
 }
 

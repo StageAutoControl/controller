@@ -1,25 +1,26 @@
 package transport
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 
 	"github.com/StageAutoControl/controller/pkg/cntl"
+	"github.com/StageAutoControl/controller/pkg/internal/logging"
 
 	"github.com/rakyll/portmidi"
-	"github.com/sirupsen/logrus"
 )
 
 // MIDI is a transport that sends MIDI signals using portmidi.
 type MIDI struct {
-	logger     *logrus.Entry
+	logger     logging.Logger
 	deviceInfo *portmidi.DeviceInfo
 	deviceID   portmidi.DeviceID
 	out        *portmidi.Stream
 }
 
 // NewMIDI creates a new MIDI transport
-func NewMIDI(logger *logrus.Entry, deviceID string) (*MIDI, error) {
+func NewMIDI(logger logging.Logger, deviceID string) (*MIDI, error) {
 	if err := portmidi.Initialize(); err != nil {
 		return nil, err
 	}
@@ -37,7 +38,7 @@ func NewMIDI(logger *logrus.Entry, deviceID string) (*MIDI, error) {
 
 	info := portmidi.Info(d)
 	if info == nil {
-		logger.Fatal("Unable to read default output device")
+		return nil, errors.New("unable to read default output device")
 	}
 
 	out, err := portmidi.NewOutputStream(d, 10, 0)

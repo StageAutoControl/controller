@@ -1,20 +1,21 @@
-package api
+package datastore
 
 import (
 	"testing"
 
+	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	internalTesting "github.com/StageAutoControl/controller/pkg/internal/testing"
 	"github.com/jinzhu/copier"
 )
 
-func TestDMXDeviceGroupController_Create_WithID(t *testing.T) {
+func TestDMXPresetController_Create_WithID(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceGroupController(logger, store)
-	key := "475b71a0-0b16-11e7-9406-e3f678e8b788"
-	entity := ds.DMXDeviceGroups[key]
+	controller := NewDMXPresetController(logger, store)
+	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
+	entity := ds.DMXPresets[key]
 
-	createReply := &cntl.DMXDeviceGroup{}
+	createReply := &cntl.DMXPreset{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
 	}
@@ -24,20 +25,20 @@ func TestDMXDeviceGroupController_Create_WithID(t *testing.T) {
 	}
 }
 
-func TestDMXDeviceGroupController_Create_WithoutID(t *testing.T) {
+func TestDMXPresetController_Create_WithoutID(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceGroupController(logger, store)
-	key := "475b71a0-0b16-11e7-9406-e3f678e8b788"
-	entity := ds.DMXDeviceGroups[key]
+	controller := NewDMXPresetController(logger, store)
+	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
+	entity := ds.DMXPresets[key]
 
-	createEntity := &cntl.DMXDeviceGroup{}
+	createEntity := &cntl.DMXPreset{}
 	if err := copier.Copy(createEntity, entity); err != nil {
 		t.Fatal(err)
 	}
 
 	createEntity.ID = ""
 
-	createReply := &cntl.DMXDeviceGroup{}
+	createReply := &cntl.DMXPreset{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
 	}
@@ -47,26 +48,26 @@ func TestDMXDeviceGroupController_Create_WithoutID(t *testing.T) {
 	}
 }
 
-func TestDMXDeviceGroupController_Get_NotExisting(t *testing.T) {
+func TestDMXPresetController_Get_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceGroupController(logger, store)
-	key := "475b71a0-0b16-11e7-9406-e3f678e8b788"
+	controller := NewDMXPresetController(logger, store)
+	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
 
-	reply := &cntl.DMXDeviceGroup{}
+	reply := &cntl.DMXPreset{}
 
-	idReq := &IDRequest{ID: key}
-	if err := controller.Get(req, idReq, reply); err != errNotExists {
-		t.Errorf("expected to get errNotExists, but got %v", err)
+	idReq := &api.IDBody{ID: key}
+	if err := controller.Get(req, idReq, reply); err != api.ErrNotExists {
+		t.Errorf("expected to get api.ErrNotExists, but got %v", err)
 	}
 }
 
-func TestDMXDeviceGroupController_Get_Existing(t *testing.T) {
+func TestDMXPresetController_Get_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceGroupController(logger, store)
-	key := "475b71a0-0b16-11e7-9406-e3f678e8b788"
-	entity := ds.DMXDeviceGroups[key]
+	controller := NewDMXPresetController(logger, store)
+	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
+	entity := ds.DMXPresets[key]
 
-	createReply := &cntl.DMXDeviceGroup{}
+	createReply := &cntl.DMXPreset{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
 	}
@@ -75,8 +76,8 @@ func TestDMXDeviceGroupController_Get_Existing(t *testing.T) {
 		t.Errorf("Expected createReply to have id %s, but has %s", key, createReply.ID)
 	}
 
-	reply := &cntl.DMXDeviceGroup{}
-	idReq := &IDRequest{ID: key}
+	reply := &cntl.DMXPreset{}
+	idReq := &api.IDBody{ID: key}
 	t.Log("idReq has ID:", idReq.ID)
 	if err := controller.Get(req, idReq, reply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
@@ -87,26 +88,26 @@ func TestDMXDeviceGroupController_Get_Existing(t *testing.T) {
 	}
 }
 
-func TestDMXDeviceGroupController_Update_NotExisting(t *testing.T) {
+func TestDMXPresetController_Update_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceGroupController(logger, store)
-	key := "475b71a0-0b16-11e7-9406-e3f678e8b788"
-	entity := ds.DMXDeviceGroups[key]
+	controller := NewDMXPresetController(logger, store)
+	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
+	entity := ds.DMXPresets[key]
 
-	reply := &cntl.DMXDeviceGroup{}
+	reply := &cntl.DMXPreset{}
 
-	if err := controller.Update(req, entity, reply); err != errNotExists {
-		t.Errorf("expected to get errNotExists, but got %v", err)
+	if err := controller.Update(req, entity, reply); err != api.ErrNotExists {
+		t.Errorf("expected to get api.ErrNotExists, but got %v", err)
 	}
 }
 
-func TestDMXDeviceGroupController_Update_Existing(t *testing.T) {
+func TestDMXPresetController_Update_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceGroupController(logger, store)
-	key := "475b71a0-0b16-11e7-9406-e3f678e8b788"
-	entity := ds.DMXDeviceGroups[key]
+	controller := NewDMXPresetController(logger, store)
+	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
+	entity := ds.DMXPresets[key]
 
-	createReply := &cntl.DMXDeviceGroup{}
+	createReply := &cntl.DMXPreset{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
 	}
@@ -115,7 +116,7 @@ func TestDMXDeviceGroupController_Update_Existing(t *testing.T) {
 		t.Errorf("Expected createReply to have id %s, but has %s", key, createReply.ID)
 	}
 
-	reply := &cntl.DMXDeviceGroup{}
+	reply := &cntl.DMXPreset{}
 	if err := controller.Update(req, entity, reply); err != nil {
 		t.Errorf("expected to get no error, but got %v", err)
 	}
@@ -124,25 +125,25 @@ func TestDMXDeviceGroupController_Update_Existing(t *testing.T) {
 		t.Errorf("Expected reply to have id %s, but has %s", key, reply.ID)
 	}
 }
-func TestDMXDeviceGroupController_Delete_NotExisting(t *testing.T) {
+func TestDMXPresetController_Delete_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceGroupController(logger, store)
-	key := "475b71a0-0b16-11e7-9406-e3f678e8b788"
+	controller := NewDMXPresetController(logger, store)
+	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
 
-	reply := &SuccessResponse{}
-	idReq := &IDRequest{ID: key}
-	if err := controller.Delete(req, idReq, reply); err != errNotExists {
+	reply := &api.SuccessResponse{}
+	idReq := &api.IDBody{ID: key}
+	if err := controller.Delete(req, idReq, reply); err != api.ErrNotExists {
 		t.Errorf("expected to get errNotExists, but got %v", err)
 	}
 }
 
-func TestDMXDeviceGroupController_Delete_Existing(t *testing.T) {
+func TestDMXPresetController_Delete_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceGroupController(logger, store)
-	key := "475b71a0-0b16-11e7-9406-e3f678e8b788"
-	entity := ds.DMXDeviceGroups[key]
+	controller := NewDMXPresetController(logger, store)
+	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
+	entity := ds.DMXPresets[key]
 
-	createReply := &cntl.DMXDeviceGroup{}
+	createReply := &cntl.DMXPreset{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
 	}
@@ -151,8 +152,8 @@ func TestDMXDeviceGroupController_Delete_Existing(t *testing.T) {
 		t.Errorf("Expected createReply to have id %s, but has %s", key, createReply.ID)
 	}
 
-	reply := &SuccessResponse{}
-	idReq := &IDRequest{ID: key}
+	reply := &api.SuccessResponse{}
+	idReq := &api.IDBody{ID: key}
 	if err := controller.Delete(req, idReq, reply); err != nil {
 		t.Errorf("expected to get no error, but got %v", err)
 	}

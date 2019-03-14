@@ -142,6 +142,7 @@ type DMXSubScene struct {
 	Preset       *PresetSelector   `json:"preset" yaml:"preset"`
 }
 
+// DMXColorVariable is a global variable for a DMX color
 type DMXColorVariable struct {
 	ID    string    `json:"id" yaml:"id"`
 	Name  string    `json:"name" yaml:"name"`

@@ -1,8 +1,9 @@
-package api
+package datastore
 
 import (
 	"testing"
 
+	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	internalTesting "github.com/StageAutoControl/controller/pkg/internal/testing"
 	"github.com/jinzhu/copier"
@@ -10,7 +11,7 @@ import (
 
 func TestDMXAnimationController_Create_WithID(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXAnimationController(logger, store)
+	controller := NewDMXAnimationController(logger, store)
 	key := "a51f7b2a-0e7b-11e7-bfc8-57da167865d7"
 	entity := ds.DMXAnimations[key]
 
@@ -26,7 +27,7 @@ func TestDMXAnimationController_Create_WithID(t *testing.T) {
 
 func TestDMXAnimationController_Create_WithoutID(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXAnimationController(logger, store)
+	controller := NewDMXAnimationController(logger, store)
 	key := "a51f7b2a-0e7b-11e7-bfc8-57da167865d7"
 	entity := ds.DMXAnimations[key]
 
@@ -49,20 +50,20 @@ func TestDMXAnimationController_Create_WithoutID(t *testing.T) {
 
 func TestDMXAnimationController_Get_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXAnimationController(logger, store)
+	controller := NewDMXAnimationController(logger, store)
 	key := "a51f7b2a-0e7b-11e7-bfc8-57da167865d7"
 
 	reply := &cntl.DMXAnimation{}
 
-	idReq := &IDRequest{ID: key}
-	if err := controller.Get(req, idReq, reply); err != errNotExists {
-		t.Errorf("expected to get errNotExists, but got %v", err)
+	idReq := &api.IDBody{ID: key}
+	if err := controller.Get(req, idReq, reply); err != api.ErrNotExists {
+		t.Errorf("expected to get api.ErrNotExists, but got %v", err)
 	}
 }
 
 func TestDMXAnimationController_Get_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXAnimationController(logger, store)
+	controller := NewDMXAnimationController(logger, store)
 	key := "a51f7b2a-0e7b-11e7-bfc8-57da167865d7"
 	entity := ds.DMXAnimations[key]
 
@@ -76,7 +77,7 @@ func TestDMXAnimationController_Get_Existing(t *testing.T) {
 	}
 
 	reply := &cntl.DMXAnimation{}
-	idReq := &IDRequest{ID: key}
+	idReq := &api.IDBody{ID: key}
 	t.Log("idReq has ID:", idReq.ID)
 	if err := controller.Get(req, idReq, reply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
@@ -89,20 +90,20 @@ func TestDMXAnimationController_Get_Existing(t *testing.T) {
 
 func TestDMXAnimationController_Update_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXAnimationController(logger, store)
+	controller := NewDMXAnimationController(logger, store)
 	key := "a51f7b2a-0e7b-11e7-bfc8-57da167865d7"
 	entity := ds.DMXAnimations[key]
 
 	reply := &cntl.DMXAnimation{}
 
-	if err := controller.Update(req, entity, reply); err != errNotExists {
-		t.Errorf("expected to get errNotExists, but got %v", err)
+	if err := controller.Update(req, entity, reply); err != api.ErrNotExists {
+		t.Errorf("expected to get api.ErrNotExists, but got %v", err)
 	}
 }
 
 func TestDMXAnimationController_Update_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXAnimationController(logger, store)
+	controller := NewDMXAnimationController(logger, store)
 	key := "a51f7b2a-0e7b-11e7-bfc8-57da167865d7"
 	entity := ds.DMXAnimations[key]
 
@@ -126,19 +127,19 @@ func TestDMXAnimationController_Update_Existing(t *testing.T) {
 }
 func TestDMXAnimationController_Delete_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXAnimationController(logger, store)
+	controller := NewDMXAnimationController(logger, store)
 	key := "a51f7b2a-0e7b-11e7-bfc8-57da167865d7"
 
-	reply := &SuccessResponse{}
-	idReq := &IDRequest{ID: key}
-	if err := controller.Delete(req, idReq, reply); err != errNotExists {
-		t.Errorf("expected to get errNotExists, but got %v", err)
+	reply := &api.SuccessResponse{}
+	idReq := &api.IDBody{ID: key}
+	if err := controller.Delete(req, idReq, reply); err != api.ErrNotExists {
+		t.Errorf("expected to get api.ErrNotExists, but got %v", err)
 	}
 }
 
 func TestDMXAnimationController_Delete_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXAnimationController(logger, store)
+	controller := NewDMXAnimationController(logger, store)
 	key := "a51f7b2a-0e7b-11e7-bfc8-57da167865d7"
 	entity := ds.DMXAnimations[key]
 
@@ -151,8 +152,8 @@ func TestDMXAnimationController_Delete_Existing(t *testing.T) {
 		t.Errorf("Expected createReply to have id %s, but has %s", key, createReply.ID)
 	}
 
-	reply := &SuccessResponse{}
-	idReq := &IDRequest{ID: key}
+	reply := &api.SuccessResponse{}
+	idReq := &api.IDBody{ID: key}
 	if err := controller.Delete(req, idReq, reply); err != nil {
 		t.Errorf("expected to get no error, but got %v", err)
 	}

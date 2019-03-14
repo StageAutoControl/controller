@@ -1,10 +1,11 @@
-package api
+package datastore
 
 import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 
+	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/disk"
 	"github.com/StageAutoControl/controller/pkg/internal/fixtures"
 	"github.com/sirupsen/logrus"
@@ -13,9 +14,9 @@ import (
 var (
 	logger *logrus.Entry
 	path   string
-	store  storage
+	store  api.Storage
 	ds     = fixtures.DataStore()
-	req    = httptest.NewRequest(http.MethodPost, rpcPath, nil)
+	req    = httptest.NewRequest(http.MethodPost, api.RPCPath, nil)
 )
 
 func init() {

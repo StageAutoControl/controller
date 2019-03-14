@@ -37,7 +37,7 @@ func createStorage(logger *logrus.Entry, storagePath string) *disk.Storage {
 }
 
 func createController(logger *logrus.Entry) artnet.Controller {
-	c, err := artnet.NewController(logger)
+	c, err := artnet.NewController(logger.WithField("module", "controller"))
 	if err != nil {
 		logger.Fatal(err)
 	}

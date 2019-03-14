@@ -5,21 +5,20 @@ import (
 	"io"
 
 	"github.com/StageAutoControl/controller/pkg/cntl"
+	"github.com/StageAutoControl/controller/pkg/internal/logging"
 
 	"strings"
-
-	"github.com/sirupsen/logrus"
 )
 
 // Stream is an output channel that can render to a buffer
 type Stream struct {
-	logger *logrus.Entry
+	logger logging.Logger
 	w      io.Writer
 	i      uint64
 }
 
 // NewStream returns a new Stream instance
-func NewStream(logger *logrus.Entry, w io.Writer) *Stream {
+func NewStream(logger logging.Logger, w io.Writer) *Stream {
 	fmt.Fprint(w, "          Position  [      BarChange     ] [ Midi ] [ DMX ] \n")
 
 	return &Stream{logger, w, 0}

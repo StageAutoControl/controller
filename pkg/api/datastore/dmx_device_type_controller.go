@@ -1,28 +1,31 @@
-package api
+package datastore
 
 import (
 	"fmt"
 	"net/http"
 
+	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	"github.com/jinzhu/copier"
 	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 )
 
-type dmxDeviceTypeController struct {
+// DMXDeviceTypeController controls the DMXDeviceType entity
+type DMXDeviceTypeController struct {
 	logger  *logrus.Entry
-	storage storage
+	storage api.Storage
 }
 
-func newDMXDeviceTypeController(logger *logrus.Entry, storage storage) *dmxDeviceTypeController {
-	return &dmxDeviceTypeController{
+// NewDMXDeviceTypeController returns a new DMXDeviceTypeController instance
+func NewDMXDeviceTypeController(logger *logrus.Entry, storage api.Storage) *DMXDeviceTypeController {
+	return &DMXDeviceTypeController{
 		logger:  logger,
 		storage: storage,
 	}
 }
 
-func (c *dmxDeviceTypeController) validate(entity *cntl.DMXDeviceType) error {
+func (c *DMXDeviceTypeController) validate(entity *cntl.DMXDeviceType) error {
 	if entity.LEDs == nil {
 		entity.LEDs = make([]cntl.LED, 0)
 	}
@@ -31,13 +34,13 @@ func (c *dmxDeviceTypeController) validate(entity *cntl.DMXDeviceType) error {
 }
 
 // Create a new DMXDeviceType
-func (c *dmxDeviceTypeController) Create(r *http.Request, entity *cntl.DMXDeviceType, reply *cntl.DMXDeviceType) error {
+func (c *DMXDeviceTypeController) Create(r *http.Request, entity *cntl.DMXDeviceType, reply *cntl.DMXDeviceType) error {
 	if entity.ID == "" {
 		entity.ID = uuid.NewV4().String()
 	}
 
 	if c.storage.Has(entity.ID, entity) {
-		return errExists
+		return api.ErrExists
 	}
 
 	if err := c.validate(entity); err != nil {
@@ -52,9 +55,9 @@ func (c *dmxDeviceTypeController) Create(r *http.Request, entity *cntl.DMXDevice
 }
 
 // Update a new DMXDeviceType
-func (c *dmxDeviceTypeController) Update(r *http.Request, entity *cntl.DMXDeviceType, reply *cntl.DMXDeviceType) error {
+func (c *DMXDeviceTypeController) Update(r *http.Request, entity *cntl.DMXDeviceType, reply *cntl.DMXDeviceType) error {
 	if !c.storage.Has(entity.ID, entity) {
-		return errNotExists
+		return api.ErrNotExists
 	}
 
 	if err := c.validate(entity); err != nil {
@@ -69,13 +72,13 @@ func (c *dmxDeviceTypeController) Update(r *http.Request, entity *cntl.DMXDevice
 }
 
 // Get a DMXDeviceType
-func (c *dmxDeviceTypeController) Get(r *http.Request, idReq *IDRequest, reply *cntl.DMXDeviceType) error {
+func (c *DMXDeviceTypeController) Get(r *http.Request, idReq *api.IDBody, reply *cntl.DMXDeviceType) error {
 	if idReq.ID == "" {
-		return errNoIDGiven
+		return api.ErrNoIDGiven
 	}
 
 	if !c.storage.Has(idReq.ID, &cntl.DMXDeviceType{}) {
-		return errNotExists
+		return api.ErrNotExists
 	}
 
 	if err := c.storage.Read(idReq.ID, reply); err != nil {
@@ -86,7 +89,7 @@ func (c *dmxDeviceTypeController) Get(r *http.Request, idReq *IDRequest, reply *
 }
 
 // GetAll returns all entities of DMXDeviceType
-func (c *dmxDeviceTypeController) GetAll(r *http.Request, idReq *Empty, reply *[]*cntl.DMXDeviceType) error {
+func (c *DMXDeviceTypeController) GetAll(r *http.Request, idReq *api.Empty, reply *[]*cntl.DMXDeviceType) error {
 	for _, id := range c.storage.List(&cntl.DMXDeviceType{}) {
 		entity := &cntl.DMXDeviceType{}
 		if err := c.storage.Read(id, entity); err != nil {
@@ -99,13 +102,13 @@ func (c *dmxDeviceTypeController) GetAll(r *http.Request, idReq *Empty, reply *[
 }
 
 // Delete a DMXDeviceType
-func (c *dmxDeviceTypeController) Delete(r *http.Request, idReq *IDRequest, reply *SuccessResponse) error {
+func (c *DMXDeviceTypeController) Delete(r *http.Request, idReq *api.IDBody, reply *api.SuccessResponse) error {
 	if idReq.ID == "" {
-		return errNoIDGiven
+		return api.ErrNoIDGiven
 	}
 
 	if !c.storage.Has(idReq.ID, &cntl.DMXDeviceType{}) {
-		return errNotExists
+		return api.ErrNotExists
 	}
 
 	if err := c.storage.Delete(idReq.ID, &cntl.DMXDeviceType{}); err != nil {

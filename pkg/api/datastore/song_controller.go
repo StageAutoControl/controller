@@ -1,35 +1,38 @@
-package api
+package datastore
 
 import (
 	"fmt"
 	"net/http"
 
+	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	"github.com/jinzhu/copier"
 	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 )
 
-type songController struct {
+// SongController controls the Song entity
+type SongController struct {
 	logger  *logrus.Entry
-	storage storage
+	storage api.Storage
 }
 
-func newSongController(logger *logrus.Entry, storage storage) *songController {
-	return &songController{
+// NewSongController returns a new SongController instance
+func NewSongController(logger *logrus.Entry, storage api.Storage) *SongController {
+	return &SongController{
 		logger:  logger,
 		storage: storage,
 	}
 }
 
 // Create a new Song
-func (c *songController) Create(r *http.Request, entity *cntl.Song, reply *cntl.Song) error {
+func (c *SongController) Create(r *http.Request, entity *cntl.Song, reply *cntl.Song) error {
 	if entity.ID == "" {
 		entity.ID = uuid.NewV4().String()
 	}
 
 	if c.storage.Has(entity.ID, entity) {
-		return errExists
+		return api.ErrExists
 	}
 
 	if err := c.storage.Write(entity.ID, entity); err != nil {
@@ -40,9 +43,9 @@ func (c *songController) Create(r *http.Request, entity *cntl.Song, reply *cntl.
 }
 
 // Update a new Song
-func (c *songController) Update(r *http.Request, entity *cntl.Song, reply *cntl.Song) error {
+func (c *SongController) Update(r *http.Request, entity *cntl.Song, reply *cntl.Song) error {
 	if !c.storage.Has(entity.ID, entity) {
-		return errNotExists
+		return api.ErrNotExists
 	}
 
 	if err := c.storage.Write(entity.ID, entity); err != nil {
@@ -53,13 +56,13 @@ func (c *songController) Update(r *http.Request, entity *cntl.Song, reply *cntl.
 }
 
 // Get a Song
-func (c *songController) Get(r *http.Request, idReq *IDRequest, reply *cntl.Song) error {
+func (c *SongController) Get(r *http.Request, idReq *api.IDBody, reply *cntl.Song) error {
 	if idReq.ID == "" {
-		return errNoIDGiven
+		return api.ErrNoIDGiven
 	}
 
 	if !c.storage.Has(idReq.ID, &cntl.Song{}) {
-		return errNotExists
+		return api.ErrNotExists
 	}
 
 	if err := c.storage.Read(idReq.ID, reply); err != nil {
@@ -70,7 +73,7 @@ func (c *songController) Get(r *http.Request, idReq *IDRequest, reply *cntl.Song
 }
 
 // GetAll returns all entities of Song
-func (c *songController) GetAll(r *http.Request, idReq *Empty, reply *[]*cntl.Song) error {
+func (c *SongController) GetAll(r *http.Request, idReq *api.Empty, reply *[]*cntl.Song) error {
 	for _, id := range c.storage.List(&cntl.Song{}) {
 		entity := &cntl.Song{}
 		if err := c.storage.Read(id, entity); err != nil {
@@ -83,13 +86,13 @@ func (c *songController) GetAll(r *http.Request, idReq *Empty, reply *[]*cntl.So
 }
 
 // Delete a Song
-func (c *songController) Delete(r *http.Request, idReq *IDRequest, reply *SuccessResponse) error {
+func (c *SongController) Delete(r *http.Request, idReq *api.IDBody, reply *api.SuccessResponse) error {
 	if idReq.ID == "" {
-		return errNoIDGiven
+		return api.ErrNoIDGiven
 	}
 
 	if !c.storage.Has(idReq.ID, &cntl.Song{}) {
-		return errNotExists
+		return api.ErrNotExists
 	}
 
 	if err := c.storage.Delete(idReq.ID, &cntl.Song{}); err != nil {

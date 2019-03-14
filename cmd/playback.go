@@ -45,7 +45,7 @@ var (
 // playbackCmd represents the playback command
 var playbackCmd = &cobra.Command{
 	Use:   "playback [song|setlist] song-valid-uuid-1",
-	Short: "Plays a given Song or SetList by id",
+	Short: "Plays a given Process or SetList by id",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		logrus.SetLevel(logrus.WarnLevel)

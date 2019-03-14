@@ -1,20 +1,21 @@
-package api
+package datastore
 
 import (
 	"testing"
 
+	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	internalTesting "github.com/StageAutoControl/controller/pkg/internal/testing"
 	"github.com/jinzhu/copier"
 )
 
-func TestSongController_Create_WithID(t *testing.T) {
+func TestSetListController_Create_WithID(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newSongController(logger, store)
-	key := "3c1065c8-0b14-11e7-96eb-5b134621c411"
-	entity := ds.Songs[key]
+	controller := NewSetListController(logger, store)
+	key := "f5b4be8a-0b18-11e7-b837-4bac99d86956"
+	entity := ds.SetLists[key]
 
-	createReply := &cntl.Song{}
+	createReply := &cntl.SetList{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
 	}
@@ -24,20 +25,20 @@ func TestSongController_Create_WithID(t *testing.T) {
 	}
 }
 
-func TestSongController_Create_WithoutID(t *testing.T) {
+func TestSetListController_Create_WithoutID(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newSongController(logger, store)
-	key := "3c1065c8-0b14-11e7-96eb-5b134621c411"
-	entity := ds.Songs[key]
+	controller := NewSetListController(logger, store)
+	key := "f5b4be8a-0b18-11e7-b837-4bac99d86956"
+	entity := ds.SetLists[key]
 
-	createEntity := &cntl.Song{}
+	createEntity := &cntl.SetList{}
 	if err := copier.Copy(createEntity, entity); err != nil {
 		t.Fatal(err)
 	}
 
 	createEntity.ID = ""
 
-	createReply := &cntl.Song{}
+	createReply := &cntl.SetList{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
 	}
@@ -47,26 +48,26 @@ func TestSongController_Create_WithoutID(t *testing.T) {
 	}
 }
 
-func TestSongController_Get_NotExisting(t *testing.T) {
+func TestSetListController_Get_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newSongController(logger, store)
-	key := "3c1065c8-0b14-11e7-96eb-5b134621c411"
+	controller := NewSetListController(logger, store)
+	key := "f5b4be8a-0b18-11e7-b837-4bac99d86956"
 
-	reply := &cntl.Song{}
+	reply := &cntl.SetList{}
 
-	idReq := &IDRequest{ID: key}
-	if err := controller.Get(req, idReq, reply); err != errNotExists {
-		t.Errorf("expected to get errNotExists, but got %v", err)
+	idReq := &api.IDBody{ID: key}
+	if err := controller.Get(req, idReq, reply); err != api.ErrNotExists {
+		t.Errorf("expected to get api.ErrNotExists, but got %v", err)
 	}
 }
 
-func TestSongController_Get_Existing(t *testing.T) {
+func TestSetListController_Get_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newSongController(logger, store)
-	key := "3c1065c8-0b14-11e7-96eb-5b134621c411"
-	entity := ds.Songs[key]
+	controller := NewSetListController(logger, store)
+	key := "f5b4be8a-0b18-11e7-b837-4bac99d86956"
+	entity := ds.SetLists[key]
 
-	createReply := &cntl.Song{}
+	createReply := &cntl.SetList{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
 	}
@@ -75,8 +76,8 @@ func TestSongController_Get_Existing(t *testing.T) {
 		t.Errorf("Expected createReply to have id %s, but has %s", key, createReply.ID)
 	}
 
-	reply := &cntl.Song{}
-	idReq := &IDRequest{ID: key}
+	reply := &cntl.SetList{}
+	idReq := &api.IDBody{ID: key}
 	t.Log("idReq has ID:", idReq.ID)
 	if err := controller.Get(req, idReq, reply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
@@ -87,26 +88,26 @@ func TestSongController_Get_Existing(t *testing.T) {
 	}
 }
 
-func TestSongController_Update_NotExisting(t *testing.T) {
+func TestSetListController_Update_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newSongController(logger, store)
-	key := "3c1065c8-0b14-11e7-96eb-5b134621c411"
-	entity := ds.Songs[key]
+	controller := NewSetListController(logger, store)
+	key := "f5b4be8a-0b18-11e7-b837-4bac99d86956"
+	entity := ds.SetLists[key]
 
-	reply := &cntl.Song{}
+	reply := &cntl.SetList{}
 
-	if err := controller.Update(req, entity, reply); err != errNotExists {
-		t.Errorf("expected to get errNotExists, but got %v", err)
+	if err := controller.Update(req, entity, reply); err != api.ErrNotExists {
+		t.Errorf("expected to get api.ErrNotExists, but got %v", err)
 	}
 }
 
-func TestSongController_Update_Existing(t *testing.T) {
+func TestSetListController_Update_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newSongController(logger, store)
-	key := "3c1065c8-0b14-11e7-96eb-5b134621c411"
-	entity := ds.Songs[key]
+	controller := NewSetListController(logger, store)
+	key := "f5b4be8a-0b18-11e7-b837-4bac99d86956"
+	entity := ds.SetLists[key]
 
-	createReply := &cntl.Song{}
+	createReply := &cntl.SetList{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
 	}
@@ -115,7 +116,7 @@ func TestSongController_Update_Existing(t *testing.T) {
 		t.Errorf("Expected createReply to have id %s, but has %s", key, createReply.ID)
 	}
 
-	reply := &cntl.Song{}
+	reply := &cntl.SetList{}
 	if err := controller.Update(req, entity, reply); err != nil {
 		t.Errorf("expected to get no error, but got %v", err)
 	}
@@ -124,25 +125,25 @@ func TestSongController_Update_Existing(t *testing.T) {
 		t.Errorf("Expected reply to have id %s, but has %s", key, reply.ID)
 	}
 }
-func TestSongController_Delete_NotExisting(t *testing.T) {
+func TestSetListController_Delete_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newSongController(logger, store)
-	key := "3c1065c8-0b14-11e7-96eb-5b134621c411"
+	controller := NewSetListController(logger, store)
+	key := "f5b4be8a-0b18-11e7-b837-4bac99d86956"
 
-	reply := &SuccessResponse{}
-	idReq := &IDRequest{ID: key}
-	if err := controller.Delete(req, idReq, reply); err != errNotExists {
-		t.Errorf("expected to get errNotExists, but got %v", err)
+	reply := &api.SuccessResponse{}
+	idReq := &api.IDBody{ID: key}
+	if err := controller.Delete(req, idReq, reply); err != api.ErrNotExists {
+		t.Errorf("expected to get api.ErrNotExists, but got %v", err)
 	}
 }
 
-func TestSongController_Delete_Existing(t *testing.T) {
+func TestSetListController_Delete_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newSongController(logger, store)
-	key := "3c1065c8-0b14-11e7-96eb-5b134621c411"
-	entity := ds.Songs[key]
+	controller := NewSetListController(logger, store)
+	key := "f5b4be8a-0b18-11e7-b837-4bac99d86956"
+	entity := ds.SetLists[key]
 
-	createReply := &cntl.Song{}
+	createReply := &cntl.SetList{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
 	}
@@ -151,8 +152,8 @@ func TestSongController_Delete_Existing(t *testing.T) {
 		t.Errorf("Expected createReply to have id %s, but has %s", key, createReply.ID)
 	}
 
-	reply := &SuccessResponse{}
-	idReq := &IDRequest{ID: key}
+	reply := &api.SuccessResponse{}
+	idReq := &api.IDBody{ID: key}
 	if err := controller.Delete(req, idReq, reply); err != nil {
 		t.Errorf("expected to get no error, but got %v", err)
 	}

@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/StageAutoControl/controller/pkg/internal/logging"
 	"github.com/jsimonetti/go-artnet"
@@ -39,9 +38,6 @@ func NewController(logger logging.Logger) (Controller, error) {
 	if err := c.Start(); err != nil {
 		return nil, fmt.Errorf("failed to start Controller: %v", err)
 	}
-
-	logger.Info("Waiting 5 seconds for nodes to register")
-	time.Sleep(5 * time.Second)
 
 	return &controller{
 		sender:      c,

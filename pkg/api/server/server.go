@@ -1,11 +1,15 @@
-package api
+package server
 
 import (
 	"context"
 	"fmt"
 	"net/http"
 
+	"github.com/StageAutoControl/controller/pkg/api"
+	"github.com/StageAutoControl/controller/pkg/api/datastore"
+	"github.com/StageAutoControl/controller/pkg/api/playback"
 	"github.com/StageAutoControl/controller/pkg/artnet"
+	"github.com/StageAutoControl/controller/pkg/process"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/rpc"
 	"github.com/gorilla/rpc/json"
@@ -16,17 +20,20 @@ import (
 type Server struct {
 	*rpc.Server
 	logger        *logrus.Entry
-	storage       storage
+	storage       api.Storage
 	apiController map[string]interface{}
-	controller    artnet.Controller
+	cntl          artnet.Controller
+	pm            process.Manager
 }
 
-// NewServer returns a new Server instance
-func NewServer(logger *logrus.Entry, storage storage, controller artnet.Controller) (*Server, error) {
+// New returns a new Server instance
+func New(logger *logrus.Entry, storage api.Storage, cntl artnet.Controller, pm process.Manager) (*Server, error) {
 	server := &Server{
 		Server:  rpc.NewServer(),
 		logger:  logger,
 		storage: storage,
+		cntl:    cntl,
+		pm:      pm,
 	}
 
 	if err := server.registerControllers(); err != nil {
@@ -38,21 +45,22 @@ func NewServer(logger *logrus.Entry, storage storage, controller artnet.Controll
 
 func (s *Server) registerControllers() error {
 	s.apiController = map[string]interface{}{
-		"DMXAnimation":     newDMXAnimationController(s.logger, s.storage),
-		"DMXDevice":        newDMXDeviceController(s.logger, s.storage),
-		"DMXDeviceGroup":   newDMXDeviceGroupController(s.logger, s.storage),
-		"DMXDeviceType":    newDMXDeviceTypeController(s.logger, s.storage),
-		"DMXPreset":        newDMXPresetController(s.logger, s.storage),
-		"DMXScene":         newDMXSceneController(s.logger, s.storage),
-		"DMXTransition":    newDMXTransitionController(s.logger, s.storage),
-		"DMXColorVariable": newDMXColorVariableController(s.logger, s.storage),
-		"Song":             newSongController(s.logger, s.storage),
-		"SetList":          newSetListController(s.logger, s.storage),
-		"DMXPlayground":    newDMXPlaygroundController(s.logger, s.controller),
+		"DMXAnimation":     datastore.NewDMXAnimationController(s.logger, s.storage),
+		"DMXDevice":        datastore.NewDMXDeviceController(s.logger, s.storage),
+		"DMXDeviceGroup":   datastore.NewDMXDeviceGroupController(s.logger, s.storage),
+		"DMXDeviceType":    datastore.NewDMXDeviceTypeController(s.logger, s.storage),
+		"DMXPreset":        datastore.NewDMXPresetController(s.logger, s.storage),
+		"DMXScene":         datastore.NewDMXSceneController(s.logger, s.storage),
+		"DMXTransition":    datastore.NewDMXTransitionController(s.logger, s.storage),
+		"DMXColorVariable": datastore.NewDMXColorVariableController(s.logger, s.storage),
+		"Song":             datastore.NewSongController(s.logger, s.storage),
+		"SetList":          datastore.NewSetListController(s.logger, s.storage),
+		"DMXPlayground":    datastore.NewDMXPlaygroundController(s.logger, s.cntl),
+		"Playback":         playback.NewController(s.pm),
 	}
 
-	for name, controller := range s.apiController {
-		if err := s.Server.RegisterService(controller, name); err != nil {
+	for name, cntl := range s.apiController {
+		if err := s.Server.RegisterService(cntl, name); err != nil {
 			return err
 		}
 	}
@@ -65,7 +73,7 @@ func (s *Server) Run(ctx context.Context, endpoint string) error {
 	s.Server.RegisterCodec(json.NewCodec(), "application/json")
 
 	r := http.NewServeMux()
-	r.Handle(rpcPath, s.Server)
+	r.Handle(api.RPCPath, s.Server)
 	r.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
 		if _, err := fmt.Fprint(rw, "OK"); err != nil {
 			s.logger.Errorf("failed to write content to response: %v", err)
@@ -92,6 +100,8 @@ func (s *Server) Run(ctx context.Context, endpoint string) error {
 			s.logger.Errorf("failed to shutdown http server: %v", err)
 		}
 	}()
+
+	s.logger.Infof("listening on %s", endpoint)
 
 	err := httpServer.ListenAndServe()
 	if err != nil && err != http.ErrServerClosed {

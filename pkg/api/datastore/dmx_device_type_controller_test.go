@@ -1,8 +1,9 @@
-package api
+package datastore
 
 import (
 	"testing"
 
+	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	internalTesting "github.com/StageAutoControl/controller/pkg/internal/testing"
 	"github.com/jinzhu/copier"
@@ -10,7 +11,7 @@ import (
 
 func TestDMXDeviceTypeController_Create_WithID(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceTypeController(logger, store)
+	controller := NewDMXDeviceTypeController(logger, store)
 	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
 	entity := ds.DMXDeviceTypes[key]
 
@@ -26,7 +27,7 @@ func TestDMXDeviceTypeController_Create_WithID(t *testing.T) {
 
 func TestDMXDeviceTypeController_Create_WithoutID(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceTypeController(logger, store)
+	controller := NewDMXDeviceTypeController(logger, store)
 	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
 	entity := ds.DMXDeviceTypes[key]
 
@@ -49,20 +50,20 @@ func TestDMXDeviceTypeController_Create_WithoutID(t *testing.T) {
 
 func TestDMXDeviceTypeController_Get_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceTypeController(logger, store)
+	controller := NewDMXDeviceTypeController(logger, store)
 	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
 
 	reply := &cntl.DMXDeviceType{}
 
-	idReq := &IDRequest{ID: key}
-	if err := controller.Get(req, idReq, reply); err != errNotExists {
-		t.Errorf("expected to get errNotExists, but got %v", err)
+	idReq := &api.IDBody{ID: key}
+	if err := controller.Get(req, idReq, reply); err != api.ErrNotExists {
+		t.Errorf("expected to get api.ErrNotExists, but got %v", err)
 	}
 }
 
 func TestDMXDeviceTypeController_Get_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceTypeController(logger, store)
+	controller := NewDMXDeviceTypeController(logger, store)
 	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
 	entity := ds.DMXDeviceTypes[key]
 
@@ -76,7 +77,7 @@ func TestDMXDeviceTypeController_Get_Existing(t *testing.T) {
 	}
 
 	reply := &cntl.DMXDeviceType{}
-	idReq := &IDRequest{ID: key}
+	idReq := &api.IDBody{ID: key}
 	t.Log("idReq has ID:", idReq.ID)
 	if err := controller.Get(req, idReq, reply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
@@ -89,20 +90,20 @@ func TestDMXDeviceTypeController_Get_Existing(t *testing.T) {
 
 func TestDMXDeviceTypeController_Update_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceTypeController(logger, store)
+	controller := NewDMXDeviceTypeController(logger, store)
 	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
 	entity := ds.DMXDeviceTypes[key]
 
 	reply := &cntl.DMXDeviceType{}
 
-	if err := controller.Update(req, entity, reply); err != errNotExists {
-		t.Errorf("expected to get errNotExists, but got %v", err)
+	if err := controller.Update(req, entity, reply); err != api.ErrNotExists {
+		t.Errorf("expected to get api.ErrNotExists, but got %v", err)
 	}
 }
 
 func TestDMXDeviceTypeController_Update_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceTypeController(logger, store)
+	controller := NewDMXDeviceTypeController(logger, store)
 	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
 	entity := ds.DMXDeviceTypes[key]
 
@@ -126,19 +127,19 @@ func TestDMXDeviceTypeController_Update_Existing(t *testing.T) {
 }
 func TestDMXDeviceTypeController_Delete_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceTypeController(logger, store)
+	controller := NewDMXDeviceTypeController(logger, store)
 	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
 
-	reply := &SuccessResponse{}
-	idReq := &IDRequest{ID: key}
-	if err := controller.Delete(req, idReq, reply); err != errNotExists {
-		t.Errorf("expected to get errNotExists, but got %v", err)
+	reply := &api.SuccessResponse{}
+	idReq := &api.IDBody{ID: key}
+	if err := controller.Delete(req, idReq, reply); err != api.ErrNotExists {
+		t.Errorf("expected to get api.ErrNotExists, but got %v", err)
 	}
 }
 
 func TestDMXDeviceTypeController_Delete_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXDeviceTypeController(logger, store)
+	controller := NewDMXDeviceTypeController(logger, store)
 	key := "628fc3ea-1188-11e7-8824-5f72d80c17b6"
 	entity := ds.DMXDeviceTypes[key]
 
@@ -151,8 +152,8 @@ func TestDMXDeviceTypeController_Delete_Existing(t *testing.T) {
 		t.Errorf("Expected createReply to have id %s, but has %s", key, createReply.ID)
 	}
 
-	reply := &SuccessResponse{}
-	idReq := &IDRequest{ID: key}
+	reply := &api.SuccessResponse{}
+	idReq := &api.IDBody{ID: key}
 	if err := controller.Delete(req, idReq, reply); err != nil {
 		t.Errorf("expected to get no error, but got %v", err)
 	}

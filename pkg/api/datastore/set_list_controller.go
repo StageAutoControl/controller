@@ -1,35 +1,38 @@
-package api
+package datastore
 
 import (
 	"fmt"
 	"net/http"
 
+	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	"github.com/jinzhu/copier"
 	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 )
 
-type setListController struct {
+// SetListController controls the SetList entity
+type SetListController struct {
 	logger  *logrus.Entry
-	storage storage
+	storage api.Storage
 }
 
-func newSetListController(logger *logrus.Entry, storage storage) *setListController {
-	return &setListController{
+// NewSetListController returns a new SetListController instance
+func NewSetListController(logger *logrus.Entry, storage api.Storage) *SetListController {
+	return &SetListController{
 		logger:  logger,
 		storage: storage,
 	}
 }
 
 // Create a new SetList
-func (c *setListController) Create(r *http.Request, entity *cntl.SetList, reply *cntl.SetList) error {
+func (c *SetListController) Create(r *http.Request, entity *cntl.SetList, reply *cntl.SetList) error {
 	if entity.ID == "" {
 		entity.ID = uuid.NewV4().String()
 	}
 
 	if c.storage.Has(entity.ID, entity) {
-		return errExists
+		return api.ErrExists
 	}
 
 	if err := c.storage.Write(entity.ID, entity); err != nil {
@@ -40,9 +43,9 @@ func (c *setListController) Create(r *http.Request, entity *cntl.SetList, reply 
 }
 
 // Update a new SetList
-func (c *setListController) Update(r *http.Request, entity *cntl.SetList, reply *cntl.SetList) error {
+func (c *SetListController) Update(r *http.Request, entity *cntl.SetList, reply *cntl.SetList) error {
 	if !c.storage.Has(entity.ID, entity) {
-		return errNotExists
+		return api.ErrNotExists
 	}
 
 	if err := c.storage.Write(entity.ID, entity); err != nil {
@@ -53,13 +56,13 @@ func (c *setListController) Update(r *http.Request, entity *cntl.SetList, reply 
 }
 
 // Get a SetList
-func (c *setListController) Get(r *http.Request, idReq *IDRequest, reply *cntl.SetList) error {
+func (c *SetListController) Get(r *http.Request, idReq *api.IDBody, reply *cntl.SetList) error {
 	if idReq.ID == "" {
-		return errNoIDGiven
+		return api.ErrNoIDGiven
 	}
 
 	if !c.storage.Has(idReq.ID, &cntl.SetList{}) {
-		return errNotExists
+		return api.ErrNotExists
 	}
 
 	if err := c.storage.Read(idReq.ID, reply); err != nil {
@@ -70,7 +73,7 @@ func (c *setListController) Get(r *http.Request, idReq *IDRequest, reply *cntl.S
 }
 
 // GetAll returns all entities of SetList
-func (c *setListController) GetAll(r *http.Request, idReq *Empty, reply *[]*cntl.SetList) error {
+func (c *SetListController) GetAll(r *http.Request, idReq *api.Empty, reply *[]*cntl.SetList) error {
 	for _, id := range c.storage.List(&cntl.SetList{}) {
 		entity := &cntl.SetList{}
 		if err := c.storage.Read(id, entity); err != nil {
@@ -83,13 +86,13 @@ func (c *setListController) GetAll(r *http.Request, idReq *Empty, reply *[]*cntl
 }
 
 // Delete a SetList
-func (c *setListController) Delete(r *http.Request, idReq *IDRequest, reply *SuccessResponse) error {
+func (c *SetListController) Delete(r *http.Request, idReq *api.IDBody, reply *api.SuccessResponse) error {
 	if idReq.ID == "" {
-		return errNoIDGiven
+		return api.ErrNoIDGiven
 	}
 
 	if !c.storage.Has(idReq.ID, &cntl.SetList{}) {
-		return errNotExists
+		return api.ErrNotExists
 	}
 
 	if err := c.storage.Delete(idReq.ID, &cntl.SetList{}); err != nil {

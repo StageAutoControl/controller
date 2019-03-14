@@ -1,20 +1,21 @@
-package api
+package datastore
 
 import (
 	"testing"
 
+	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	internalTesting "github.com/StageAutoControl/controller/pkg/internal/testing"
 	"github.com/jinzhu/copier"
 )
 
-func TestDMXPresetController_Create_WithID(t *testing.T) {
+func TestDMXSceneController_Create_WithID(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXPresetController(logger, store)
-	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
-	entity := ds.DMXPresets[key]
+	controller := NewDMXSceneController(logger, store)
+	key := "492cef2e-0b14-11e7-be89-c3fa25f9cabb"
+	entity := ds.DMXScenes[key]
 
-	createReply := &cntl.DMXPreset{}
+	createReply := &cntl.DMXScene{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
 	}
@@ -24,20 +25,20 @@ func TestDMXPresetController_Create_WithID(t *testing.T) {
 	}
 }
 
-func TestDMXPresetController_Create_WithoutID(t *testing.T) {
+func TestDMXSceneController_Create_WithoutID(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXPresetController(logger, store)
-	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
-	entity := ds.DMXPresets[key]
+	controller := NewDMXSceneController(logger, store)
+	key := "492cef2e-0b14-11e7-be89-c3fa25f9cabb"
+	entity := ds.DMXScenes[key]
 
-	createEntity := &cntl.DMXPreset{}
+	createEntity := &cntl.DMXScene{}
 	if err := copier.Copy(createEntity, entity); err != nil {
 		t.Fatal(err)
 	}
 
 	createEntity.ID = ""
 
-	createReply := &cntl.DMXPreset{}
+	createReply := &cntl.DMXScene{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
 	}
@@ -47,26 +48,26 @@ func TestDMXPresetController_Create_WithoutID(t *testing.T) {
 	}
 }
 
-func TestDMXPresetController_Get_NotExisting(t *testing.T) {
+func TestDMXSceneController_Get_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXPresetController(logger, store)
-	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
+	controller := NewDMXSceneController(logger, store)
+	key := "492cef2e-0b14-11e7-be89-c3fa25f9cabb"
 
-	reply := &cntl.DMXPreset{}
+	reply := &cntl.DMXScene{}
 
-	idReq := &IDRequest{ID: key}
-	if err := controller.Get(req, idReq, reply); err != errNotExists {
-		t.Errorf("expected to get errNotExists, but got %v", err)
+	idReq := &api.IDBody{ID: key}
+	if err := controller.Get(req, idReq, reply); err != api.ErrNotExists {
+		t.Errorf("expected to get api.ErrNotExists, but got %v", err)
 	}
 }
 
-func TestDMXPresetController_Get_Existing(t *testing.T) {
+func TestDMXSceneController_Get_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXPresetController(logger, store)
-	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
-	entity := ds.DMXPresets[key]
+	controller := NewDMXSceneController(logger, store)
+	key := "492cef2e-0b14-11e7-be89-c3fa25f9cabb"
+	entity := ds.DMXScenes[key]
 
-	createReply := &cntl.DMXPreset{}
+	createReply := &cntl.DMXScene{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
 	}
@@ -75,8 +76,8 @@ func TestDMXPresetController_Get_Existing(t *testing.T) {
 		t.Errorf("Expected createReply to have id %s, but has %s", key, createReply.ID)
 	}
 
-	reply := &cntl.DMXPreset{}
-	idReq := &IDRequest{ID: key}
+	reply := &cntl.DMXScene{}
+	idReq := &api.IDBody{ID: key}
 	t.Log("idReq has ID:", idReq.ID)
 	if err := controller.Get(req, idReq, reply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
@@ -87,26 +88,26 @@ func TestDMXPresetController_Get_Existing(t *testing.T) {
 	}
 }
 
-func TestDMXPresetController_Update_NotExisting(t *testing.T) {
+func TestDMXSceneController_Update_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXPresetController(logger, store)
-	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
-	entity := ds.DMXPresets[key]
+	controller := NewDMXSceneController(logger, store)
+	key := "492cef2e-0b14-11e7-be89-c3fa25f9cabb"
+	entity := ds.DMXScenes[key]
 
-	reply := &cntl.DMXPreset{}
+	reply := &cntl.DMXScene{}
 
-	if err := controller.Update(req, entity, reply); err != errNotExists {
-		t.Errorf("expected to get errNotExists, but got %v", err)
+	if err := controller.Update(req, entity, reply); err != api.ErrNotExists {
+		t.Errorf("expected to get api.ErrNotExists, but got %v", err)
 	}
 }
 
-func TestDMXPresetController_Update_Existing(t *testing.T) {
+func TestDMXSceneController_Update_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXPresetController(logger, store)
-	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
-	entity := ds.DMXPresets[key]
+	controller := NewDMXSceneController(logger, store)
+	key := "492cef2e-0b14-11e7-be89-c3fa25f9cabb"
+	entity := ds.DMXScenes[key]
 
-	createReply := &cntl.DMXPreset{}
+	createReply := &cntl.DMXScene{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
 	}
@@ -115,7 +116,7 @@ func TestDMXPresetController_Update_Existing(t *testing.T) {
 		t.Errorf("Expected createReply to have id %s, but has %s", key, createReply.ID)
 	}
 
-	reply := &cntl.DMXPreset{}
+	reply := &cntl.DMXScene{}
 	if err := controller.Update(req, entity, reply); err != nil {
 		t.Errorf("expected to get no error, but got %v", err)
 	}
@@ -124,25 +125,25 @@ func TestDMXPresetController_Update_Existing(t *testing.T) {
 		t.Errorf("Expected reply to have id %s, but has %s", key, reply.ID)
 	}
 }
-func TestDMXPresetController_Delete_NotExisting(t *testing.T) {
+func TestDMXSceneController_Delete_NotExisting(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXPresetController(logger, store)
-	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
+	controller := NewDMXSceneController(logger, store)
+	key := "492cef2e-0b14-11e7-be89-c3fa25f9cabb"
 
-	reply := &SuccessResponse{}
-	idReq := &IDRequest{ID: key}
-	if err := controller.Delete(req, idReq, reply); err != errNotExists {
-		t.Errorf("expected to get errNotExists, but got %v", err)
+	reply := &api.SuccessResponse{}
+	idReq := &api.IDBody{ID: key}
+	if err := controller.Delete(req, idReq, reply); err != api.ErrNotExists {
+		t.Errorf("expected to get api.ErrNotExists, but got %v", err)
 	}
 }
 
-func TestDMXPresetController_Delete_Existing(t *testing.T) {
+func TestDMXSceneController_Delete_Existing(t *testing.T) {
 	defer internalTesting.Cleanup(t, path)
-	controller := newDMXPresetController(logger, store)
-	key := "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
-	entity := ds.DMXPresets[key]
+	controller := NewDMXSceneController(logger, store)
+	key := "492cef2e-0b14-11e7-be89-c3fa25f9cabb"
+	entity := ds.DMXScenes[key]
 
-	createReply := &cntl.DMXPreset{}
+	createReply := &cntl.DMXScene{}
 	if err := controller.Create(req, entity, createReply); err != nil {
 		t.Errorf("failed to call apiController: %v", err)
 	}
@@ -151,8 +152,8 @@ func TestDMXPresetController_Delete_Existing(t *testing.T) {
 		t.Errorf("Expected createReply to have id %s, but has %s", key, createReply.ID)
 	}
 
-	reply := &SuccessResponse{}
-	idReq := &IDRequest{ID: key}
+	reply := &api.SuccessResponse{}
+	idReq := &api.IDBody{ID: key}
 	if err := controller.Delete(req, idReq, reply); err != nil {
 		t.Errorf("expected to get no error, but got %v", err)
 	}
