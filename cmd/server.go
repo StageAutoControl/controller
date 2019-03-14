@@ -29,12 +29,14 @@ var serverCmd = &cobra.Command{
 		}
 
 		endpoint := fmt.Sprintf("0.0.0.0:%d", port)
-
 		loader := disk.NewLoader(storage)
-		if err := pm.AddProcess(playback.ProcessName, playback.NewProcess(loader, storage, controller), true); err != nil {
-			logger.Fatal(err)
-		}
 
+		if !disableController {
+			if err := pm.AddProcess(playback.ProcessName, playback.NewProcess(loader, storage, controller), true); err != nil {
+				logger.Fatal(err)
+			}
+
+		}
 		if err := server.Run(ctx, endpoint); err != nil {
 			logger.Fatal(err)
 		}

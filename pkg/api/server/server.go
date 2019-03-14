@@ -8,6 +8,7 @@ import (
 	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/api/datastore"
 	"github.com/StageAutoControl/controller/pkg/api/playback"
+	"github.com/StageAutoControl/controller/pkg/api/playground"
 	"github.com/StageAutoControl/controller/pkg/artnet"
 	"github.com/StageAutoControl/controller/pkg/process"
 	"github.com/gorilla/handlers"
@@ -55,7 +56,7 @@ func (s *Server) registerControllers() error {
 		"DMXColorVariable": datastore.NewDMXColorVariableController(s.logger, s.storage),
 		"Song":             datastore.NewSongController(s.logger, s.storage),
 		"SetList":          datastore.NewSetListController(s.logger, s.storage),
-		"DMXPlayground":    datastore.NewDMXPlaygroundController(s.logger, s.cntl),
+		"DMXPlayground":    playground.NewDMXPlaygroundController(s.logger, s.cntl),
 		"Playback":         playback.NewController(s.pm),
 	}
 

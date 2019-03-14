@@ -36,7 +36,12 @@ func createStorage(logger *logrus.Entry, storagePath string) *disk.Storage {
 	return disk.New(storagePath)
 }
 
-func createController(logger *logrus.Entry) artnet.Controller {
+func createController(logger *logrus.Entry, disable bool) artnet.Controller {
+	if disable {
+		logger.Warn("ArtNet controller is disabled, so no playback or playground will be possible!")
+		return nil
+	}
+
 	c, err := artnet.NewController(logger.WithField("module", "controller"))
 	if err != nil {
 		logger.Fatal(err)

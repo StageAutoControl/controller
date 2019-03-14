@@ -13,11 +13,12 @@ import (
 )
 
 var (
-	logLevel    string
-	logger      *logrus.Entry
-	storagePath string
-	storage     *disk.Storage
-	controller  artnet.Controller
+	logLevel          string
+	logger            *logrus.Entry
+	storagePath       string
+	storage           *disk.Storage
+	controller        artnet.Controller
+	disableController bool
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -28,7 +29,7 @@ var RootCmd = &cobra.Command{
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		logger = createLogger(logLevel)
 		storage = createStorage(logger, storagePath)
-		controller = createController(logger)
+		controller = createController(logger, disableController)
 	},
 }
 
@@ -43,5 +44,6 @@ func Execute() {
 
 func init() {
 	RootCmd.PersistentFlags().StringVar(&logLevel, "log-level", "info", "Which log level to use")
+	RootCmd.PersistentFlags().BoolVar(&disableController, "disable-controller", false, "Disable the controller, e.g. when not on an artnet network")
 	RootCmd.PersistentFlags().StringVarP(&storagePath, "storage-path", "s", "/var/controller/data", "path where the storage should store the data")
 }
