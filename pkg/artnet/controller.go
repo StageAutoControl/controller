@@ -96,7 +96,7 @@ func (c *controller) sendBackground() {
 
 func (c *controller) send() {
 	for universe, dmx := range c.state {
-		c.sender.SendDMXToAddress(dmx, c.universeToAddress(universe))
+		go c.sender.SendDMXToAddress(dmx, c.universeToAddress(universe))
 	}
 }
 
