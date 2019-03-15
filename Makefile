@@ -19,30 +19,6 @@ lint:
 test:
 	go test -v $(PACKAGES)
 
-start-playback-visualizer: build-darwin
-	./bin/controller_darwin playback song "${SONG}" \
-		--data-dir "${SAC_DATA_DIR}" \
-		--transport visualizer \
-		--visualizer-endpoint localhost:1337
-
-start-playback-stream: build-darwin
-	./bin/controller_darwin playback song "${SONG}" \
-			--data-dir "${SAC_DATA_DIR}" \
-			--transport stream
-
-start-playback-none: build-darwin
-	./bin/controller_darwin playback song "${SONG}" \
-			--data-dir "${SAC_DATA_DIR}"
-
-start-playback-artnet: build-darwin
-	./bin/controller_darwin playback song "${SONG}" \
-			--data-dir "${SAC_DATA_DIR}" \
-			--transport artnet
-
-start-api: build-darwin
-	./bin/controller_darwin api \
-	-s ./storage
-
 build-all: build-darwin build-arm build-linux build-docker
 
 build-darwin:
