@@ -1,5 +1,5 @@
 hash: cf169cddd10a9453d7edb6f4facbf3a022d5581edc3b0f17a20081dd22d2bea0
-updated: 2019-03-09T12:56:06.76403+01:00
+updated: 2019-03-15T21:03:27.602112+01:00
 imports:
 - name: github.com/apinnecke/go-exitcontext
   version: 06015046a58d57f896f5e2ea290e6540c3fba863
@@ -36,19 +36,19 @@ imports:
 - name: github.com/satori/go.uuid
   version: f58768cc1a7a7e77a3bd49e98cdd21419399b6a3
 - name: github.com/sirupsen/logrus
-  version: d7b6bf5e4d26448fd977d07d745a2a66097ddecb
+  version: dae0fa8d5b0c810a8ab733fbd5510c7cae84eca4
 - name: github.com/spf13/cobra
-  version: 7547e83b2d85fd1893c7d76916f67689d761fecb
+  version: ba1052d4cbce7aac421a96de820558f75199ccbc
 - name: github.com/spf13/pflag
   version: 24fa6976df40757dce6aea913e7b81ade90530e1
 - name: github.com/spf13/viper
-  version: 6d33b5a963d922d182c91e8a1c88d81fd150cfd4
+  version: 9e56dacc08fbbf8c9ee2dbc717553c758ce42bc9
 - name: golang.org/x/crypto
-  version: c2843e01d9a2bc60bb26ad24e09734fdc2d9ec58
+  version: a1f597ede03a7bef967a422b5b3a5bd08805a01e
   subpackages:
   - ssh/terminal
 - name: golang.org/x/sys
-  version: 584f3b12f43e1e55248c90e84804777009eed0a4
+  version: fead79001313d15903fb4605b4a1b781532cd93e
   subpackages:
   - unix
   - windows

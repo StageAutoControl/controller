@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
+	"time"
 
 	"github.com/StageAutoControl/controller/pkg/internal/logging"
 	"github.com/jsimonetti/go-artnet"
@@ -13,7 +15,8 @@ import (
 
 // Controller is a transport for the ArtNet protocol (DMX over UDP/IP)
 type controller struct {
-	sender      Sender
+	logger      logging.Logger
+	sender      *artnet.Controller
 	state       State
 	sendTrigger chan struct{}
 }
@@ -34,16 +37,26 @@ func NewController(logger logging.Logger) (Controller, error) {
 		panic(err)
 	}
 
-	c := artnet.NewController(host, ip, artnet.NewLogger(logger.(*logrus.Entry)))
+	host = strings.ToLower(strings.Split(host, ".")[0])
+
+	logger.Infof("Using ArtNet IP %s and hostname %s", ip.String(), host)
+
+	c := artnet.NewController(host, ip, artnet.NewLogger(logger.(*logrus.Entry).WithField("module", "artnet")))
 	if err := c.Start(); err != nil {
 		return nil, fmt.Errorf("failed to start Controller: %v", err)
 	}
 
-	return &controller{
+	cntl := &controller{
+		logger:      logger,
 		sender:      c,
 		state:       NewState(),
 		sendTrigger: make(chan struct{}, 1),
-	}, nil
+	}
+
+	go cntl.sendBackground()
+	go cntl.debugDevices()
+
+	return cntl, nil
 }
 
 // Start the controller
@@ -76,6 +89,7 @@ func (c *controller) triggerSend() {
 
 func (c *controller) sendBackground() {
 	for range c.sendTrigger {
+		c.logger.Debug("Sending DMX Values")
 		c.send()
 	}
 }
@@ -96,4 +110,18 @@ func (c *controller) universeToAddress(universe uint16) artnet.Address {
 		Net:    v[0],
 		SubUni: v[1],
 	}
+}
+
+func (c *controller) debugDevices() {
+	t := time.NewTicker(30 * time.Second)
+	for range t.C {
+		c.logger.Debugf("Currently %d devices are registered: %+s", len(c.sender.Nodes), ips(c.sender.Nodes))
+	}
+}
+
+func ips(nodes []*artnet.ControlledNode) (ips []string) {
+	for _, n := range nodes {
+		ips = append(ips, NodeToString(n))
+	}
+	return
 }
