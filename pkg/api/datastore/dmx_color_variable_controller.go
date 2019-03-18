@@ -61,7 +61,6 @@ func (c *DMXColorVariableController) Get(r *http.Request, idReq *api.IDBody, rep
 		return api.ErrNoIDGiven
 	}
 
-	fmt.Println(idReq.ID)
 	if !c.storage.Has(idReq.ID, &cntl.DMXColorVariable{}) {
 		return api.ErrNotExists
 	}
@@ -75,6 +74,7 @@ func (c *DMXColorVariableController) Get(r *http.Request, idReq *api.IDBody, rep
 
 // GetAll returns all entities of DMXColorVariable
 func (c *DMXColorVariableController) GetAll(r *http.Request, idReq *api.Empty, reply *[]*cntl.DMXColorVariable) error {
+	*reply = []*cntl.DMXColorVariable{}
 	for _, id := range c.storage.List(&cntl.DMXColorVariable{}) {
 		entity := &cntl.DMXColorVariable{}
 		if err := c.storage.Read(id, entity); err != nil {

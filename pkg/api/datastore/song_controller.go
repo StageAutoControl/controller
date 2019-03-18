@@ -74,6 +74,7 @@ func (c *SongController) Get(r *http.Request, idReq *api.IDBody, reply *cntl.Son
 
 // GetAll returns all entities of Song
 func (c *SongController) GetAll(r *http.Request, idReq *api.Empty, reply *[]*cntl.Song) error {
+	*reply = []*cntl.Song{}
 	for _, id := range c.storage.List(&cntl.Song{}) {
 		entity := &cntl.Song{}
 		if err := c.storage.Read(id, entity); err != nil {

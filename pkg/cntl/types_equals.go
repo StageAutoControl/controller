@@ -21,7 +21,7 @@ func (v1 BarChange) Equals(v2 BarChange) bool {
 }
 
 // Equals returns whether the two given objects are equal
-func (v1 ScenePosition) Equals(v2 ScenePosition) bool {
+func (v1 DMXScenePosition) Equals(v2 DMXScenePosition) bool {
 	return v1.At == v2.At &&
 		v1.ID == v2.ID &&
 		v1.Repeat == v2.Repeat
@@ -141,7 +141,6 @@ func (v1 DMXParams) Equals(v2 DMXParams) bool {
 // Equals returns whether the two given objects are equal
 func (v1 DMXAnimation) Equals(v2 DMXAnimation) bool {
 	return v2.ID == v2.ID &&
-		v1.Length == v2.Length &&
 		dmxAnimationFrameList(v1.Frames).Equals(dmxAnimationFrameList(v2.Frames))
 }
 

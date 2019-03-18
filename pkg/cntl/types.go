@@ -2,8 +2,7 @@ package cntl
 
 // SongSelector is a selector for a song
 type SongSelector struct {
-	ID   string `json:"id" yaml:"id"`
-	Name string `json:"name" yaml:"name"`
+	ID string `json:"id" yaml:"id"`
 }
 
 // SetList is a set of songs in a specific order
@@ -21,22 +20,21 @@ type BarChange struct {
 	Speed     uint16 `json:"speed" yaml:"speed"`
 }
 
-// ScenePosition describes the position of a DMX scene within a song
-type ScenePosition struct {
+// DMXScenePosition describes the position of a DMX scene within a song
+type DMXScenePosition struct {
 	ID     string `json:"id" yaml:"id"`
-	Name   string `json:"name" yaml:"name"`
 	At     uint64 `json:"at" yaml:"at"`
 	Repeat uint8  `json:"repeat" yaml:"repeat"`
 }
 
 // Song is the whole container for everything that needs to be controlled during a song.
 type Song struct {
-	ID              string            `json:"id" yaml:"id"`
-	Name            string            `json:"name" yaml:"name"`
-	BarChanges      []BarChange       `json:"barChanges" yaml:"barChanges"`
-	DMXScenes       []ScenePosition   `json:"dmxScenes" yaml:"dmxScenes"`
-	DMXDeviceParams []DMXDeviceParams `json:"dmxDeviceParams" yaml:"dmxDeviceParams"`
-	MIDICommands    []MIDICommand     `json:"midiCommands" yaml:"midiCommands"`
+	ID              string             `json:"id" yaml:"id"`
+	Name            string             `json:"name" yaml:"name"`
+	BarChanges      []BarChange        `json:"barChanges" yaml:"barChanges"`
+	DMXScenes       []DMXScenePosition `json:"dmxScenes" yaml:"dmxScenes"`
+	DMXDeviceParams []DMXDeviceParams  `json:"dmxDeviceParams" yaml:"dmxDeviceParams"`
+	MIDICommands    []MIDICommand      `json:"midiCommands" yaml:"midiCommands"`
 }
 
 // Tag is a string literal tagging a DMX device
@@ -82,14 +80,12 @@ type LED struct {
 // DMXDeviceSelector is a selector for DMX devices
 type DMXDeviceSelector struct {
 	ID   string `json:"id" yaml:"id"`
-	Name string `json:"name" yaml:"name"`
 	Tags []Tag  `json:"tags" yaml:"tags"`
 }
 
 // DMXDeviceGroupSelector is a selector for DMX device groups
 type DMXDeviceGroupSelector struct {
-	ID   string `json:"id" yaml:"id"`
-	Name string `json:"name" yaml:"name"`
+	ID string `json:"id" yaml:"id"`
 }
 
 // DMXDeviceGroup is a DMX device group
@@ -101,14 +97,12 @@ type DMXDeviceGroup struct {
 
 // AnimationSelector selects an animation
 type AnimationSelector struct {
-	ID   string `json:"id" yaml:"id"`
-	Name string `json:"name" yaml:"name"`
+	ID string `json:"id" yaml:"id"`
 }
 
 // TransitionSelector selects a transition
 type TransitionSelector struct {
-	ID   string `json:"id" yaml:"id"`
-	Name string `json:"name" yaml:"name"`
+	ID string `json:"id" yaml:"id"`
 }
 
 // DMXDeviceParams is an object storing DMX parameters including the selection of either groups or devices
@@ -131,8 +125,7 @@ type DMXScene struct {
 
 // PresetSelector is a selector for a preset
 type PresetSelector struct {
-	ID   string `json:"id" yaml:"id"`
-	Name string `json:"name" yaml:"name"`
+	ID string `json:"id" yaml:"id"`
 }
 
 // DMXSubScene is a sub scene of a light scene
@@ -163,7 +156,7 @@ type DMXParams struct {
 	Pan      *DMXValue `json:"pan" yaml:"pan"`
 	Tilt     *DMXValue `json:"tilt" yaml:"tilt"`
 	Strobe   *DMXValue `json:"strobe" yaml:"strobe"`
-	Mode     *DMXValue `json:"preset" yaml:"preset"`
+	Mode     *DMXValue `json:"mode" yaml:"mode"`
 	Dimmer   *DMXValue `json:"dimmer" yaml:"dimmer"`
 }
 
@@ -171,7 +164,6 @@ type DMXParams struct {
 type DMXAnimation struct {
 	ID     string              `json:"id" yaml:"id"`
 	Name   string              `json:"name" yaml:"name"`
-	Length uint8               `json:"length" yaml:"length"`
 	Frames []DMXAnimationFrame `json:"frames" yaml:"frames"`
 }
 

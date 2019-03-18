@@ -81,8 +81,7 @@ func (s *Server) Run(ctx context.Context, endpoint string) error {
 		}
 	})
 
-	h := handlers.LoggingHandler(s.logger.Writer(), r)
-	h = handlers.RecoveryHandler()(h)
+	h := handlers.RecoveryHandler()(r)
 	h = handlers.CORS(
 		handlers.AllowCredentials(),
 		handlers.AllowedOrigins([]string{"*"}),

@@ -8,7 +8,7 @@ import (
 
 // RenderAnimation renders the given DMXAnimation to an array of DMXCommands to be sent to a DMX device
 func RenderAnimation(ds *cntl.DataStore, dd []*cntl.DMXDevice, a *cntl.DMXAnimation) ([]cntl.DMXCommands, error) {
-	cmds := make([]cntl.DMXCommands, a.Length)
+	cmds := make([]cntl.DMXCommands, maxFrame(a))
 	for _, f := range a.Frames {
 		ps, err := RenderParams(ds, dd, f.Params)
 		if err != nil {
@@ -19,4 +19,15 @@ func RenderAnimation(ds *cntl.DataStore, dd []*cntl.DMXDevice, a *cntl.DMXAnimat
 	}
 
 	return cmds, nil
+}
+
+func maxFrame(a *cntl.DMXAnimation) uint8 {
+	var max uint8
+	for _, f := range a.Frames {
+		if f.At > max {
+			max = f.At
+		}
+	}
+
+	return max
 }

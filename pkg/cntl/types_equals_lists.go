@@ -32,7 +32,7 @@ func (v1 barChangeList) Equals(v2 barChangeList) bool {
 	return true
 }
 
-type scenePositionList []ScenePosition
+type scenePositionList []DMXScenePosition
 
 func (v1 scenePositionList) Equals(v2 scenePositionList) bool {
 	if len(v1) != len(v2) {

@@ -74,6 +74,7 @@ func (c *DMXDeviceGroupController) Get(r *http.Request, idReq *api.IDBody, reply
 
 // GetAll returns all entities of DMXDeviceGroup
 func (c *DMXDeviceGroupController) GetAll(r *http.Request, idReq *api.Empty, reply *[]*cntl.DMXDeviceGroup) error {
+	*reply = []*cntl.DMXDeviceGroup{}
 	for _, id := range c.storage.List(&cntl.DMXDeviceGroup{}) {
 		entity := &cntl.DMXDeviceGroup{}
 		if err := c.storage.Read(id, entity); err != nil {

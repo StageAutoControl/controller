@@ -74,6 +74,7 @@ func (c *SetListController) Get(r *http.Request, idReq *api.IDBody, reply *cntl.
 
 // GetAll returns all entities of SetList
 func (c *SetListController) GetAll(r *http.Request, idReq *api.Empty, reply *[]*cntl.SetList) error {
+	*reply = []*cntl.SetList{}
 	for _, id := range c.storage.List(&cntl.SetList{}) {
 		entity := &cntl.SetList{}
 		if err := c.storage.Read(id, entity); err != nil {

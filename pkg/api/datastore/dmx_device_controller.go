@@ -81,7 +81,6 @@ func (c *DMXDeviceController) Get(r *http.Request, idReq *api.IDBody, reply *cnt
 		return api.ErrNoIDGiven
 	}
 
-	fmt.Println(idReq.ID)
 	if !c.storage.Has(idReq.ID, &cntl.DMXDevice{}) {
 		return api.ErrNotExists
 	}
@@ -95,6 +94,7 @@ func (c *DMXDeviceController) Get(r *http.Request, idReq *api.IDBody, reply *cnt
 
 // GetAll returns all entities of DMXDevice
 func (c *DMXDeviceController) GetAll(r *http.Request, idReq *api.Empty, reply *[]*cntl.DMXDevice) error {
+	*reply = []*cntl.DMXDevice{}
 	for _, id := range c.storage.List(&cntl.DMXDevice{}) {
 		entity := &cntl.DMXDevice{}
 		if err := c.storage.Read(id, entity); err != nil {

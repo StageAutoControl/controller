@@ -74,6 +74,7 @@ func (c *DMXTransitionController) Get(r *http.Request, idReq *api.IDBody, reply 
 
 // GetAll returns all entities of DMXTransition
 func (c *DMXTransitionController) GetAll(r *http.Request, idReq *api.Empty, reply *[]*cntl.DMXTransition) error {
+	*reply = []*cntl.DMXTransition{}
 	for _, id := range c.storage.List(&cntl.DMXTransition{}) {
 		entity := &cntl.DMXTransition{}
 		if err := c.storage.Read(id, entity); err != nil {

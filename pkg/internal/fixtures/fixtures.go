@@ -39,7 +39,7 @@ var data = &cntl.DataStore{
 				{At: 1184, NoteCount: 7, NoteValue: 8},
 				{At: 1632, NoteCount: 4, NoteValue: 4},
 			},
-			DMXScenes: []cntl.ScenePosition{
+			DMXScenes: []cntl.DMXScenePosition{
 				{At: 0, ID: "492cef2e-0b14-11e7-be89-c3fa25f9cabb", Repeat: 3},
 				{At: 512, ID: "a44f8dee-0b14-11e7-b5b9-bf1015384192", Repeat: 3},
 				{At: 1408, ID: "99b86a5e-0e7a-11e7-a01a-5b5fbdeba3d6", Repeat: 2},
@@ -334,8 +334,7 @@ var data = &cntl.DataStore{
 	},
 	DMXAnimations: map[string]*cntl.DMXAnimation{
 		"a51f7b2a-0e7b-11e7-bfc8-57da167865d7": {
-			ID:     "a51f7b2a-0e7b-11e7-bfc8-57da167865d7",
-			Length: 4,
+			ID: "a51f7b2a-0e7b-11e7-bfc8-57da167865d7",
 			Frames: []cntl.DMXAnimationFrame{
 				{At: 0, Params: cntl.DMXParams{LED: 1, Blue: Value31}},
 				{At: 1, Params: cntl.DMXParams{LED: 1, Blue: Value63}},
