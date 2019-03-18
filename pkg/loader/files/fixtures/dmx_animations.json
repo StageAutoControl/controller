@@ -1,0 +1,34 @@
+{
+  "dmx_animations": [
+    {
+      "frames": [
+        {
+          "at": 0,
+          "params": {
+            "blue": 31
+          }
+        },
+        {
+          "at": 1,
+          "params": {
+            "blue": 63
+          }
+        },
+        {
+          "at": 2,
+          "params": {
+            "blue": 127
+          }
+        },
+        {
+          "at": 3,
+          "params": {
+            "blue": 255
+          }
+        }
+      ],
+      "id": "a51f7b2a-0e7b-11e7-bfc8-57da167865d7",
+      "length": 4
+    }
+  ]
+}

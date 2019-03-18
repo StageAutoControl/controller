@@ -1,0 +1,84 @@
+{
+  "dmx_presets": [
+    {
+      "deviceParams": [
+        {
+          "device": {
+            "id": "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
+          },
+          "params": [
+            {
+              "red": 255
+            }
+          ]
+        }
+      ],
+      "id": "0de258e0-0e7b-11e7-afd4-ebf6036983dc",
+      "name": "Test-Preset 1"
+    },
+    {
+      "deviceParams": [
+        {
+          "device": {
+            "id": "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
+          },
+          "params": [
+            {
+              "blue": 255
+            }
+          ]
+        }
+      ],
+      "id": "11adf93e-0e7b-11e7-998c-5bd2bd0df396",
+      "name": "Test-Preset 2"
+    },
+    {
+      "deviceParams": [
+        {
+          "device": {
+            "id": "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
+          },
+          "params": [
+            {
+              "green": 255
+            }
+          ]
+        }
+      ],
+      "id": "652e716a-0e7b-11e7-b92a-8f2ff28ba235",
+      "name": "Test-Preset 4"
+    },
+    {
+      "deviceParams": [
+        {
+          "group": {
+            "id": "cb58bc10-0b16-11e7-b45a-7bee591b0adb"
+          },
+          "params": [
+            {
+              "strobe": 255
+            }
+          ]
+        }
+      ],
+      "id": "5d3a415a-0b15-11e7-90b9-03c2b960e034",
+      "name": "Test-Preset 4"
+    },
+    {
+      "deviceParams": [
+        {
+          "group": {
+            "id": "475b71a0-0b16-11e7-9406-e3f678e8b788"
+          },
+          "params": [
+            {
+              "red": 200
+            }
+          ]
+        }
+      ],
+      "id": "4e3c2e84-0b15-11e7-a076-4b5bbb4c19bf",
+      "name": "Test-Preset 5"
+    }
+  ]
+}
