@@ -3,9 +3,7 @@
     {
       "deviceParams": [
         {
-          "device": {
-            "id": "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
-          },
+          "device": "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
           "params": [
             {
               "red": 255
@@ -19,9 +17,7 @@
     {
       "deviceParams": [
         {
-          "device": {
-            "id": "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
-          },
+          "device": "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
           "params": [
             {
               "blue": 255
@@ -35,9 +31,7 @@
     {
       "deviceParams": [
         {
-          "device": {
-            "id": "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
-          },
+          "device": "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
           "params": [
             {
               "green": 255
@@ -51,9 +45,7 @@
     {
       "deviceParams": [
         {
-          "group": {
-            "id": "cb58bc10-0b16-11e7-b45a-7bee591b0adb"
-          },
+          "group": "cb58bc10-0b16-11e7-b45a-7bee591b0adb",
           "params": [
             {
               "strobe": 255
@@ -67,9 +59,7 @@
     {
       "deviceParams": [
         {
-          "group": {
-            "id": "475b71a0-0b16-11e7-9406-e3f678e8b788"
-          },
+          "group": "475b71a0-0b16-11e7-9406-e3f678e8b788",
           "params": [
             {
               "red": 200

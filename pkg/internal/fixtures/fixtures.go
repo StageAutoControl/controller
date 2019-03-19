@@ -24,8 +24,8 @@ var data = &cntl.DataStore{
 		"f5b4be8a-0b18-11e7-b837-4bac99d86956": {
 			ID:   "f5b4be8a-0b18-11e7-b837-4bac99d86956",
 			Name: "Regular gig",
-			Songs: []cntl.SongSelector{
-				{ID: "3c1065c8-0b14-11e7-96eb-5b134621c411"},
+			Songs: []string{
+				"3c1065c8-0b14-11e7-96eb-5b134621c411",
 			},
 		},
 	},
@@ -53,9 +53,7 @@ var data = &cntl.DataStore{
 			Name: "Test-Preset 1",
 			DeviceParams: []cntl.DMXDeviceParams{
 				{
-					Device: &cntl.DMXDeviceSelector{
-						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
-					},
+					Device: StrPtr("35cae00a-0b17-11e7-8bca-bbf30c56f20e"),
 					Params: []cntl.DMXParams{
 						{ColorVar: StrPtr("Red255")},
 					},
@@ -66,9 +64,7 @@ var data = &cntl.DataStore{
 			Name: "Test-Preset 2",
 			DeviceParams: []cntl.DMXDeviceParams{
 				{
-					Device: &cntl.DMXDeviceSelector{
-						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
-					},
+					Device: StrPtr("35cae00a-0b17-11e7-8bca-bbf30c56f20e"),
 					Params: []cntl.DMXParams{
 						{ColorVar: StrPtr("Blue255")},
 					},
@@ -79,9 +75,7 @@ var data = &cntl.DataStore{
 			Name: "Test-Preset 3",
 			DeviceParams: []cntl.DMXDeviceParams{
 				{
-					Device: &cntl.DMXDeviceSelector{
-						ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
-					},
+					Device: StrPtr("35cae00a-0b17-11e7-8bca-bbf30c56f20e"),
 					Params: []cntl.DMXParams{
 						{ColorVar: StrPtr("Green255")},
 					},
@@ -92,9 +86,8 @@ var data = &cntl.DataStore{
 			ID:   "5d3a415a-0b15-11e7-90b9-03c2b960e034",
 			Name: "Test-Preset 4",
 			DeviceParams: []cntl.DMXDeviceParams{
-				{Group: &cntl.DMXDeviceGroupSelector{
-					ID: "cb58bc10-0b16-11e7-b45a-7bee591b0adb",
-				},
+				{
+					Group: StrPtr("cb58bc10-0b16-11e7-b45a-7bee591b0adb"),
 					Params: []cntl.DMXParams{
 						{Strobe: Value255},
 					},
@@ -106,7 +99,7 @@ var data = &cntl.DataStore{
 			Name: "Test-Preset 5",
 			DeviceParams: []cntl.DMXDeviceParams{
 				{
-					Group: &cntl.DMXDeviceGroupSelector{ID: "475b71a0-0b16-11e7-9406-e3f678e8b788"},
+					Group: StrPtr("475b71a0-0b16-11e7-9406-e3f678e8b788"),
 					Params: []cntl.DMXParams{
 						{Red: Value200},
 					},
@@ -122,10 +115,8 @@ var data = &cntl.DataStore{
 			NoteValue: 4,
 			SubScenes: []cntl.DMXSubScene{
 				{
-					At: []uint64{0, 1, 2, 3},
-					Preset: &cntl.PresetSelector{
-						ID: "0de258e0-0e7b-11e7-afd4-ebf6036983dc",
-					},
+					At:     []uint64{0, 1, 2, 3},
+					Preset: StrPtr("0de258e0-0e7b-11e7-afd4-ebf6036983dc"),
 				},
 			},
 		},
@@ -136,10 +127,8 @@ var data = &cntl.DataStore{
 			NoteValue: 4,
 			SubScenes: []cntl.DMXSubScene{
 				{
-					At: []uint64{0, 1},
-					Preset: &cntl.PresetSelector{
-						ID: "11adf93e-0e7b-11e7-998c-5bd2bd0df396",
-					},
+					At:     []uint64{0, 1},
+					Preset: StrPtr("11adf93e-0e7b-11e7-998c-5bd2bd0df396"),
 				},
 			},
 		},
@@ -153,12 +142,8 @@ var data = &cntl.DataStore{
 					At: []uint64{0, 4, 8, 12},
 					DeviceParams: []cntl.DMXDeviceParams{
 						{
-							Device: &cntl.DMXDeviceSelector{
-								ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
-							},
-							Animation: &cntl.AnimationSelector{
-								ID: "a51f7b2a-0e7b-11e7-bfc8-57da167865d7",
-							},
+							Device:    StrPtr("35cae00a-0b17-11e7-8bca-bbf30c56f20e"),
+							Animation: StrPtr("a51f7b2a-0e7b-11e7-bfc8-57da167865d7"),
 						},
 					},
 				},
@@ -171,10 +156,8 @@ var data = &cntl.DataStore{
 			NoteValue: 4,
 			SubScenes: []cntl.DMXSubScene{
 				{
-					At: []uint64{0, 1, 2, 3},
-					Preset: &cntl.PresetSelector{
-						ID: "0de258e0-0e7b-11e7-afd4-ebf6036983dc",
-					},
+					At:     []uint64{0, 1, 2, 3},
+					Preset: StrPtr("0de258e0-0e7b-11e7-afd4-ebf6036983dc"),
 				},
 			},
 		},
@@ -188,12 +171,8 @@ var data = &cntl.DataStore{
 					At: []uint64{0},
 					DeviceParams: []cntl.DMXDeviceParams{
 						{
-							Device: &cntl.DMXDeviceSelector{
-								ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e",
-							},
-							Transition: &cntl.TransitionSelector{
-								ID: "a1a02b6c-12dd-4d7b-bc3e-24cc823adf21",
-							},
+							Device:     StrPtr("35cae00a-0b17-11e7-8bca-bbf30c56f20e"),
+							Transition: StrPtr("a1a02b6c-12dd-4d7b-bc3e-24cc823adf21"),
 						},
 					},
 				},

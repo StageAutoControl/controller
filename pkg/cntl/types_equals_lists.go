@@ -1,6 +1,6 @@
 package cntl
 
-type songSelectorList []SongSelector
+type songSelectorList []string
 
 func (v1 songSelectorList) Equals(v2 songSelectorList) bool {
 	if len(v1) != len(v2) {
@@ -8,7 +8,7 @@ func (v1 songSelectorList) Equals(v2 songSelectorList) bool {
 	}
 
 	for i := range v1 {
-		if !v1[i].Equals(v2[i]) {
+		if v1[i] != v2[i] {
 			return false
 		}
 	}

@@ -1,11 +1,6 @@
 package cntl
 
 // Equals returns whether the two given objects are equal
-func (v1 SongSelector) Equals(v2 SongSelector) bool {
-	return v1.ID == v2.ID
-}
-
-// Equals returns whether the two given objects are equal
 func (v1 *SetList) Equals(v2 *SetList) bool {
 	return v1.ID == v2.ID &&
 		v1.Name == v2.Name &&
@@ -80,11 +75,6 @@ func (v1 LED) Equals(v2 LED) bool {
 func (v1 DMXDeviceSelector) Equals(v2 DMXDeviceSelector) bool {
 	return v1.ID == v2.ID &&
 		tagList(v1.Tags).Equals(tagList(v2.Tags))
-}
-
-// Equals returns whether the two given objects are equal
-func (v1 DMXDeviceGroupSelector) Equals(v2 DMXDeviceGroupSelector) bool {
-	return v1.ID == v2.ID
 }
 
 // Equals returns whether the two given objects are equal

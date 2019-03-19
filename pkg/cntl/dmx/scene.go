@@ -51,9 +51,9 @@ func RenderScene(ds *cntl.DataStore, sc *cntl.DMXScene) ([]cntl.DMXCommands, err
 		}
 
 		if ss.Preset != nil {
-			p, ok := ds.DMXPresets[ss.Preset.ID]
+			p, ok := ds.DMXPresets[*ss.Preset]
 			if !ok {
-				return []cntl.DMXCommands{}, fmt.Errorf("cannot find DMXPreset %q", ss.Preset.ID)
+				return []cntl.DMXCommands{}, fmt.Errorf("cannot find DMXPreset %q", *ss.Preset)
 			}
 
 			pcs, err := RenderPreset(ds, p)

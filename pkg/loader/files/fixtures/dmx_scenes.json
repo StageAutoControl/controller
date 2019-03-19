@@ -13,9 +13,7 @@
             2,
             3
           ],
-          "preset": {
-            "id": "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
-          }
+          "preset": "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
         }
       ]
     },
@@ -30,9 +28,7 @@
             0,
             1
           ],
-          "preset": {
-            "id": "11adf93e-0e7b-11e7-998c-5bd2bd0df396"
-          }
+          "preset": "11adf93e-0e7b-11e7-998c-5bd2bd0df396"
         }
       ]
     },
@@ -55,12 +51,8 @@
           ],
           "deviceParams": [
             {
-              "animation": {
-                "id": "a51f7b2a-0e7b-11e7-bfc8-57da167865d7"
-              },
-              "device": {
-                "id": "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
-              }
+              "animation": "a51f7b2a-0e7b-11e7-bfc8-57da167865d7",
+              "device": "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
             }
           ]
         }
@@ -79,9 +71,7 @@
             2,
             3
           ],
-          "preset": {
-            "id": "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
-          }
+          "preset": "0de258e0-0e7b-11e7-afd4-ebf6036983dc"
         }
       ]
     },
@@ -97,12 +87,8 @@
           ],
           "deviceParams": [
             {
-              "transition": {
-                "id": "a51f7b2a-0e7b-11e7-bfc8-57da167865d7"
-              },
-              "device": {
-                "id": "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
-              }
+              "transition": "a51f7b2a-0e7b-11e7-bfc8-57da167865d7",
+              "device": "35cae00a-0b17-11e7-8bca-bbf30c56f20e"
             }
           ]
         }

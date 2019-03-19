@@ -31,9 +31,9 @@ func NewPlayer(logger logging.Logger, ds *cntl.DataStore, writers []TransportWri
 }
 
 func (p *Player) checkSetList(setList *cntl.SetList) error {
-	for _, songSel := range setList.Songs {
-		if _, ok := p.dataStore.Songs[songSel.ID]; !ok {
-			return fmt.Errorf("cannot find Process %q", songSel.ID)
+	for _, songID := range setList.Songs {
+		if _, ok := p.dataStore.Songs[songID]; !ok {
+			return fmt.Errorf("cannot find Process %q", songID)
 		}
 	}
 
@@ -51,7 +51,7 @@ func (p *Player) PlaySetList(ctx context.Context, setListID string) error {
 		return err
 	}
 
-	for _, songSel := range setList.Songs {
+	for _, songID := range setList.Songs {
 		select {
 		case <-ctx.Done():
 			p.logger.Warn("Aborting")
@@ -59,9 +59,9 @@ func (p *Player) PlaySetList(ctx context.Context, setListID string) error {
 		default:
 		}
 
-		p.logger.Infof("Playing song %s", songSel.ID)
+		p.logger.Infof("Playing song %s", songID)
 
-		if err := p.PlaySong(ctx, songSel.ID); err != nil {
+		if err := p.PlaySong(ctx, songID); err != nil {
 			return err
 		}
 	}

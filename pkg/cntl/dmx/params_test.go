@@ -16,34 +16,34 @@ func TestCheckDeviceParams(t *testing.T) {
 	}{
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:     &cntl.DMXDeviceSelector{ID: "asdf"},
-				Group:      &cntl.DMXDeviceGroupSelector{ID: "asdf2"},
-				Transition: &cntl.TransitionSelector{ID: "anim1"},
-				Animation:  &cntl.AnimationSelector{ID: "anim2"},
+				Device:     fixtures.StrPtr("asdf"),
+				Group:      fixtures.StrPtr("asdf2"),
+				Transition: fixtures.StrPtr("anim1"),
+				Animation:  fixtures.StrPtr("anim2"),
 			},
 			expectedErr: ErrDeviceParamsDevicesInvalid,
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:     &cntl.DMXDeviceSelector{ID: "asdf"},
-				Group:      &cntl.DMXDeviceGroupSelector{ID: "asdf2"},
-				Transition: &cntl.TransitionSelector{ID: "anim1"},
-				Animation:  &cntl.AnimationSelector{ID: "anim2"},
+				Device:     fixtures.StrPtr("asdf"),
+				Group:      fixtures.StrPtr("asdf2"),
+				Transition: fixtures.StrPtr("anim1"),
+				Animation:  fixtures.StrPtr("anim2"),
 			},
 			expectedErr: ErrDeviceParamsDevicesInvalid,
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:     &cntl.DMXDeviceSelector{ID: "asdf"},
-				Transition: &cntl.TransitionSelector{ID: "anim1"},
-				Animation:  &cntl.AnimationSelector{ID: "anim2"},
+				Device:     fixtures.StrPtr("asdf"),
+				Transition: fixtures.StrPtr("anim1"),
+				Animation:  fixtures.StrPtr("anim2"),
 			},
 			expectedErr: ErrDeviceParamsValuesInvalid,
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:     &cntl.DMXDeviceSelector{ID: "asdf"},
-				Transition: &cntl.TransitionSelector{ID: "anim1"},
+				Device:     fixtures.StrPtr("asdf"),
+				Transition: fixtures.StrPtr("anim1"),
 				Params: []cntl.DMXParams{
 					{Blue: fixtures.Value255},
 				},
@@ -52,8 +52,8 @@ func TestCheckDeviceParams(t *testing.T) {
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:    &cntl.DMXDeviceSelector{ID: "asdf"},
-				Animation: &cntl.AnimationSelector{ID: "anim1"},
+				Device:    fixtures.StrPtr("asdf"),
+				Animation: fixtures.StrPtr("anim1"),
 				Params: []cntl.DMXParams{
 					{Blue: fixtures.Value255}},
 			},
@@ -61,7 +61,7 @@ func TestCheckDeviceParams(t *testing.T) {
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device: &cntl.DMXDeviceSelector{ID: "asdf"},
+				Device: fixtures.StrPtr("asdf"),
 				Params: []cntl.DMXParams{
 					{Blue: fixtures.Value255},
 				},
@@ -70,21 +70,21 @@ func TestCheckDeviceParams(t *testing.T) {
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:    &cntl.DMXDeviceSelector{ID: "asdf"},
-				Animation: &cntl.AnimationSelector{ID: "anim1"},
+				Device:    fixtures.StrPtr("asdf"),
+				Animation: fixtures.StrPtr("anim1"),
 			},
 			expectedErr: nil,
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:     &cntl.DMXDeviceSelector{ID: "asdf"},
-				Transition: &cntl.TransitionSelector{ID: "anim1"},
+				Device:     fixtures.StrPtr("asdf"),
+				Transition: fixtures.StrPtr("anim1"),
 			},
 			expectedErr: nil,
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Group: &cntl.DMXDeviceGroupSelector{ID: "asdf"},
+				Group: fixtures.StrPtr("asdf"),
 				Params: []cntl.DMXParams{
 					{Blue: fixtures.Value255},
 				},
@@ -93,15 +93,15 @@ func TestCheckDeviceParams(t *testing.T) {
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Group:     &cntl.DMXDeviceGroupSelector{ID: "asdf"},
-				Animation: &cntl.AnimationSelector{ID: "anim1"},
+				Group:     fixtures.StrPtr("asdf"),
+				Animation: fixtures.StrPtr("anim1"),
 			},
 			expectedErr: nil,
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Group:      &cntl.DMXDeviceGroupSelector{ID: "asdf"},
-				Transition: &cntl.TransitionSelector{ID: "anim1"},
+				Group:      fixtures.StrPtr("asdf"),
+				Transition: fixtures.StrPtr("anim1"),
 			},
 			expectedErr: nil,
 		},
@@ -124,7 +124,7 @@ func TestRenderDeviceParams(t *testing.T) {
 	}{
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device: &cntl.DMXDeviceSelector{ID: "5e0335e0-0b17-11e7-ad6c-63a7138d926c"},
+				Device: fixtures.StrPtr("5e0335e0-0b17-11e7-ad6c-63a7138d926c"),
 				Params: []cntl.DMXParams{
 					{
 						Red:   fixtures.Value255,
@@ -145,7 +145,7 @@ func TestRenderDeviceParams(t *testing.T) {
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Group: &cntl.DMXDeviceGroupSelector{ID: "475b71a0-0b16-11e7-9406-e3f678e8b788"},
+				Group: fixtures.StrPtr("475b71a0-0b16-11e7-9406-e3f678e8b788"),
 				Params: []cntl.DMXParams{
 					{
 						Red:   fixtures.Value255,
@@ -169,7 +169,7 @@ func TestRenderDeviceParams(t *testing.T) {
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Group: &cntl.DMXDeviceGroupSelector{ID: "cb58bc10-0b16-11e7-b45a-7bee591b0adb"},
+				Group: fixtures.StrPtr("cb58bc10-0b16-11e7-b45a-7bee591b0adb"),
 				Params: []cntl.DMXParams{
 					{Mode: fixtures.Value200},
 				},
@@ -183,8 +183,8 @@ func TestRenderDeviceParams(t *testing.T) {
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
-				Device:    &cntl.DMXDeviceSelector{ID: "35cae00a-0b17-11e7-8bca-bbf30c56f20e"},
-				Animation: &cntl.AnimationSelector{ID: "a51f7b2a-0e7b-11e7-bfc8-57da167865d7"},
+				Device:    fixtures.StrPtr("35cae00a-0b17-11e7-8bca-bbf30c56f20e"),
+				Animation: fixtures.StrPtr("a51f7b2a-0e7b-11e7-bfc8-57da167865d7"),
 			},
 			c: []cntl.DMXCommands{
 				{
