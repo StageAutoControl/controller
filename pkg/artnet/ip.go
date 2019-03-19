@@ -13,26 +13,24 @@ const (
 
 // FindArtNetIP finds the matching interface with an IP address inside of the addressRange
 func FindArtNetIP() (net.IP, error) {
-	var ip net.IP
-
 	_, cidrnet, _ := net.ParseCIDR(addressRange)
 
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {
-		return ip, fmt.Errorf("error getting ips: %s", err)
+		return nil, fmt.Errorf("error getting ips: %s", err)
 	}
 
 	for _, addr := range addrs {
-		ip = addr.(*net.IPNet).IP
+		ip := addr.(*net.IPNet).IP
 
 		if strings.Contains(ip.String(), ":") {
 			continue
 		}
 
 		if cidrnet.Contains(ip) {
-			break
+			return ip, nil
 		}
 	}
 
-	return ip, nil
+	return nil, nil
 }
