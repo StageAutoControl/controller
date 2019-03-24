@@ -64,8 +64,7 @@ func (v1 *DMXDeviceType) Equals(v2 *DMXDeviceType) bool {
 
 // Equals returns whether the two given objects are equal
 func (v1 LED) Equals(v2 LED) bool {
-	return v1.Position == v2.Position &&
-		v1.Red == v2.Red &&
+	return v1.Red == v2.Red &&
 		v1.Green == v2.Green &&
 		v1.Blue == v2.Blue &&
 		v1.White == v2.White

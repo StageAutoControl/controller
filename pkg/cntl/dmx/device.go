@@ -16,7 +16,7 @@ func getDeviceChannel(ds *cntl.DataStore, d *cntl.DMXDevice, c cntl.DMXChannel, 
 	// slice of LEDs and apply all values to that?
 
 	ledLen := len(dt.LEDs)
-	if ledLen > 0 && int(led) >= ledLen {
+	if int(led) >= ledLen {
 		return 0, fmt.Errorf("given device has insufficient biggest index of LEDs %d to handle the given LED index %d", ledLen-1, led)
 	}
 
@@ -24,32 +24,16 @@ func getDeviceChannel(ds *cntl.DataStore, d *cntl.DMXDevice, c cntl.DMXChannel, 
 
 	switch c {
 	case ChannelRed:
-		deviceLED := getLED(dt, led)
-		if deviceLED == nil {
-			return 0, fmt.Errorf("failed to find LED %d for device type %s", led, dt.ID)
-		}
-		channel = getLED(dt, led).Red
+		channel = dt.LEDs[led].Red
 
 	case ChannelGreen:
-		deviceLED := getLED(dt, led)
-		if deviceLED == nil {
-			return 0, fmt.Errorf("failed to find LED %d for device type %s", led, dt.ID)
-		}
-		channel = getLED(dt, led).Green
+		channel = dt.LEDs[led].Green
 
 	case ChannelBlue:
-		deviceLED := getLED(dt, led)
-		if deviceLED == nil {
-			return 0, fmt.Errorf("failed to find LED %d for device type %s", led, dt.ID)
-		}
-		channel = getLED(dt, led).Blue
+		channel = dt.LEDs[led].Blue
 
 	case ChannelWhite:
-		deviceLED := getLED(dt, led)
-		if deviceLED == nil {
-			return 0, fmt.Errorf("failed to find LED %d for device type %s", led, dt.ID)
-		}
-		channel = getLED(dt, led).White
+		channel = dt.LEDs[led].White
 
 	case ChannelStrobe:
 		if !dt.StrobeEnabled {
@@ -86,16 +70,6 @@ func getDeviceChannel(ds *cntl.DataStore, d *cntl.DMXDevice, c cntl.DMXChannel, 
 	}
 
 	return d.StartChannel + channel, nil
-}
-
-func getLED(dt *cntl.DMXDeviceType, led uint16) *cntl.LED {
-	for _, l := range dt.LEDs {
-		if l.Position == led {
-			return &l
-		}
-	}
-
-	return nil
 }
 
 // ResolveDeviceSelector returns all DMXDevices that match the given selector

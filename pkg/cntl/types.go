@@ -65,11 +65,10 @@ type DMXDeviceType struct {
 
 // LED maps a single LEDs DMX channels
 type LED struct {
-	Position uint16     `json:"position" yaml:"position"`
-	Red      DMXChannel `json:"red" yaml:"red"`
-	Green    DMXChannel `json:"green" yaml:"green"`
-	Blue     DMXChannel `json:"blue" yaml:"blue"`
-	White    DMXChannel `json:"white" yaml:"white"`
+	Red   DMXChannel `json:"red" yaml:"red"`
+	Green DMXChannel `json:"green" yaml:"green"`
+	Blue  DMXChannel `json:"blue" yaml:"blue"`
+	White DMXChannel `json:"white" yaml:"white"`
 }
 
 // DMXDeviceSelector is a selector for DMX devices
