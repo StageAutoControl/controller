@@ -2,7 +2,6 @@ package song
 
 import (
 	"errors"
-	"log"
 	"reflect"
 
 	"github.com/StageAutoControl/controller/pkg/cntl"
@@ -49,15 +48,7 @@ func maxKey(search interface{}) uint64 {
 	return biggest
 }
 
-func makeCommand() cntl.Command {
-	return cntl.Command{
-		MIDICommands: make([]cntl.MIDICommand, 0),
-		DMXCommands:  make([]cntl.DMXCommand, 0),
-	}
-}
-
 func makeCommandArray(length uint64) []cntl.Command {
-	log.Print(length)
 	cmds := make([]cntl.Command, length)
 
 	for i := range cmds {
@@ -67,13 +58,25 @@ func makeCommandArray(length uint64) []cntl.Command {
 	return cmds
 }
 
-func streamlineBarChanges(s *cntl.Song) map[uint64]cntl.BarChange {
+// StreamlineBarChanges fills the bar changes of the given song into a map indexed by the frame the BC is at
+func StreamlineBarChanges(s *cntl.Song) map[uint64]cntl.BarChange {
 	bcs := make(map[uint64]cntl.BarChange)
 	for _, bc := range s.BarChanges {
 		bcs[bc.At] = bc
 	}
 
 	return bcs
+}
+
+// Validate the given streamlined map of BarChanges
+func ValidateBarChanges(bc map[uint64]cntl.BarChange) error {
+	if _, ok := bc[0]; !ok {
+		return ErrSongMustHaveABarChangeAtFrame0
+	}
+
+	// @TODO Add validation of bar change distance, so that one can't add a BC if the previous bar isn't finished yet
+
+	return nil
 }
 
 // CalcBarLength calculates the length of a bar by given BarChange

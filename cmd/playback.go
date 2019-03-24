@@ -32,7 +32,7 @@ var (
 	usedTransports []string
 
 	viualizerEndpoint string
-	midiDeviceID      string
+	midiDeviceID      int8
 
 	waiterTypes = []string{
 		waiter.TypeNone,
@@ -158,7 +158,7 @@ func init() {
 
 	playbackCmd.Flags().StringSliceVarP(&usedTransports, "transport", "t", []string{}, fmt.Sprintf("Which usedTransports to use from %s.", transportTypes))
 	playbackCmd.Flags().StringVar(&viualizerEndpoint, "visualizer-endpoint", "localhost:1337", "Endpoint of the visualizer backend if visualizer transport is chosen.")
-	playbackCmd.Flags().StringVarP(&midiDeviceID, "midi-device-id", "m", "", "DeviceID of MIDI output to use (On empty string the default device is used)")
+	playbackCmd.Flags().Int8VarP(&midiDeviceID, "midi-device-id", "m", -1, "DeviceID of MIDI output to use (On empty string the default device is used)")
 	playbackCmd.Flags().StringSliceVarP(&usedWaiters, "wait-for", "w", []string{waiter.TypeNone}, fmt.Sprintf("Wait for a specific signal before playing a song (required to be used on stage, otherwise the next song would start immediately), one of %s", waiterTypes))
 	playbackCmd.Flags().Float32Var(&audioWaiterThreshold, "audio-waiter-threshold", 0.9, "Threshold frequency for audio waiter to trigger a signal")
 }

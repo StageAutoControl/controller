@@ -2,8 +2,6 @@ package transport
 
 import (
 	"errors"
-	"fmt"
-	"strconv"
 
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	"github.com/StageAutoControl/controller/pkg/internal/logging"
@@ -20,20 +18,16 @@ type MIDI struct {
 }
 
 // NewMIDI creates a new MIDI transport
-func NewMIDI(logger logging.Logger, deviceID string) (*MIDI, error) {
+func NewMIDI(logger logging.Logger, deviceID int8) (*MIDI, error) {
 	if err := portmidi.Initialize(); err != nil {
 		return nil, err
 	}
 
 	var d portmidi.DeviceID
-	if deviceID == "" {
+	if deviceID < 0 {
 		d = portmidi.DefaultOutputDeviceID()
 	} else {
-		i, err := strconv.Atoi(deviceID)
-		if err != nil {
-			return nil, fmt.Errorf("failed to transform deviceID %q to int: %v", deviceID, err)
-		}
-		d = portmidi.DeviceID(i)
+		d = portmidi.DeviceID(deviceID)
 	}
 
 	info := portmidi.Info(d)

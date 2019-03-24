@@ -13,15 +13,19 @@ import (
 func Render(ds *cntl.DataStore, songID string) ([]cntl.Command, error) {
 	s, ok := ds.Songs[songID]
 	if !ok {
-		return []cntl.Command{}, fmt.Errorf("cannot find Song %q", songID)
+		return nil, fmt.Errorf("cannot find Song %q", songID)
 	}
 
 	scs, err := dmx.StreamlineScenes(ds, s)
 	if err != nil {
-		return []cntl.Command{}, err
+		return nil, err
 	}
 
-	bcs := streamlineBarChanges(s)
+	bcs := StreamlineBarChanges(s)
+	if err := ValidateBarChanges(bcs); err != nil {
+		return nil, fmt.Errorf("failed to validate bar changes: %v", err)
+	}
+
 	mcs := midi.StreamlineMidiCommands(s)
 
 	fb := &frameBrain{}
@@ -44,7 +48,7 @@ func Render(ds *cntl.DataStore, songID string) ([]cntl.Command, error) {
 			for _, sc := range scs {
 				dcs, err := dmx.RenderScene(ds, sc)
 				if err != nil {
-					return []cntl.Command{}, err
+					return nil, err
 				}
 
 				for j, dc := range dcs {

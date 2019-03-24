@@ -32,6 +32,9 @@ var serverCmd = &cobra.Command{
 		loader := disk.NewLoader(storage)
 
 		if !disableController {
+			if err := playback.EnsureDefaultConfig(storage); err != nil {
+				logger.Fatal(err)
+			}
 			if err := pm.AddProcess(playback.ProcessName, playback.NewProcess(loader, storage, controller), true); err != nil {
 				logger.Fatal(err)
 			}

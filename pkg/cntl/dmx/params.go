@@ -46,6 +46,7 @@ func RenderDeviceParams(ds *cntl.DataStore, dp *cntl.DMXDeviceParams) ([]cntl.DM
 
 	var dd []*cntl.DMXDevice
 	if dp.Group != nil {
+
 		g, ok := ds.DMXDeviceGroups[*dp.Group]
 		if !ok {
 			return []cntl.DMXCommands{}, fmt.Errorf("failed to find DMXDeviceGroup %q", *dp.Group)

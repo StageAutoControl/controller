@@ -16,7 +16,7 @@ type processInfo struct {
 type manager struct {
 	ctx       context.Context
 	logger    logging.Logger
-	processes map[string]processInfo
+	processes map[string]*processInfo
 }
 
 // NewManager returns a new process manager instance
@@ -24,7 +24,7 @@ func NewManager(ctx context.Context, logger logging.Logger) Manager {
 	m := &manager{
 		ctx:       ctx,
 		logger:    logger,
-		processes: make(map[string]processInfo),
+		processes: make(map[string]*processInfo),
 	}
 
 	go m.listenExit()
@@ -35,8 +35,12 @@ func NewManager(ctx context.Context, logger logging.Logger) Manager {
 func (m *manager) listenExit() {
 	<-m.ctx.Done()
 	for name := range m.processes {
-		if _, err := m.Stop(name); err != nil {
+		if p, _, err := m.GetProcess(name); err != nil {
+			m.logger.Errorf("failed to find process %q while shutting down: %v", name, err)
+
+		} else if err := p.Stop(); err != nil {
 			m.logger.Errorf("failed to stop process %q: %v", name, err)
+
 		}
 	}
 }
@@ -46,7 +50,7 @@ func (m *manager) AddProcess(name string, process Process, verbose bool) error {
 		return errProcessAlreadyExists
 	}
 
-	m.processes[name] = processInfo{
+	m.processes[name] = &processInfo{
 		process: process,
 		status: Status{
 			Name:    name,
@@ -86,10 +90,13 @@ func (m *manager) Start(name string) (*Status, error) {
 	logger := NewBufferedLogger(&info.status.Logs, info.status.Verbose)
 	info.process.SetLogger(logger)
 
-	if err := info.process.Start(m.ctx); err != nil {
-		info.status.Error = err
-		return m.Stop(name)
-	}
+	go func() {
+		if err := info.process.Start(m.ctx); err != nil {
+			info.status.Error = err
+			info.status.Running = false
+			m.logger.Warnf("failed to start process %s: %v", name, err)
+		}
+	}()
 
 	return &info.status, nil
 }

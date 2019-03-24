@@ -37,7 +37,7 @@ func TestStreamlineBarChanges(t *testing.T) {
 	}
 
 	for i, e := range exp {
-		res := streamlineBarChanges(e.s)
+		res := StreamlineBarChanges(e.s)
 
 		for k, v := range e.m {
 			resv, ok := res[k]

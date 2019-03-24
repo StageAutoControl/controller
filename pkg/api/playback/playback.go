@@ -8,7 +8,6 @@ import (
 	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/cntl/playback"
 	"github.com/StageAutoControl/controller/pkg/process"
-	"github.com/jinzhu/copier"
 )
 
 var (
@@ -27,13 +26,13 @@ func NewController(pm process.Manager) *Controller {
 	}
 }
 
-// StartRequest starts the Playback of a Song or SetList
-type StartRequest struct {
-	playback.Params
+type Status struct {
+	Process process.Status  `json:"process"`
+	Params  playback.Params `json:"params"`
 }
 
 // Start a playback with either a song or a setlist
-func (c *Controller) Start(r *http.Request, req *StartRequest, res *process.Status) error {
+func (c *Controller) Start(r *http.Request, req *playback.Params, res *Status) error {
 	if (req.Song.ID != "" && req.SetList.ID != "") || (req.Song.ID == "" && req.SetList.ID == "") {
 		return errSongSetListNeedToBeDistinct
 	}
@@ -42,25 +41,38 @@ func (c *Controller) Start(r *http.Request, req *StartRequest, res *process.Stat
 	if err != nil {
 		return fmt.Errorf("failed to fetch playback process: %v", err)
 	}
-	p.(*playback.Process).SetParams(req.Params)
+	p.(*playback.Process).SetParams(*req)
 
-	if s, err := c.pm.Start(playback.ProcessName); err != nil {
+	s, err := c.pm.Start(playback.ProcessName)
+	if err != nil {
 		return fmt.Errorf("failed to start playback: %v", err)
-
-	} else if err := copier.Copy(res, s); err != nil {
-		return fmt.Errorf("failed to write response body: %v", err)
 	}
+
+	res.Process = *s
+	res.Params = *req
 
 	return nil
 }
 
 // Stop a playback
-func (c *Controller) Stop(r *http.Request, req *api.IDBody, res *process.Status) error {
+func (c *Controller) Stop(r *http.Request, req *api.IDBody, res *Status) error {
 	_, err := c.pm.Stop(playback.ProcessName)
+	if err != nil {
+		return fmt.Errorf("failed to stop playback: %v", err)
+	}
+
 	return err
 }
 
 // Status returns the current status of a playback
-func (c *Controller) Status(r *http.Request, req *api.IDBody, res *process.Status) error {
+func (c *Controller) Status(r *http.Request, req *api.IDBody, res *Status) error {
+	p, s, err := c.pm.GetProcess(playback.ProcessName)
+	if err != nil {
+		return fmt.Errorf("failed to get playback status: %v", err)
+	}
+
+	res.Process = *s
+	res.Params = p.(*playback.Process).GetParams()
+
 	return nil
 }

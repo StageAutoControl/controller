@@ -9,7 +9,7 @@ import (
 func getDeviceChannel(ds *cntl.DataStore, d *cntl.DMXDevice, c cntl.DMXChannel, led uint16) (cntl.DMXChannel, error) {
 	dt, ok := ds.DMXDeviceTypes[d.TypeID]
 	if !ok {
-		return cntl.DMXChannel(0), fmt.Errorf("given DeviceType %q on device %q is unknown", d.TypeID, d.ID)
+		return 0, fmt.Errorf("given DeviceType %q on device %q is unknown", d.TypeID, d.ID)
 	}
 	// can a param affect multiple LEDs?
 	// Should I switch the scheme of params to have an
@@ -17,56 +17,72 @@ func getDeviceChannel(ds *cntl.DataStore, d *cntl.DMXDevice, c cntl.DMXChannel, 
 
 	ledLen := len(dt.LEDs)
 	if ledLen > 0 && int(led) >= ledLen {
-		return cntl.DMXChannel(0), fmt.Errorf("given device has insufficient biggest index of LEDs %d to handle the given LED index %d", ledLen-1, led)
+		return 0, fmt.Errorf("given device has insufficient biggest index of LEDs %d to handle the given LED index %d", ledLen-1, led)
 	}
 
 	var channel cntl.DMXChannel
 
 	switch c {
 	case ChannelRed:
+		deviceLED := getLED(dt, led)
+		if deviceLED == nil {
+			return 0, fmt.Errorf("failed to find LED %d for device type %s", led, dt.ID)
+		}
 		channel = getLED(dt, led).Red
 
 	case ChannelGreen:
+		deviceLED := getLED(dt, led)
+		if deviceLED == nil {
+			return 0, fmt.Errorf("failed to find LED %d for device type %s", led, dt.ID)
+		}
 		channel = getLED(dt, led).Green
 
 	case ChannelBlue:
+		deviceLED := getLED(dt, led)
+		if deviceLED == nil {
+			return 0, fmt.Errorf("failed to find LED %d for device type %s", led, dt.ID)
+		}
 		channel = getLED(dt, led).Blue
 
 	case ChannelWhite:
+		deviceLED := getLED(dt, led)
+		if deviceLED == nil {
+			return 0, fmt.Errorf("failed to find LED %d for device type %s", led, dt.ID)
+		}
 		channel = getLED(dt, led).White
 
 	case ChannelStrobe:
 		if !dt.StrobeEnabled {
-			return cntl.DMXChannel(0), ErrDeviceHasDisabledStrobeChannel
+			return 0, ErrDeviceHasDisabledStrobeChannel
 		}
 		channel = dt.StrobeChannel
 
 	case ChannelMode:
 		if !dt.ModeEnabled {
-			return cntl.DMXChannel(0), ErrDeviceHasDisabledModeChannel
+			return 0, ErrDeviceHasDisabledModeChannel
 		}
 		channel = dt.ModeChannel
 
 	case ChannelDimmer:
 		if !dt.DimmerEnabled {
-			return cntl.DMXChannel(0), ErrDeviceHasDisabledDimmerChannel
+			return 0, ErrDeviceHasDisabledDimmerChannel
 		}
 		channel = dt.DimmerChannel
 
 	case ChannelTilt:
 		if !dt.Moving {
-			return cntl.DMXChannel(0), ErrDeviceIsNotMoving
+			return 0, ErrDeviceIsNotMoving
 		}
 		channel = dt.TiltChannel
 
 	case ChannelPan:
 		if !dt.Moving {
-			return cntl.DMXChannel(0), ErrDeviceIsNotMoving
+			return 0, ErrDeviceIsNotMoving
 		}
 		channel = dt.PanChannel
 
 	default:
-		return cntl.DMXChannel(0), fmt.Errorf("channel %q is unknown", c)
+		return 0, fmt.Errorf("channel %q is unknown", c)
 	}
 
 	return d.StartChannel + channel, nil

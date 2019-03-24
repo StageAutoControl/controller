@@ -67,6 +67,10 @@ func (s *Storage) Read(key string, value interface{}) error {
 
 	b, err := s.disk.Read(fileName)
 	if err != nil {
+		if os.IsNotExist(err) {
+			return ErrNotExists
+		}
+
 		return fmt.Errorf("failed to read value of type %s from disk: %v", s.getType(value), err)
 	}
 

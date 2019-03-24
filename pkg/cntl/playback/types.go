@@ -27,11 +27,11 @@ type loader interface {
 // Params specifies how to run a playback
 type Params struct {
 	Song struct {
-		ID string
-	}
+		ID string `json:"id"`
+	} `json:"song"`
 	SetList struct {
-		ID string
-	}
+		ID string `json:"id"`
+	} `json:"setList"`
 }
 
 type parsedConfig struct {
@@ -43,17 +43,17 @@ type parsedConfig struct {
 type Config struct {
 	Waiters struct {
 		Audio struct {
-			Enabled   bool
-			Threshold float32
-		}
-	}
+			Enabled   bool    `json:"enabled"`
+			Threshold float32 `json:"threshold"`
+		} `json:"audio"`
+	} `json:"waiters"`
 	TransportWriters struct {
 		ArtNet struct {
-			Enabled bool
-		}
+			Enabled bool `json:"enabled"`
+		} `json:"artNet"`
 		MIDI struct {
-			Enabled        bool
-			OutputDeviceID string
-		}
-	}
+			Enabled        bool `json:"enabled"`
+			OutputDeviceID int8 `json:"outputDeviceId"`
+		} `json:"midi"`
+	} `json:"transportWriters"`
 }

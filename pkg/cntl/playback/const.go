@@ -4,7 +4,8 @@ import "errors"
 
 // Player errors
 var (
-	ErrCancelled = errors.New("playback cancelled")
+	ErrCancelled                = errors.New("playback cancelled")
+	ErrNoSongIDOrSetListIDGiven = errors.New("no songID or setListID given")
 )
 
 const (
@@ -12,3 +13,22 @@ const (
 	ProcessName      = "playback"
 	paramsStorageKey = "playback_process"
 )
+
+var defaultConfig = `
+{
+  "waiters": {
+    "audio": {
+      "enabled": true
+    }
+  },
+  "transportWriters": {
+    "artNet": {
+      "enabled": true
+    },
+    "midi": {
+      "enabled": false,
+      "outputDeviceId": 0
+    }
+  }
+}
+`

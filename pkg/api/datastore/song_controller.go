@@ -1,11 +1,13 @@
 package datastore
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/cntl"
+	"github.com/StageAutoControl/controller/pkg/cntl/song"
 	"github.com/jinzhu/copier"
 	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
@@ -25,6 +27,22 @@ func NewSongController(logger *logrus.Entry, storage api.Storage) *SongControlle
 	}
 }
 
+func (c *SongController) validate(entity *cntl.Song) error {
+	if entity.MIDICommands == nil {
+		entity.MIDICommands = make([]cntl.MIDICommand, 0)
+	}
+
+	if entity.BarChanges == nil {
+		return errors.New("song needs to have at least one BarChange")
+	}
+
+	if err := song.ValidateBarChanges(song.StreamlineBarChanges(entity)); err != nil {
+		return fmt.Errorf("failed to validate bar changes: %v", err)
+	}
+
+	return nil
+}
+
 // Create a new Song
 func (c *SongController) Create(r *http.Request, entity *cntl.Song, reply *cntl.Song) error {
 	if entity.ID == "" {
@@ -33,6 +51,10 @@ func (c *SongController) Create(r *http.Request, entity *cntl.Song, reply *cntl.
 
 	if c.storage.Has(entity.ID, entity) {
 		return api.ErrExists
+	}
+
+	if err := c.validate(entity); err != nil {
+		return fmt.Errorf("failed to validate entity: %v", err)
 	}
 
 	if err := c.storage.Write(entity.ID, entity); err != nil {
@@ -46,6 +68,10 @@ func (c *SongController) Create(r *http.Request, entity *cntl.Song, reply *cntl.
 func (c *SongController) Update(r *http.Request, entity *cntl.Song, reply *cntl.Song) error {
 	if !c.storage.Has(entity.ID, entity) {
 		return api.ErrNotExists
+	}
+
+	if err := c.validate(entity); err != nil {
+		return fmt.Errorf("failed to validate entity: %v", err)
 	}
 
 	if err := c.storage.Write(entity.ID, entity); err != nil {

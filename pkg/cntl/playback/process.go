@@ -36,6 +36,11 @@ func (p *Process) SetParams(params Params) {
 	p.params = params
 }
 
+// GetParams returns the params the process is currently running with
+func (p *Process) GetParams() Params {
+	return p.params
+}
+
 // SetLogger sets the logger for the process
 func (p *Process) SetLogger(logger logging.Logger) {
 	p.logger = logger
@@ -65,6 +70,8 @@ func (p *Process) Start(ctx context.Context) error {
 		if err := p.player.PlaySong(ctx, p.params.Song.ID); err != nil {
 			return fmt.Errorf("failed to start song playback: %v", err)
 		}
+	} else {
+		return ErrNoSongIDOrSetListIDGiven
 	}
 
 	return nil
@@ -114,7 +121,9 @@ func (p *Process) parseConfig(config *Config) (*parsedConfig, error) {
 
 // Stop the process, i.e. cancel the playback context
 func (p *Process) Stop() error {
-	p.cancel()
+	if p.cancel != nil {
+		p.cancel()
+	}
 	p.player = nil
 	p.ctx = nil
 

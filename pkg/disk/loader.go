@@ -18,8 +18,8 @@ func NewLoader(storage *Storage) *Loader {
 func (l *Loader) Load() (*cntl.DataStore, error) {
 	data := cntl.NewStore()
 
-	setList := &cntl.SetList{}
-	for _, id := range l.storage.List(setList) {
+	for _, id := range l.storage.List(&cntl.SetList{}) {
+		setList := &cntl.SetList{}
 		err := l.storage.Read(id, setList)
 		if err != nil {
 			return nil, err
@@ -28,8 +28,8 @@ func (l *Loader) Load() (*cntl.DataStore, error) {
 		data.SetLists[id] = setList
 	}
 
-	song := &cntl.Song{}
-	for _, id := range l.storage.List(song) {
+	for _, id := range l.storage.List(&cntl.Song{}) {
+		song := &cntl.Song{}
 		err := l.storage.Read(id, song)
 		if err != nil {
 			return nil, err
@@ -38,8 +38,8 @@ func (l *Loader) Load() (*cntl.DataStore, error) {
 		data.Songs[id] = song
 	}
 
-	dmxDevice := &cntl.DMXDevice{}
-	for _, id := range l.storage.List(dmxDevice) {
+	for _, id := range l.storage.List(&cntl.DMXDevice{}) {
+		dmxDevice := &cntl.DMXDevice{}
 		err := l.storage.Read(id, dmxDevice)
 		if err != nil {
 			return nil, err
@@ -48,8 +48,8 @@ func (l *Loader) Load() (*cntl.DataStore, error) {
 		data.DMXDevices[id] = dmxDevice
 	}
 
-	dmxDeviceGroup := &cntl.DMXDeviceGroup{}
-	for _, id := range l.storage.List(dmxDeviceGroup) {
+	for _, id := range l.storage.List(&cntl.DMXDeviceGroup{}) {
+		dmxDeviceGroup := &cntl.DMXDeviceGroup{}
 		err := l.storage.Read(id, dmxDeviceGroup)
 		if err != nil {
 			return nil, err
@@ -58,8 +58,8 @@ func (l *Loader) Load() (*cntl.DataStore, error) {
 		data.DMXDeviceGroups[id] = dmxDeviceGroup
 	}
 
-	dmxDeviceType := &cntl.DMXDeviceType{}
-	for _, id := range l.storage.List(dmxDeviceType) {
+	for _, id := range l.storage.List(&cntl.DMXDeviceType{}) {
+		dmxDeviceType := &cntl.DMXDeviceType{}
 		err := l.storage.Read(id, dmxDeviceType)
 		if err != nil {
 			return nil, err
@@ -68,8 +68,8 @@ func (l *Loader) Load() (*cntl.DataStore, error) {
 		data.DMXDeviceTypes[id] = dmxDeviceType
 	}
 
-	dmxPreset := &cntl.DMXPreset{}
-	for _, id := range l.storage.List(dmxPreset) {
+	for _, id := range l.storage.List(&cntl.DMXPreset{}) {
+		dmxPreset := &cntl.DMXPreset{}
 		err := l.storage.Read(id, dmxPreset)
 		if err != nil {
 			return nil, err
@@ -78,8 +78,8 @@ func (l *Loader) Load() (*cntl.DataStore, error) {
 		data.DMXPresets[id] = dmxPreset
 	}
 
-	dmxScene := &cntl.DMXScene{}
-	for _, id := range l.storage.List(dmxScene) {
+	for _, id := range l.storage.List(&cntl.DMXScene{}) {
+		dmxScene := &cntl.DMXScene{}
 		err := l.storage.Read(id, dmxScene)
 		if err != nil {
 			return nil, err
@@ -88,8 +88,8 @@ func (l *Loader) Load() (*cntl.DataStore, error) {
 		data.DMXScenes[id] = dmxScene
 	}
 
-	dmxAnimation := &cntl.DMXAnimation{}
-	for _, id := range l.storage.List(dmxAnimation) {
+	for _, id := range l.storage.List(&cntl.DMXAnimation{}) {
+		dmxAnimation := &cntl.DMXAnimation{}
 		err := l.storage.Read(id, dmxAnimation)
 		if err != nil {
 			return nil, err
@@ -98,14 +98,24 @@ func (l *Loader) Load() (*cntl.DataStore, error) {
 		data.DMXAnimations[id] = dmxAnimation
 	}
 
-	dmxTransition := &cntl.DMXTransition{}
-	for _, id := range l.storage.List(dmxTransition) {
+	for _, id := range l.storage.List(&cntl.DMXTransition{}) {
+		dmxTransition := &cntl.DMXTransition{}
 		err := l.storage.Read(id, dmxTransition)
 		if err != nil {
 			return nil, err
 		}
 
 		data.DMXTransitions[id] = dmxTransition
+	}
+
+	for _, id := range l.storage.List(&cntl.DMXColorVariable{}) {
+		dmxColorVariable := &cntl.DMXColorVariable{}
+		err := l.storage.Read(id, dmxColorVariable)
+		if err != nil {
+			return nil, err
+		}
+
+		data.DMXColorVariables[id] = dmxColorVariable
 	}
 
 	return data, nil
