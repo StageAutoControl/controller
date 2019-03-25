@@ -113,12 +113,13 @@ func (p *Player) PlaySong(ctx context.Context, songID string) error {
 	t := time.NewTicker(1 * time.Nanosecond)
 
 	p.logger.Infof("Playing song %s", songID)
+	done := ctx.Done()
 
 	var i int
 	var cmd cntl.Command
 	for {
 		select {
-		case <-ctx.Done():
+		case <-done:
 			return ErrCancelled
 
 		case <-t.C:

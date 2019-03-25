@@ -18,7 +18,6 @@ type Process struct {
 	params     Params
 	controller artnet.Controller
 	player     *Player
-	ctx        context.Context
 	cancel     context.CancelFunc
 }
 
@@ -60,14 +59,14 @@ func (p *Process) Start(ctx context.Context) error {
 
 	cfg, err := p.parseConfig(config)
 	p.player = NewPlayer(p.logger, ds, cfg.writers, cfg.waiters)
-	p.ctx, p.cancel = context.WithCancel(ctx)
+	ctx, p.cancel = context.WithCancel(ctx)
 
 	if p.params.SetList.ID != "" {
-		if err := p.player.PlaySetList(ctx, p.params.SetList.ID); err != nil {
+		if err := p.player.PlaySetList(ctx, p.params.SetList.ID); err != nil && err != ErrCancelled {
 			return fmt.Errorf("failed to start setlist playbaack: %v", err)
 		}
 	} else if p.params.Song.ID != "" {
-		if err := p.player.PlaySong(ctx, p.params.Song.ID); err != nil {
+		if err := p.player.PlaySong(ctx, p.params.Song.ID); err != nil && err != ErrCancelled {
 			return fmt.Errorf("failed to start song playback: %v", err)
 		}
 	} else {
@@ -125,7 +124,6 @@ func (p *Process) Stop() error {
 		p.cancel()
 	}
 	p.player = nil
-	p.ctx = nil
 
 	return nil
 }
