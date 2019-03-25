@@ -27,8 +27,7 @@ func (v1 *Song) Equals(v2 *Song) bool {
 	return v1.ID == v2.ID &&
 		v1.Name == v2.Name &&
 		barChangeList(v1.BarChanges).Equals(barChangeList(v2.BarChanges)) &&
-		scenePositionList(v1.DMXScenes).Equals(scenePositionList(v2.DMXScenes)) &&
-		dmxDeviceParamsList(v1.DMXDeviceParams).Equals(dmxDeviceParamsList(v2.DMXDeviceParams))
+		scenePositionList(v1.DMXScenes).Equals(scenePositionList(v2.DMXScenes))
 }
 
 // Equals returns whether the two given objects are equal

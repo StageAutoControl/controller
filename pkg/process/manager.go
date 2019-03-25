@@ -83,8 +83,8 @@ func (m *manager) Start(name string) (*Status, error) {
 
 	info.status.Running = true
 	info.status.Error = nil
-	info.status.StartedAt = JSONTime{Time: time.Now()}
-	info.status.StoppedAt = JSONTime{}
+	info.status.StartedAt = &JSONTime{Time: time.Now()}
+	info.status.StoppedAt = nil
 	info.status.Logs = make([]Log, 0)
 
 	logger := NewBufferedLogger(&info.status.Logs, info.status.Verbose)
@@ -94,7 +94,7 @@ func (m *manager) Start(name string) (*Status, error) {
 		if err := info.process.Start(m.ctx); err != nil {
 			info.status.Error = err
 			info.status.Running = false
-			m.logger.Warnf("failed to start process %s: %v", name, err)
+			m.logger.Errorf("failed to start process %s: %v", name, err)
 		}
 	}()
 
@@ -117,7 +117,7 @@ func (m *manager) Stop(name string) (*Status, error) {
 	}
 
 	p.status.Running = false
-	p.status.StoppedAt = JSONTime{Time: time.Now()}
+	p.status.StoppedAt = &JSONTime{Time: time.Now()}
 
 	return &p.status, nil
 }

@@ -8,13 +8,13 @@ import (
 
 // Status of a process as handled by the manager
 type Status struct {
-	Name      string   `json:"name"`
-	Running   bool     `json:"running"`
-	StartedAt JSONTime `json:"startedAt"`
-	StoppedAt JSONTime `json:"stoppedAt"`
-	Error     error    `json:"error"`
-	Logs      []Log    `json:"logs"`
-	Verbose   bool     `json:"verbose"`
+	Name      string    `json:"name"`
+	Running   bool      `json:"running"`
+	StartedAt *JSONTime `json:"startedAt"`
+	StoppedAt *JSONTime `json:"stoppedAt"`
+	Error     error     `json:"error"`
+	Logs      []Log     `json:"logs"`
+	Verbose   bool      `json:"verbose"`
 }
 
 // Log represents a log line printed by the process

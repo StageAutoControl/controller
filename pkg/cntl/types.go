@@ -24,12 +24,11 @@ type DMXScenePosition struct {
 
 // Song is the whole container for everything that needs to be controlled during a song.
 type Song struct {
-	ID              string             `json:"id" yaml:"id"`
-	Name            string             `json:"name" yaml:"name"`
-	BarChanges      []BarChange        `json:"barChanges" yaml:"barChanges"`
-	DMXScenes       []DMXScenePosition `json:"dmxScenes" yaml:"dmxScenes"`
-	DMXDeviceParams []DMXDeviceParams  `json:"dmxDeviceParams" yaml:"dmxDeviceParams"`
-	MIDICommands    []MIDICommand      `json:"midiCommands" yaml:"midiCommands"`
+	ID           string             `json:"id" yaml:"id"`
+	Name         string             `json:"name" yaml:"name"`
+	BarChanges   []BarChange        `json:"barChanges" yaml:"barChanges"`
+	DMXScenes    []DMXScenePosition `json:"dmxScenes" yaml:"dmxScenes"`
+	MIDICommands []MIDICommand      `json:"midiCommands" yaml:"midiCommands"`
 }
 
 // Tag is a string literal tagging a DMX device

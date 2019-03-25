@@ -20,15 +20,3 @@ func (t JSONTime) MarshalJSON() ([]byte, error) {
 	date := fmt.Sprintf("%q", t.String())
 	return []byte(date), nil
 }
-
-func datesAreEqual(t1 *JSONTime, t2 *JSONTime) bool {
-	if (t1 == nil && t2 != nil) || (t1 != nil && t2 == nil) {
-		return false
-	}
-
-	if t1 == nil && t2 == nil {
-		return true
-	}
-
-	return (*t1).Equal(t2.Time)
-}
