@@ -4,6 +4,7 @@ package main
 
 import (
 	"github.com/StageAutoControl/controller/cmd"
+	_ "github.com/StageAutoControl/controller/cmd/audio"
 	_ "github.com/StageAutoControl/controller/cmd/midi"
 )
 
