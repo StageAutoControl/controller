@@ -18,7 +18,8 @@ var defaultConfig = `
 {
   "waiters": {
     "audio": {
-      "enabled": true
+      "enabled": true,
+			"threshold": 0.8
     }
   },
   "transportWriters": {

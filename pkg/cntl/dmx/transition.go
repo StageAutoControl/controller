@@ -35,6 +35,14 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 		return []cntl.DMXCommands{}, err
 	}
 
+	if err := resolveColorVar(ds, &p.From); err != nil {
+		return []cntl.DMXCommands{}, err
+	}
+
+	if err := resolveColorVar(ds, &p.To); err != nil {
+		return []cntl.DMXCommands{}, err
+	}
+
 	if p.From.Red != nil && p.To.Red != nil && p.From.Red.Value != p.To.Red.Value {
 		steps, err := calcTransitionSteps(p.From.Red.Value, p.To.Red.Value, t.Length, ease)
 		if err != nil {
