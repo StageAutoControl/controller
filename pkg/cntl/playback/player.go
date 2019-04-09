@@ -99,7 +99,7 @@ func (p *Player) wait(ctx context.Context) error {
 
 // PlaySong plays a full song
 func (p *Player) PlaySong(ctx context.Context, songID string) error {
-	cmds, err := song.Render(p.dataStore, songID)
+	commands, err := song.Render(p.dataStore, songID)
 	if err != nil {
 		return err
 	}
@@ -109,10 +109,19 @@ func (p *Player) PlaySong(ctx context.Context, songID string) error {
 		return err
 	}
 
-	l := len(cmds)
-	t := time.NewTicker(1 * time.Nanosecond)
-
 	p.logger.Infof("Playing song %s", songID)
+	return Play(ctx, p.logger, p.writers, commands)
+}
+
+// CalcRenderSpeed calculates the render speed of a BarChange to a time.Duration
+func CalcRenderSpeed(bc *cntl.BarChange) time.Duration {
+	return time.Minute / time.Duration(bc.Speed*uint16(bc.NoteValue)/4) / time.Duration(cntl.RenderFrames/bc.NoteValue)
+}
+
+// Play plays a given slice of commands and send it to the given writers
+func Play(ctx context.Context, logger logging.Logger, writers []TransportWriter, commands []cntl.Command) error {
+	l := len(commands)
+	t := time.NewTicker(1 * time.Nanosecond)
 	done := ctx.Done()
 
 	var i int
@@ -128,16 +137,16 @@ func (p *Player) PlaySong(ctx context.Context, songID string) error {
 				return nil
 			}
 
-			cmd = cmds[i]
+			cmd = commands[i]
 			if cmd.BarChange != nil {
 				t.Stop()
 				t = time.NewTicker(CalcRenderSpeed(cmd.BarChange))
 			}
 
-			for _, w := range p.writers {
+			for _, w := range writers {
 				go func() {
 					if err := w.Write(cmd); err != nil {
-						p.logger.Error(err)
+						logger.Error(err)
 					}
 				}()
 			}
@@ -147,7 +156,21 @@ func (p *Player) PlaySong(ctx context.Context, songID string) error {
 	}
 }
 
-// CalcRenderSpeed calculates the render speed of a BarChange to a time.Duration
-func CalcRenderSpeed(bc *cntl.BarChange) time.Duration {
-	return time.Minute / time.Duration(bc.Speed*uint16(bc.NoteValue)/4) / time.Duration(cntl.RenderFrames/bc.NoteValue)
+// ToPlayable takes a slice of DMXCommands and combines it with the given BarParams to a playable slice of Commands
+func ToPlayable(bp cntl.BarParams, dmxCommands []cntl.DMXCommands) []cntl.Command {
+	commands := make([]cntl.Command, len(dmxCommands))
+	for i, cmd := range dmxCommands {
+		commands[i] = cntl.Command{
+
+			DMXCommands:  cmd,
+			MIDICommands: []cntl.MIDICommand{},
+		}
+	}
+
+	commands[0].BarChange = &cntl.BarChange{
+		At:        0,
+		BarParams: bp,
+	}
+
+	return commands
 }

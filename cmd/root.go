@@ -17,6 +17,7 @@ var (
 	logger            *logrus.Entry
 	storagePath       string
 	storage           *disk.Storage
+	loader            *disk.Loader
 	controller        artnet.Controller
 	disableController bool
 )
@@ -30,6 +31,7 @@ var RootCmd = &cobra.Command{
 		logger = createLogger(logLevel)
 		storage = createStorage(logger, storagePath)
 		controller = createController(logger, disableController)
+		loader = disk.NewLoader(storage)
 	},
 }
 

@@ -34,10 +34,10 @@ var data = &cntl.DataStore{
 			ID:   "3c1065c8-0b14-11e7-96eb-5b134621c411",
 			Name: "Test song",
 			BarChanges: []cntl.BarChange{
-				{At: 0, NoteCount: 4, NoteValue: 4, Speed: 160},
-				{At: 512, NoteCount: 3, NoteValue: 4},
-				{At: 1184, NoteCount: 7, NoteValue: 8},
-				{At: 1632, NoteCount: 4, NoteValue: 4},
+				{At: 0, BarParams: cntl.BarParams{NoteCount: 4, NoteValue: 4, Speed: 160}},
+				{At: 512, BarParams: cntl.BarParams{NoteCount: 3, NoteValue: 4}},
+				{At: 1184, BarParams: cntl.BarParams{NoteCount: 7, NoteValue: 8}},
+				{At: 1632, BarParams: cntl.BarParams{NoteCount: 4, NoteValue: 4}},
 			},
 			DMXScenes: []cntl.DMXScenePosition{
 				{At: 0, ID: "492cef2e-0b14-11e7-be89-c3fa25f9cabb", Repeat: 3},

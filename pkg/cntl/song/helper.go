@@ -68,7 +68,7 @@ func StreamlineBarChanges(s *cntl.Song) map[uint64]cntl.BarChange {
 	return bcs
 }
 
-// Validate the given streamlined map of BarChanges
+// ValidateBarChanges the given streamlined map of BarChanges
 func ValidateBarChanges(bc map[uint64]cntl.BarChange) error {
 	if _, ok := bc[0]; !ok {
 		return ErrSongMustHaveABarChangeAtFrame0

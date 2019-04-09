@@ -26,6 +26,7 @@ func NewController(pm process.Manager) *Controller {
 	}
 }
 
+// Status Response of the playback process
 type Status struct {
 	Process process.Status  `json:"process"`
 	Params  playback.Params `json:"params"`

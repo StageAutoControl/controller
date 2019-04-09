@@ -28,10 +28,10 @@ func TestStreamlineBarChanges(t *testing.T) {
 		{
 			s: ds.Songs["3c1065c8-0b14-11e7-96eb-5b134621c411"],
 			m: map[uint64]cntl.BarChange{
-				0:    {At: 0, NoteCount: 4, NoteValue: 4, Speed: 160},
-				512:  {At: 512, NoteCount: 3, NoteValue: 4},
-				1184: {At: 1184, NoteCount: 7, NoteValue: 8},
-				1632: {At: 1632, NoteCount: 4, NoteValue: 4},
+				0:    {At: 0, BarParams: cntl.BarParams{NoteCount: 4, NoteValue: 4, Speed: 160}},
+				512:  {At: 512, BarParams: cntl.BarParams{NoteCount: 3, NoteValue: 4}},
+				1184: {At: 1184, BarParams: cntl.BarParams{NoteCount: 7, NoteValue: 8}},
+				1632: {At: 1632, BarParams: cntl.BarParams{NoteCount: 4, NoteValue: 4}},
 			},
 		},
 	}

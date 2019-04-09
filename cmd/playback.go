@@ -11,7 +11,6 @@ import (
 	"github.com/StageAutoControl/controller/pkg/cntl/playback"
 	"github.com/StageAutoControl/controller/pkg/cntl/transport"
 	"github.com/StageAutoControl/controller/pkg/cntl/waiter"
-	"github.com/StageAutoControl/controller/pkg/disk"
 	"github.com/apinnecke/go-exitcontext"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -57,8 +56,6 @@ var playbackCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		store := disk.New(storagePath)
-		loader := disk.NewLoader(store)
 		data, err := loader.Load()
 		if err != nil {
 			logrus.Fatal(err)

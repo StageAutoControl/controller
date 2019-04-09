@@ -22,17 +22,19 @@ type Server struct {
 	*rpc.Server
 	logger        *logrus.Entry
 	storage       api.Storage
+	loader        api.Loader
 	apiController map[string]interface{}
 	cntl          artnet.Controller
 	pm            process.Manager
 }
 
 // New returns a new Server instance
-func New(logger *logrus.Entry, storage api.Storage, cntl artnet.Controller, pm process.Manager) (*Server, error) {
+func New(logger *logrus.Entry, storage api.Storage, loader api.Loader, cntl artnet.Controller, pm process.Manager) (*Server, error) {
 	server := &Server{
 		Server:  rpc.NewServer(),
 		logger:  logger,
 		storage: storage,
+		loader:  loader,
 		cntl:    cntl,
 		pm:      pm,
 	}
@@ -56,7 +58,7 @@ func (s *Server) registerControllers() error {
 		"DMXColorVariable": datastore.NewDMXColorVariableController(s.logger, s.storage),
 		"Song":             datastore.NewSongController(s.logger, s.storage),
 		"SetList":          datastore.NewSetListController(s.logger, s.storage),
-		"DMXPlayground":    playground.NewDMXPlaygroundController(s.logger, s.cntl),
+		"DMXPlayground":    playground.NewDMXPlaygroundController(s.logger, s.cntl, s.loader),
 		"Playback":         playback.NewController(s.pm),
 	}
 

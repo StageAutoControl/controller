@@ -7,12 +7,17 @@ type SetList struct {
 	Songs []string `json:"songs" yaml:"songs"`
 }
 
-// BarChange describes the changes of tempo and notes during a song
-type BarChange struct {
-	At        uint64 `json:"at" yaml:"at"`
+// BarParams are a reusable informational struct on how fast and in what scheme something should be played
+type BarParams struct {
 	NoteValue uint8  `json:"noteValue" yaml:"noteValue"`
 	NoteCount uint8  `json:"noteCount" yaml:"noteCount"`
 	Speed     uint16 `json:"speed" yaml:"speed"`
+}
+
+// BarChange describes the changes of tempo and notes during a song
+type BarChange struct {
+	BarParams
+	At uint64 `json:"at" yaml:"at"`
 }
 
 // DMXScenePosition describes the position of a DMX scene within a song

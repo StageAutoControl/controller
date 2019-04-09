@@ -18,7 +18,7 @@ var serverCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx := exitcontext.New()
 		pm := process.NewManager(ctx, logger)
-		server, err := server.New(logger.WithField("module", "api"), storage, controller, pm)
+		server, err := server.New(logger.WithField("module", "api"), storage, loader, controller, pm)
 		if err != nil {
 			logger.Fatal(err)
 		}

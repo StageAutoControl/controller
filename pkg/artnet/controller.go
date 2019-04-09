@@ -8,9 +8,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/StageAutoControl/controller/pkg/internal/logging"
 	"github.com/jsimonetti/go-artnet"
 	"github.com/sirupsen/logrus"
+
+	"github.com/StageAutoControl/controller/pkg/cntl"
+	"github.com/StageAutoControl/controller/pkg/internal/logging"
 )
 
 // Controller is a transport for the ArtNet protocol (DMX over UDP/IP)
@@ -81,6 +83,22 @@ func (c *controller) SetDMXChannelValues(values []ChannelValue) {
 	}
 
 	c.triggerSend()
+}
+
+// Write implements the playback.TransportWriter interface to compatibility :)
+func (c *controller) Write(cmd cntl.Command) error {
+	values := make([]ChannelValue, 0)
+	for _, dmxCmd := range cmd.DMXCommands {
+		values = append(values, ChannelValue{
+			Universe: uint16(dmxCmd.Universe),
+			Channel:  uint8(dmxCmd.Channel),
+			Value:    dmxCmd.Value.Uint8(),
+		})
+	}
+
+	c.SetDMXChannelValues(values)
+
+	return nil
 }
 
 func (c *controller) triggerSend() {

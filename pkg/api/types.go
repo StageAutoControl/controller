@@ -1,6 +1,10 @@
 package api
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/StageAutoControl/controller/pkg/cntl"
+)
 
 var (
 	// RPCPath to where the RPC server should listen on
@@ -21,6 +25,11 @@ type Storage interface {
 	Read(key string, value interface{}) error
 	List(kind interface{}) []string
 	Delete(key string, kind interface{}) error
+}
+
+// Loader interface for abstraction in api usage
+type Loader interface {
+	Load() (*cntl.DataStore, error)
 }
 
 // IDBody is a request object only storing an ID
