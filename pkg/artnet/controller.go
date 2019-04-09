@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/jsimonetti/go-artnet"
@@ -17,6 +18,7 @@ import (
 
 // Controller is a transport for the ArtNet protocol (DMX over UDP/IP)
 type controller struct {
+	mutex       sync.RWMutex
 	logger      logging.Logger
 	sender      *artnet.Controller
 	state       State
@@ -48,17 +50,18 @@ func NewController(logger logging.Logger) (Controller, error) {
 		return nil, fmt.Errorf("failed to start Controller: %v", err)
 	}
 
-	cntl := &controller{
+	control := &controller{
+		mutex:       sync.RWMutex{},
 		logger:      logger,
 		sender:      c,
 		state:       NewState(),
 		sendTrigger: make(chan struct{}, 1),
 	}
 
-	go cntl.sendBackground()
-	go cntl.debugDevices()
+	go control.sendBackground()
+	go control.debugDevices()
 
-	return cntl, nil
+	return control, nil
 }
 
 // Start the controller
@@ -73,11 +76,17 @@ func (c *controller) Stop() {
 }
 
 func (c *controller) SetDMXChannelValue(value ChannelValue) {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
 	c.state.Set(value.Universe, value.Channel, value.Value)
 	c.triggerSend()
 }
 
 func (c *controller) SetDMXChannelValues(values []ChannelValue) {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
 	for _, value := range values {
 		c.state.Set(value.Universe, value.Channel, value.Value)
 	}
@@ -113,6 +122,9 @@ func (c *controller) sendBackground() {
 }
 
 func (c *controller) send() {
+	c.mutex.RLock()
+	defer c.mutex.RUnlock()
+
 	for universe, dmx := range c.state {
 		go c.sender.SendDMXToAddress(dmx, c.universeToAddress(universe))
 	}

@@ -21,7 +21,7 @@ func checkDeviceParams(dp *cntl.DMXDeviceParams) error {
 	}
 
 	valuesSet := 0
-	if dp.Params != nil {
+	if dp.Params != nil && len(dp.Params) > 0 {
 		valuesSet++
 	}
 	if dp.Animation != nil {
