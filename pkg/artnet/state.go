@@ -1,45 +1,60 @@
 package artnet
 
+import (
+	"sync"
+)
+
 // State stores the state of universes
-type State map[uint16][512]byte
+type State struct {
+	data sync.Map
+}
 
 // NewState returns a new state instance
-func NewState() State {
-	return make(State)
+func NewState() *State {
+	return &State{
+		data: sync.Map{},
+	}
 }
 
-// Set sets a given channel on a given universe on a given value.
-func (state State) Set(u uint16, c, v uint8) {
-	state.addUniverse(u)
+// NewStateFromData takes the given data and stores it into a freshly created store
+func NewStateFromData(data map[uint16]Universe) *State {
+	s := NewState()
+	for k, value := range data {
+		s.SetUniverse(k, value)
+	}
+	return s
+}
 
-	dmx := state[u]
+// SetChannel sets a given channel on a given universe on a given value.
+func (s *State) SetChannel(u uint16, c, v uint8) {
+	dmx := s.GetUniverse(u)
 	dmx[c] = byte(v)
-	state[u] = dmx
+	s.SetUniverse(u, dmx)
 }
 
-func (state State) addUniverse(u uint16) {
-	if _, ok := state[u]; ok {
-		return
-	}
-
-	state[u] = [512]byte{}
+// SetUniverse sets a complete DMX universe data
+func (s *State) SetUniverse(u uint16, dmx Universe) {
+	s.data.Store(u, dmx)
 }
 
-// Equals compares two states for equality
-func (state State) Equals(state2 State) bool {
-	if len(state) != len(state2) {
-		return false
+// GetUniverse gets a complete DMX universe data
+func (s *State) GetUniverse(u uint16) Universe {
+	dmx, ok := s.data.Load(u)
+	if !ok {
+		return Universe{}
 	}
 
-	for u := range state {
-		if _, ok := state2[u]; !ok {
-			return false
-		}
+	return dmx.(Universe)
+}
 
-		if state2[u] != state[u] {
-			return false
-		}
-	}
+// GetUniverses returns a slice of all available universe indexes
+func (s *State) GetUniverses() []uint16 {
+	universes := make([]uint16, 0)
 
-	return true
+	s.data.Range(func(key interface{}, value interface{}) bool {
+		universes = append(universes, key.(uint16))
+		return true
+	})
+
+	return universes
 }

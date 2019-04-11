@@ -27,3 +27,6 @@ type Controller interface {
 	Start() error
 	Stop()
 }
+
+// Universe wraps the 512 byte array for convenience
+type Universe [512]byte
