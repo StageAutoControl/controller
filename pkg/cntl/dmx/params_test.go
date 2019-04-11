@@ -145,6 +145,55 @@ func TestRenderDeviceParams(t *testing.T) {
 		},
 		{
 			dp: &cntl.DMXDeviceParams{
+				Device: fixtures.StrPtr("35cae00a-0b17-11e7-8bca-bbf30c56f20e"),
+				Params: []cntl.DMXParams{
+					{
+						Red:    fixtures.Value255,
+						LEDAll: true,
+					},
+				},
+			},
+			c: []cntl.DMXCommands{
+				{
+					{Universe: 1, Channel: 222, Value: *fixtures.Value255},
+					{Universe: 1, Channel: 226, Value: *fixtures.Value255},
+					{Universe: 1, Channel: 230, Value: *fixtures.Value255},
+					{Universe: 1, Channel: 234, Value: *fixtures.Value255},
+					{Universe: 1, Channel: 238, Value: *fixtures.Value255},
+					{Universe: 1, Channel: 242, Value: *fixtures.Value255},
+					{Universe: 1, Channel: 246, Value: *fixtures.Value255},
+					{Universe: 1, Channel: 250, Value: *fixtures.Value255},
+					{Universe: 1, Channel: 254, Value: *fixtures.Value255},
+					{Universe: 1, Channel: 258, Value: *fixtures.Value255},
+					{Universe: 1, Channel: 262, Value: *fixtures.Value255},
+					{Universe: 1, Channel: 266, Value: *fixtures.Value255},
+					{Universe: 1, Channel: 270, Value: *fixtures.Value255},
+					{Universe: 1, Channel: 274, Value: *fixtures.Value255},
+					{Universe: 1, Channel: 278, Value: *fixtures.Value255},
+					{Universe: 1, Channel: 282, Value: *fixtures.Value255},
+				},
+			},
+			err: nil,
+		},
+		{
+			dp: &cntl.DMXDeviceParams{
+				Device: fixtures.StrPtr("5e0335e0-0b17-11e7-ad6c-63a7138d926c"),
+				Params: []cntl.DMXParams{
+					{
+						Red:    fixtures.Value255,
+						LEDAll: true,
+					},
+				},
+			},
+			c: []cntl.DMXCommands{
+				{
+					{Universe: 2, Channel: 26, Value: *fixtures.Value255},
+				},
+			},
+			err: nil,
+		},
+		{
+			dp: &cntl.DMXDeviceParams{
 				Group: fixtures.StrPtr("475b71a0-0b16-11e7-9406-e3f678e8b788"),
 				Params: []cntl.DMXParams{
 					{
@@ -207,21 +256,21 @@ func TestRenderDeviceParams(t *testing.T) {
 	for i, e := range exp {
 		c, err := RenderDeviceParams(ds, e.dp)
 		if e.err != nil && (err == nil || err.Error() != e.err.Error()) {
-			t.Fatalf("Expected to get error %v, got %v at index %d", e.err, err, i)
+			t.Fatalf("Expected to get error %v, got %v at case %d", e.err, err, i)
 		}
 
 		if len(c) != len(e.c) {
-			t.Fatalf("Expected to get %d commands, got %d at index %d", len(e.c), len(c), i)
+			t.Fatalf("Expected to get %d commands, got %d at case %d", len(e.c), len(c), i)
 		}
 
 		for j := range e.c {
 			if len(e.c[j]) != len(c[j]) {
-				t.Fatalf("Expected to get length %d at command index %d, got %d at index %d", len(e.c[j]), j, len(c[j]), i)
+				t.Fatalf("Expected to get length %d at command index %d, got %d at case %d", len(e.c[j]), j, len(c[j]), i)
 			}
 
 			for _, cmd := range e.c[j] {
 				if !c[j].Contains(cmd) {
-					t.Errorf("Expected %+v to have %+v, but hasn't index %d", c[j], cmd, i)
+					t.Errorf("Expected %+v to have %+v, but hasn't at case %d", c[j], cmd, i)
 				}
 			}
 		}

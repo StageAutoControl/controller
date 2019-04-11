@@ -174,21 +174,45 @@ func RenderParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, p cntl.DMXParams) (c
 		})
 	}
 
+	// for each device in the resolved selectors and each channel set the correct LED value
 	for _, d := range dd {
 		for _, c := range channels {
-			ch, err := getDeviceChannel(ds, d, c.Channel, p.LED)
-			if err != nil {
-				return cntl.DMXCommands{}, err
+			for _, led := range resolveLEDs(ds, p, d) {
+				ch, err := getDeviceChannel(ds, d, c.Channel, led)
+				if err != nil {
+					return cntl.DMXCommands{}, err
+				}
+				cmds = append(cmds, cntl.DMXCommand{
+					Universe: d.Universe,
+					Channel:  ch,
+					Value:    c.Value,
+				})
 			}
-			cmds = append(cmds, cntl.DMXCommand{
-				Universe: d.Universe,
-				Channel:  ch,
-				Value:    c.Value,
-			})
 		}
 	}
 
 	return
+}
+
+func resolveLEDs(ds *cntl.DataStore, p cntl.DMXParams, d *cntl.DMXDevice) []uint16 {
+	if !p.LEDAll {
+		return []uint16{p.LED}
+	}
+
+	// in this place we assume that we already resolved the device type before ...
+	dt, ok := ds.DMXDeviceTypes[d.TypeID]
+	if !ok {
+		panic("Alex is an idiot, the comment is wrong. Thanks.")
+	}
+
+	// so in order to iterate all LEDs we just returns a slice with every LED index, which in fact is
+	// the index of the slice ... wow :D
+
+	leds := make([]uint16, len(dt.LEDs))
+	for index := range dt.LEDs {
+		leds[index] = uint16(index)
+	}
+	return leds
 }
 
 func resolveColorVar(ds *cntl.DataStore, p *cntl.DMXParams) error {

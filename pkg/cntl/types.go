@@ -125,6 +125,7 @@ type DMXColorVariable struct {
 
 // DMXParams is a DMX parameter object
 type DMXParams struct {
+	LEDAll   bool      `json:"ledAll"`
 	LED      uint16    `json:"led" yaml:"led"`
 	ColorVar *string   `json:"$color" yaml:"$color"`
 	Red      *DMXValue `json:"red" yaml:"red"`
