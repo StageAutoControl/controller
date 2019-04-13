@@ -51,20 +51,23 @@ type DMXDevice struct {
 
 // DMXDeviceType is the type of a DMXDevice
 type DMXDeviceType struct {
-	ID             string     `json:"id" yaml:"id"`
-	Name           string     `json:"name" yaml:"name"`
-	ChannelCount   uint16     `json:"channelCount" yaml:"channelCount"`
-	ChannelsPerLED uint16     `json:"channelsPerLED" yaml:"channelsPerLED"`
-	StrobeEnabled  bool       `json:"strobeEnabled" yaml:"strobeEnabled"`
-	StrobeChannel  DMXChannel `json:"strobeChannel" yaml:"strobeChannel"`
-	DimmerEnabled  bool       `json:"dimmerEnabled" yaml:"dimmerEnabled"`
-	DimmerChannel  DMXChannel `json:"dimmerChannel" yaml:"dimmerChannel"`
-	ModeEnabled    bool       `json:"modeEnabled" yaml:"modeEnabled"`
-	ModeChannel    DMXChannel `json:"modeChannel" yaml:"modeChannel"`
-	Moving         bool       `json:"moving" yaml:"moving"`
-	TiltChannel    DMXChannel `json:"tiltChannel" yaml:"tiltChannel"`
-	PanChannel     DMXChannel `json:"panChannel" yaml:"panChannel"`
-	LEDs           []LED      `json:"leds"`
+	ID                  string     `json:"id" yaml:"id"`
+	Name                string     `json:"name" yaml:"name"`
+	ChannelCount        uint16     `json:"channelCount" yaml:"channelCount"`
+	ChannelsPerLED      uint16     `json:"channelsPerLED" yaml:"channelsPerLED"`
+	StrobeEnabled       bool       `json:"strobeEnabled" yaml:"strobeEnabled"`
+	StrobeChannel       DMXChannel `json:"strobeChannel" yaml:"strobeChannel"`
+	DimmerEnabled       bool       `json:"dimmerEnabled" yaml:"dimmerEnabled"`
+	DimmerChannel       DMXChannel `json:"dimmerChannel" yaml:"dimmerChannel"`
+	ModeEnabled         bool       `json:"modeEnabled" yaml:"modeEnabled"`
+	ModeChannel         DMXChannel `json:"modeChannel" yaml:"modeChannel"`
+	Moving              bool       `json:"moving" yaml:"moving"`
+	PanChannel          DMXChannel `json:"panChannel" yaml:"panChannel"`
+	PanFineChannel      DMXChannel `json:"panFineChannel" yaml:"panFineChannel"`
+	TiltChannel         DMXChannel `json:"tiltChannel" yaml:"tiltChannel"`
+	TiltFineChannel     DMXChannel `json:"tiltFineChannel" yaml:"tiltFineChannel"`
+	PanTiltSpeedChannel DMXChannel `json:"panTiltSpeedChannel" yaml:"panTiltSpeedChannel"`
+	LEDs                []LED      `json:"leds"`
 }
 
 // LED maps a single LEDs DMX channels
@@ -125,18 +128,21 @@ type DMXColorVariable struct {
 
 // DMXParams is a DMX parameter object
 type DMXParams struct {
-	LEDAll   bool      `json:"ledAll"`
-	LED      uint16    `json:"led" yaml:"led"`
-	ColorVar *string   `json:"$color" yaml:"$color"`
-	Red      *DMXValue `json:"red" yaml:"red"`
-	Green    *DMXValue `json:"green" yaml:"green"`
-	Blue     *DMXValue `json:"blue" yaml:"blue"`
-	White    *DMXValue `json:"white" yaml:"white"`
-	Pan      *DMXValue `json:"pan" yaml:"pan"`
-	Tilt     *DMXValue `json:"tilt" yaml:"tilt"`
-	Strobe   *DMXValue `json:"strobe" yaml:"strobe"`
-	Mode     *DMXValue `json:"mode" yaml:"mode"`
-	Dimmer   *DMXValue `json:"dimmer" yaml:"dimmer"`
+	LEDAll       bool      `json:"ledAll"`
+	LED          uint16    `json:"led" yaml:"led"`
+	ColorVar     *string   `json:"$color" yaml:"$color"`
+	Red          *DMXValue `json:"red" yaml:"red"`
+	Green        *DMXValue `json:"green" yaml:"green"`
+	Blue         *DMXValue `json:"blue" yaml:"blue"`
+	White        *DMXValue `json:"white" yaml:"white"`
+	Pan          *DMXValue `json:"pan" yaml:"pan"`
+	PanFine      *DMXValue `json:"panFine" yaml:"panFine"`
+	Tilt         *DMXValue `json:"tilt" yaml:"tilt"`
+	TiltFine     *DMXValue `json:"tiltFine" yaml:"tiltFine"`
+	PanTiltSpeed *DMXValue `json:"panTiltSpeed" yaml:"panTiltSpeed"`
+	Strobe       *DMXValue `json:"strobe" yaml:"strobe"`
+	Mode         *DMXValue `json:"mode" yaml:"mode"`
+	Dimmer       *DMXValue `json:"dimmer" yaml:"dimmer"`
 }
 
 // DMXAnimation is an animation of dmx params in relation to time

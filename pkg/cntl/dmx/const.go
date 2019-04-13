@@ -12,5 +12,8 @@ const (
 	ChannelMode
 	ChannelDimmer
 	ChannelTilt
+	ChannelTiltFine
 	ChannelPan
+	ChannelPanFine
+	ChannelPanTiltSpeed
 )

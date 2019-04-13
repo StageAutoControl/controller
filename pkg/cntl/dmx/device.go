@@ -59,11 +59,29 @@ func getDeviceChannel(ds *cntl.DataStore, d *cntl.DMXDevice, c cntl.DMXChannel, 
 		}
 		channel = dt.TiltChannel
 
+	case ChannelTiltFine:
+		if !dt.Moving {
+			return 0, ErrDeviceIsNotMoving
+		}
+		channel = dt.TiltFineChannel
+
 	case ChannelPan:
 		if !dt.Moving {
 			return 0, ErrDeviceIsNotMoving
 		}
 		channel = dt.PanChannel
+
+	case ChannelPanFine:
+		if !dt.Moving {
+			return 0, ErrDeviceIsNotMoving
+		}
+		channel = dt.PanFineChannel
+
+	case ChannelPanTiltSpeed:
+		if !dt.Moving {
+			return 0, ErrDeviceIsNotMoving
+		}
+		channel = dt.PanTiltSpeedChannel
 
 	default:
 		return 0, fmt.Errorf("channel %q is unknown", c)
