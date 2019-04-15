@@ -1,6 +1,8 @@
 package artnet
 
 import (
+	"context"
+
 	"github.com/jsimonetti/go-artnet"
 
 	"github.com/StageAutoControl/controller/pkg/cntl"
@@ -15,8 +17,9 @@ type Sender interface {
 
 // ChannelValue defines an ArtNet Universe and the value of the DMX channel
 type ChannelValue struct {
-	Universe       uint16
-	Channel, Value uint8
+	Universe uint16
+	Channel  uint16
+	Value    uint8
 }
 
 // Controller is a convenience interface to use within this application
@@ -24,7 +27,7 @@ type Controller interface {
 	Write(cntl.Command) error
 	SetDMXChannelValue(value ChannelValue)
 	SetDMXChannelValues(values []ChannelValue)
-	Start() error
+	Start(ctx context.Context) error
 	Stop()
 }
 

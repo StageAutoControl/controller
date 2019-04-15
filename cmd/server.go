@@ -6,7 +6,7 @@ import (
 	"github.com/apinnecke/go-exitcontext"
 	"github.com/spf13/cobra"
 
-	"github.com/StageAutoControl/controller/pkg/api/server"
+	apiServer "github.com/StageAutoControl/controller/pkg/api/server"
 	"github.com/StageAutoControl/controller/pkg/cntl/playback"
 	"github.com/StageAutoControl/controller/pkg/disk"
 	"github.com/StageAutoControl/controller/pkg/process"
@@ -19,7 +19,7 @@ var serverCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx := exitcontext.New()
 		pm := process.NewManager(ctx, logger)
-		server, err := server.New(logger.WithField("module", "api"), storage, loader, controller, pm)
+		server, err := apiServer.New(logger.WithField("module", "api"), storage, loader, controller, pm)
 		if err != nil {
 			logger.Fatal(err)
 		}
@@ -39,8 +39,12 @@ var serverCmd = &cobra.Command{
 			if err := pm.AddProcess(playback.ProcessName, playback.NewProcess(loader, storage, controller), true); err != nil {
 				logger.Fatal(err)
 			}
-
+			if err := controller.Start(ctx); err != nil {
+				logger.Fatal(err)
+			}
+			logger.Info("Started ArtNet Controller")
 		}
+
 		if err := server.Run(ctx, endpoint); err != nil {
 			logger.Fatal(err)
 		}

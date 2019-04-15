@@ -23,7 +23,7 @@ func (a *ArtNet) Write(cmd cntl.Command) error {
 	for _, c := range cmd.DMXCommands {
 		values = append(values, art.ChannelValue{
 			Universe: uint16(c.Universe),
-			Channel:  uint8(c.Channel),
+			Channel:  uint16(c.Channel),
 			Value:    c.Value.Uint8(),
 		})
 	}

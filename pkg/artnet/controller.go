@@ -1,6 +1,7 @@
 package artnet
 
 import (
+	"context"
 	"encoding/binary"
 	"errors"
 	"fmt"
@@ -21,6 +22,7 @@ type controller struct {
 	sender      *artnet.Controller
 	state       *State
 	sendTrigger chan *UniverseStateMap
+	context     context.Context
 }
 
 // NewController returns a artnet Controller as an anonymous interface
@@ -36,34 +38,34 @@ func NewController(logger logging.Logger) (Controller, error) {
 
 	host, err := os.Hostname()
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("failed to resolve hostname: %v", err)
 	}
 
 	host = strings.ToLower(strings.Split(host, ".")[0])
-
 	logger.Infof("Using ArtNet IP %s and hostname %s", ip.String(), host)
 
-	c := artnet.NewController(host, ip, artnet.NewLogger(logger.(*logrus.Entry).WithField("module", "artnet")))
-	if err := c.Start(); err != nil {
-		return nil, fmt.Errorf("failed to start Controller: %v", err)
-	}
-
+	senderLogger := artnet.NewLogger(logger.(*logrus.Entry).WithField("module", "artnet"))
 	control := &controller{
 		logger:      logger,
-		sender:      c,
+		sender:      artnet.NewController(host, ip, senderLogger),
 		state:       NewState(),
 		sendTrigger: make(chan *UniverseStateMap, 100),
 	}
-
-	go control.sendBackground()
-	go control.debugDevices()
 
 	return control, nil
 }
 
 // Start the controller
-func (c *controller) Start() error {
-	return c.sender.Start()
+func (c *controller) Start(ctx context.Context) error {
+	if err := c.sender.Start(); err != nil {
+		return fmt.Errorf("failed to start Controller: %v", err)
+	}
+
+	c.context = ctx
+	go c.sendBackground()
+	go c.debugDevices()
+
+	return nil
 }
 
 // Stop the controller
@@ -87,9 +89,11 @@ func (c *controller) Write(cmd cntl.Command) error {
 	values := make([]ChannelValue, len(cmd.DMXCommands))
 	for i, dmxCmd := range cmd.DMXCommands {
 		values[i].Universe = uint16(dmxCmd.Universe)
-		values[i].Channel = uint8(dmxCmd.Channel)
+		values[i].Channel = uint16(dmxCmd.Channel)
 		values[i].Value = dmxCmd.Value.Uint8()
 	}
+
+	//c.logger.Warnf("%+v", values)
 
 	c.SetDMXChannelValues(values)
 
