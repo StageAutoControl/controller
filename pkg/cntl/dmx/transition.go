@@ -50,7 +50,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 		}
 
 		for i, step := range steps {
-			stepParam := cntl.DMXParams{LED: p.From.LED}
+			stepParam := cntl.DMXParams{LED: p.From.LED, LEDAll: p.From.LEDAll}
 			stepParam.Red = &cntl.DMXValue{Value: step}
 
 			cmd, err := RenderParams(ds, dd, stepParam)
@@ -69,7 +69,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 		}
 
 		for i, step := range steps {
-			stepParam := cntl.DMXParams{LED: p.From.LED}
+			stepParam := cntl.DMXParams{LED: p.From.LED, LEDAll: p.From.LEDAll}
 			stepParam.Green = &cntl.DMXValue{Value: step}
 
 			cmd, err := RenderParams(ds, dd, stepParam)
@@ -88,7 +88,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 		}
 
 		for i, step := range steps {
-			stepParam := cntl.DMXParams{LED: p.From.LED}
+			stepParam := cntl.DMXParams{LED: p.From.LED, LEDAll: p.From.LEDAll}
 			stepParam.Blue = &cntl.DMXValue{Value: step}
 
 			cmd, err := RenderParams(ds, dd, stepParam)
@@ -107,7 +107,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 		}
 
 		for i, step := range steps {
-			stepParam := cntl.DMXParams{LED: p.From.LED}
+			stepParam := cntl.DMXParams{LED: p.From.LED, LEDAll: p.From.LEDAll}
 			stepParam.White = &cntl.DMXValue{Value: step}
 
 			cmd, err := RenderParams(ds, dd, stepParam)
@@ -126,7 +126,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 		}
 
 		for i, step := range steps {
-			stepParam := cntl.DMXParams{LED: p.From.LED}
+			stepParam := cntl.DMXParams{LED: p.From.LED, LEDAll: p.From.LEDAll}
 			stepParam.Pan = &cntl.DMXValue{Value: step}
 
 			cmd, err := RenderParams(ds, dd, stepParam)
@@ -145,7 +145,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 		}
 
 		for i, step := range steps {
-			stepParam := cntl.DMXParams{LED: p.From.LED}
+			stepParam := cntl.DMXParams{LED: p.From.LED, LEDAll: p.From.LEDAll}
 			stepParam.Tilt = &cntl.DMXValue{Value: step}
 
 			cmd, err := RenderParams(ds, dd, stepParam)

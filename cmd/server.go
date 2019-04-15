@@ -3,12 +3,13 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/apinnecke/go-exitcontext"
+	"github.com/spf13/cobra"
+
 	"github.com/StageAutoControl/controller/pkg/api/server"
 	"github.com/StageAutoControl/controller/pkg/cntl/playback"
 	"github.com/StageAutoControl/controller/pkg/disk"
 	"github.com/StageAutoControl/controller/pkg/process"
-	"github.com/apinnecke/go-exitcontext"
-	"github.com/spf13/cobra"
 )
 
 // serverCmd represents the server command

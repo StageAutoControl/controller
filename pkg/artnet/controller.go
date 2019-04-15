@@ -20,7 +20,7 @@ type controller struct {
 	logger      logging.Logger
 	sender      *artnet.Controller
 	state       *State
-	sendTrigger chan struct{}
+	sendTrigger chan *UniverseStateMap
 }
 
 // NewController returns a artnet Controller as an anonymous interface
@@ -52,7 +52,7 @@ func NewController(logger logging.Logger) (Controller, error) {
 		logger:      logger,
 		sender:      c,
 		state:       NewState(),
-		sendTrigger: make(chan struct{}, 1),
+		sendTrigger: make(chan *UniverseStateMap, 100),
 	}
 
 	go control.sendBackground()
@@ -78,22 +78,17 @@ func (c *controller) SetDMXChannelValue(value ChannelValue) {
 }
 
 func (c *controller) SetDMXChannelValues(values []ChannelValue) {
-	for _, value := range values {
-		c.state.SetChannel(value.Universe, value.Channel, value.Value)
-	}
-
+	c.state.SetChannelValues(values)
 	c.triggerSend()
 }
 
 // Write implements the playback.TransportWriter interface to compatibility :)
 func (c *controller) Write(cmd cntl.Command) error {
-	values := make([]ChannelValue, 0)
-	for _, dmxCmd := range cmd.DMXCommands {
-		values = append(values, ChannelValue{
-			Universe: uint16(dmxCmd.Universe),
-			Channel:  uint8(dmxCmd.Channel),
-			Value:    dmxCmd.Value.Uint8(),
-		})
+	values := make([]ChannelValue, len(cmd.DMXCommands))
+	for i, dmxCmd := range cmd.DMXCommands {
+		values[i].Universe = uint16(dmxCmd.Universe)
+		values[i].Channel = uint8(dmxCmd.Channel)
+		values[i].Value = dmxCmd.Value.Uint8()
 	}
 
 	c.SetDMXChannelValues(values)
@@ -102,19 +97,20 @@ func (c *controller) Write(cmd cntl.Command) error {
 }
 
 func (c *controller) triggerSend() {
-	c.sendTrigger <- struct{}{}
+	data := c.state.Get()
+	c.sendTrigger <- &data
 }
 
 func (c *controller) sendBackground() {
-	for range c.sendTrigger {
+	for data := range c.sendTrigger {
 		c.logger.Debug("Sending DMX Values")
-		c.send()
+		c.send(data)
 	}
 }
 
-func (c *controller) send() {
-	for _, u := range c.state.GetUniverses() {
-		go c.sender.SendDMXToAddress([512]byte(c.state.GetUniverse(u)), c.universeToAddress(u))
+func (c *controller) send(data *UniverseStateMap) {
+	for u, dmx := range *data {
+		c.sender.SendDMXToAddress(dmx.toByteSlice(), c.universeToAddress(u))
 	}
 }
 

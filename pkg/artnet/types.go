@@ -30,3 +30,10 @@ type Controller interface {
 
 // Universe wraps the 512 byte array for convenience
 type Universe [512]byte
+
+func (u Universe) toByteSlice() [512]byte {
+	return [512]byte(u)
+}
+
+// UniverseStateMap holds the state of all used universes
+type UniverseStateMap map[uint16]Universe
