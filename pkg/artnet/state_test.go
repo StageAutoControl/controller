@@ -8,8 +8,8 @@ import (
 func TestState_Set(t *testing.T) {
 	cases := []struct {
 		before, after *State
-		u             uint16
-		c, v          uint8
+		u, c          uint16
+		v             uint8
 	}{
 		{
 			before: NewStateFromData(map[uint16]Universe{}),
