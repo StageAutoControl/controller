@@ -1,12 +1,12 @@
 hash: 545bc7234b824797dad72e8e0edfde8d0a8792abc3e7deaa15ccd852b25014cb
-updated: 2019-04-21T12:14:25.603471+02:00
+updated: 2019-04-21T22:06:36.310522+02:00
 imports:
 - name: github.com/apinnecke/go-exitcontext
   version: 06015046a58d57f896f5e2ea290e6540c3fba863
 - name: github.com/creasty/go-easing
   version: 0cfd96d3a544aad2e643739e4a4f6c081b12cda0
 - name: github.com/google/btree
-  version: 4030bb1f1f0c35b30ca7009e9ebd06849dd45306
+  version: 20236160a414454a9c64b6c8829381c6f4bddcaa
 - name: github.com/gordonklaus/portaudio
   version: 00e7307ccd93051979a933c6fd5ead641eba5686
 - name: github.com/gorilla/handlers
@@ -22,7 +22,7 @@ imports:
 - name: github.com/jinzhu/copier
   version: 7e38e58719c33e0d44d585c4ab477a30f8cb82dd
 - name: github.com/jsimonetti/go-artnet
-  version: 750f64a82a4a1596a2ddb3db029f25c968fc7925
+  version: 964cdb29d889ef234b4a6e8757889a283c61b197
   repo: https://github.com/StageAutoControl/go-artnet.git
   subpackages:
   - packet
@@ -37,20 +37,15 @@ imports:
 - name: github.com/satori/go.uuid
   version: f58768cc1a7a7e77a3bd49e98cdd21419399b6a3
 - name: github.com/sirupsen/logrus
-  version: dae0fa8d5b0c810a8ab733fbd5510c7cae84eca4
+  version: 9b3cdde74fbe9443d704467498a7dcb61a79de9b
 - name: github.com/spf13/cobra
-  version: ba1052d4cbce7aac421a96de820558f75199ccbc
+  version: 67fc4837d267bc9bfd6e47f77783fcc3dffc68de
 - name: github.com/spf13/pflag
   version: 24fa6976df40757dce6aea913e7b81ade90530e1
 - name: github.com/spf13/viper
   version: 9e56dacc08fbbf8c9ee2dbc717553c758ce42bc9
-- name: golang.org/x/crypto
-  version: a1f597ede03a7bef967a422b5b3a5bd08805a01e
-  subpackages:
-  - ssh/terminal
 - name: golang.org/x/sys
-  version: fead79001313d15903fb4605b4a1b781532cd93e
+  version: e8e3143a4f4a00f1fafef0dd82ba78223281b01b
   subpackages:
   - unix
-  - windows
 testImports: []
