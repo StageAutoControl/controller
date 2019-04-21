@@ -10,7 +10,7 @@ import:
   - v2
   - v2/json
 - package: github.com/jsimonetti/go-artnet
-  repo: git@github.com:StageAutoControl/go-artnet
+  repo: https://github.com/StageAutoControl/go-artnet.git
 - package: github.com/rakyll/portmidi
   version: 1246dd47c56089ea2ae791266edb7f4c6b90c045
 - package: github.com/satori/go.uuid
