@@ -87,7 +87,7 @@ func (s *Server) Run(ctx context.Context, endpoint string) error {
 	h = handlers.CORS(
 		handlers.AllowCredentials(),
 		handlers.AllowedOrigins([]string{"*"}),
-		handlers.AllowedMethods([]string{"POST", "GET"}),
+		handlers.AllowedMethods([]string{"POST", "GET", "HEAD"}),
 		handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),
 	)(h)
 

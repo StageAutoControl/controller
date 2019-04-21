@@ -8,7 +8,7 @@ import (
 
 var (
 	// RPCPath to where the RPC server should listen on
-	RPCPath = "/rpc"
+	RPCPath = "/api"
 
 	// ErrNoIDGiven is returned when the request did not contain a valid ID
 	ErrNoIDGiven = errors.New("no ID was given with request")
