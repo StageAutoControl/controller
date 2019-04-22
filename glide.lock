@@ -1,5 +1,5 @@
 hash: 9c0104253964b2541b50307ca3945404a033b411314dbff9fd35abe0b9a9644f
-updated: 2019-04-22T14:38:05.559218+02:00
+updated: 2019-04-22T15:01:14.153222+02:00
 imports:
 - name: github.com/apinnecke/go-exitcontext
   version: 06015046a58d57f896f5e2ea290e6540c3fba863
@@ -22,7 +22,7 @@ imports:
 - name: github.com/jinzhu/copier
   version: 7e38e58719c33e0d44d585c4ab477a30f8cb82dd
 - name: github.com/jsimonetti/go-artnet
-  version: fe904701874ddfaecd7f87d337ba8199b99e8ee1
+  version: 528cc72e6c51531b15a7f07e35cee3f93fa981cb
   repo: https://github.com/StageAutoControl/go-artnet.git
   subpackages:
   - packet
