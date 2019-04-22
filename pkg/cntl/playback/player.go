@@ -57,13 +57,6 @@ func (p *Player) PlaySetList(ctx context.Context, setListID string) error {
 		default:
 		}
 
-		s, ok := p.dataStore.Songs[songID]
-		if !ok {
-			return fmt.Errorf("failed to find song %v", songID)
-		}
-
-		p.logger.Infof("Playing song %v", s.Name)
-
 		if err := p.PlaySong(ctx, songID); err != nil {
 			return err
 		}

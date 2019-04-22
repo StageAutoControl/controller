@@ -27,7 +27,7 @@ func NewAudio(logger logging.Logger, threshold float32) *Audio {
 		fanOut:    make([]chan struct{}, 0),
 		buf:       make([]float32, 64),
 		cancel:    make(chan struct{}, 1),
-		err:       make(chan error, 1),
+		err:       make(chan error, 5),
 	}
 }
 
@@ -52,13 +52,6 @@ func (a *Audio) readStream() {
 		return
 	}
 
-	defer func() {
-		if err := a.stream.Stop(); err != nil {
-			a.err <- err
-			return
-		}
-	}()
-
 	for {
 		err := a.stream.Read()
 		if err != nil {
@@ -71,6 +64,7 @@ func (a *Audio) readStream() {
 		select {
 		case <-a.cancel:
 			return
+
 		default:
 		}
 	}
@@ -109,6 +103,8 @@ loop:
 			break loop
 		case <-cancel:
 			break loop
+		case e := <-a.err:
+			return e
 		}
 	}
 
@@ -120,11 +116,20 @@ loop:
 func (a *Audio) stop() (err error) {
 	a.cancel <- struct{}{}
 
-	defer func() {
-		if err := portaudio.Terminate(); err != nil {
-			a.logger.Errorf("failed to terminate portaudio: %v", err)
-		}
-	}()
+	if err := a.stream.Abort(); err != nil {
+		a.err <- err
+		a.logger.Errorf("failed to stop portaudio stream: %v", err)
+	}
 
-	return a.stream.Close()
+	if err := a.stream.Close(); err != nil {
+		a.err <- err
+		a.logger.Errorf("failed to close portaudio stream: %v", err)
+	}
+
+	if err := portaudio.Terminate(); err != nil {
+		a.logger.Errorf("failed to terminate portaudio: %v", err)
+		a.err <- err
+	}
+
+	return nil
 }

@@ -76,7 +76,9 @@ func (p *Process) Start(ctx context.Context) error {
 		return ErrNoSongIDOrSetListIDGiven
 	}
 
-	return p.Stop()
+	// return p.Stop()
+	// we don't need to explicitly stop the process when it's done as it's marked as blocking
+	return nil
 }
 
 func (p *Process) parseConfig(config *Config) (*parsedConfig, error) {

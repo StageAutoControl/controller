@@ -11,6 +11,7 @@ import (
 type processInfo struct {
 	process Process
 	status  Status
+	logger  logging.Logger
 }
 
 type manager struct {
@@ -38,7 +39,7 @@ func (m *manager) listenExit() {
 		if p, _, err := m.GetProcess(name); err != nil {
 			m.logger.Errorf("failed to find process %q while shutting down: %v", name, err)
 
-		} else if err := p.Stop(); err != nil {
+		} else if err := p.Stop(); err != nil && err != errProcessNotRunning {
 			m.logger.Errorf("failed to stop process %q: %v", name, err)
 
 		}
@@ -86,19 +87,21 @@ func (m *manager) Start(name string) (*Status, error) {
 	info.status.StartedAt = &JSONTime{Time: time.Now()}
 	info.status.StoppedAt = nil
 	info.status.Logs = make([]Log, 0)
-
-	logger := NewBufferedLogger(&info.status.Logs, info.status.Verbose)
-	info.process.SetLogger(logger)
+	info.logger = NewBufferedLogger(&info.status.Logs, info.status.Verbose)
+	info.process.SetLogger(info.logger)
 
 	go func() {
 		if err := info.process.Start(m.ctx); err != nil {
 			info.status.Error = err
 			info.status.Running = false
 			m.logger.Errorf("failed to start process %s: %v", name, err)
+			return
 		}
+
 		if info.process.Blocking() {
-			if _, err := m.Stop(name); err != nil {
+			if _, err := m.Stop(name); err != nil && err != errProcessNotRunning {
 				m.logger.Error(err)
+				info.logger.Error(err)
 			}
 		}
 	}()
@@ -118,12 +121,14 @@ func (m *manager) Stop(name string) (*Status, error) {
 	}
 
 	if err := p.process.Stop(); err != nil {
-		return nil, fmt.Errorf("failed to stop process %q: %v", name, err)
+		err = fmt.Errorf("failed to stop process %q: %v", name, err)
+		p.logger.Error(err)
+		return &p.status, err
 	}
 
 	p.status.Running = false
 	p.status.StoppedAt = &JSONTime{Time: time.Now()}
-	m.logger.Infof("Process %s finished successfully", name)
+	p.logger.Infof("Process finished")
 
 	return &p.status, nil
 }
