@@ -3,8 +3,9 @@ package waiter
 import (
 	"fmt"
 
-	"github.com/StageAutoControl/controller/pkg/internal/logging"
 	"github.com/gordonklaus/portaudio"
+
+	"github.com/StageAutoControl/controller/pkg/internal/logging"
 )
 
 // Audio is a waiter that does nothing
@@ -14,35 +15,35 @@ type Audio struct {
 	fanOut    []chan struct{}
 	buf       []float32
 	stream    *portaudio.Stream
-	stop      chan struct{}
+	cancel    chan struct{}
 	err       chan error
 }
 
 // NewAudio creates a new Audio waiter
-func NewAudio(logger logging.Logger, threshold float32) (*Audio, error) {
-	if err := portaudio.Initialize(); err != nil {
-		return nil, fmt.Errorf("failed to initialize portaudio: %v", err)
-	}
-
-	buf := make([]float32, 64)
-	stream, err := portaudio.OpenDefaultStream(1, 0, sampleRate, len(buf), buf)
-	if err != nil {
-		return nil, err
-	}
-
-	a := &Audio{
+func NewAudio(logger logging.Logger, threshold float32) *Audio {
+	return &Audio{
 		logger:    logger,
 		threshold: threshold,
 		fanOut:    make([]chan struct{}, 0),
-		buf:       buf,
-		stream:    stream,
-		stop:      make(chan struct{}, 1),
+		buf:       make([]float32, 64),
+		cancel:    make(chan struct{}, 1),
 		err:       make(chan error, 1),
+	}
+}
+
+func (a *Audio) start() (err error) {
+	if err := portaudio.Initialize(); err != nil {
+		return fmt.Errorf("failed to initialize portaudio: %v", err)
+	}
+
+	a.stream, err = portaudio.OpenDefaultStream(1, 0, sampleRate, len(a.buf), a.buf)
+	if err != nil {
+		return fmt.Errorf("failed to open default portaudio stream: %v", err)
 	}
 
 	go a.readStream()
 
-	return a, nil
+	return nil
 }
 
 func (a *Audio) readStream() {
@@ -68,7 +69,7 @@ func (a *Audio) readStream() {
 		a.checkForPeak()
 
 		select {
-		case <-a.stop:
+		case <-a.cancel:
 			return
 		default:
 		}
@@ -90,33 +91,34 @@ func (a *Audio) notifyWait() {
 	}
 }
 
-// Wait waits for a specific event to happen. In this case, nothing.
-func (a *Audio) Wait(done chan struct{}, cancel chan struct{}, err chan error) error {
+// Wait for a peak in the incoming audio stream
+func (a *Audio) Wait(done chan struct{}, cancel chan struct{}) error {
+	if err := a.start(); err != nil {
+		return err
+	}
+
 	waitForPeak := make(chan struct{}, 1)
 	a.fanOut = append(a.fanOut, waitForPeak)
 
-	// remove channel from fanout, we don't want to have further updates
-	defer func() {
-		a.fanOut = a.fanOut[:len(a.fanOut)-1]
-	}()
-
+loop:
 	for {
 		select {
 		case <-waitForPeak:
 			a.logger.Info("Found peak. Starting playback!")
 			done <- struct{}{}
-			return nil
+			break loop
 		case <-cancel:
-			return nil
-		case err := <-a.err:
-			return err
+			break loop
 		}
 	}
+
+	a.fanOut = a.fanOut[:len(a.fanOut)-1]
+	return a.stop()
 }
 
 // Stop stops the audio stream
-func (a *Audio) Stop() (err error) {
-	a.stop <- struct{}{}
+func (a *Audio) stop() (err error) {
+	a.cancel <- struct{}{}
 
 	defer func() {
 		if err := portaudio.Terminate(); err != nil {

@@ -2,12 +2,11 @@ package playback
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	"github.com/StageAutoControl/controller/pkg/internal/logging"
-
-	"fmt"
 
 	"github.com/StageAutoControl/controller/pkg/cntl/song"
 )
@@ -70,10 +69,13 @@ func (p *Player) PlaySetList(ctx context.Context, setListID string) error {
 }
 
 func (p *Player) wait(ctx context.Context) error {
+	if len(p.waiters) == 0 {
+		return nil
+	}
+
 	chanLen := len(p.waiters) + 1
 	done := make(chan struct{}, chanLen)
 	cancel := make(chan struct{}, chanLen)
-	err := make(chan error, chanLen)
 
 	defer func() {
 		cancel <- struct{}{}
@@ -81,7 +83,7 @@ func (p *Player) wait(ctx context.Context) error {
 
 	for _, w := range p.waiters {
 		go func() {
-			if err := w.Wait(done, cancel, err); err != nil {
+			if err := w.Wait(done, cancel); err != nil {
 				p.logger.Error(err)
 			}
 		}()
@@ -92,8 +94,6 @@ func (p *Player) wait(ctx context.Context) error {
 		return ErrCancelled
 	case <-done:
 		return nil
-	case err := <-err:
-		return err
 	}
 }
 

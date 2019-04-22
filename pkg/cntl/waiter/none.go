@@ -13,7 +13,7 @@ func NewNone(logger logging.Logger) *None {
 }
 
 // Wait waits for a specific event to happen. In this case, nothing.
-func (t *None) Wait(done chan struct{}, cancel chan struct{}, err chan error) error {
+func (t *None) Wait(done chan struct{}, cancel chan struct{}) error {
 	t.logger.Info("Not waiting")
 	done <- struct{}{}
 	return nil

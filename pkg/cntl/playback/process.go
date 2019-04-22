@@ -58,6 +58,9 @@ func (p *Process) Start(ctx context.Context) error {
 	}
 
 	cfg, err := p.parseConfig(config)
+	if err != nil {
+		return err
+	}
 	p.player = NewPlayer(p.logger, ds, cfg.writers, cfg.waiters)
 	ctx, p.cancel = context.WithCancel(ctx)
 
@@ -106,13 +109,7 @@ func (p *Process) parseConfig(config *Config) (*parsedConfig, error) {
 	}
 
 	if config.Waiters.Audio.Enabled {
-		audio, err := waiter.NewAudio(p.logger, config.Waiters.Audio.Threshold)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create audio waiter: %v", err)
-		}
-		cfg.waiters = append(cfg.waiters, audio)
-	} else {
-		cfg.waiters = append(cfg.waiters, waiter.NewNone(p.logger))
+		cfg.waiters = append(cfg.waiters, waiter.NewAudio(p.logger, config.Waiters.Audio.Threshold))
 	}
 
 	return cfg, nil

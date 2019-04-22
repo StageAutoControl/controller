@@ -9,7 +9,7 @@ type TransportWriter interface {
 
 // Waiter waits for a trigger to happen
 type Waiter interface {
-	Wait(done chan struct{}, cancel chan struct{}, err chan error) error
+	Wait(done chan struct{}, cancel chan struct{}) error
 }
 
 type storage interface {

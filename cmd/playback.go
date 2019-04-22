@@ -6,14 +6,15 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/apinnecke/go-exitcontext"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
+
 	"github.com/StageAutoControl/controller/pkg/artnet"
 	"github.com/StageAutoControl/controller/pkg/cntl"
 	"github.com/StageAutoControl/controller/pkg/cntl/playback"
 	"github.com/StageAutoControl/controller/pkg/cntl/transport"
 	"github.com/StageAutoControl/controller/pkg/cntl/waiter"
-	"github.com/apinnecke/go-exitcontext"
-	"github.com/sirupsen/logrus"
-	"github.com/spf13/cobra"
 )
 
 const (
@@ -119,12 +120,7 @@ var playbackCmd = &cobra.Command{
 				break
 
 			case waiter.TypeAudio:
-				a, err := waiter.NewAudio(logger.WithField(cntl.LoggerFieldWaiter, waiter.TypeAudio), audioWaiterThreshold)
-				if err != nil {
-					logger.Fatal(err)
-				}
-
-				waiters = append(waiters, a)
+				waiters = append(waiters, waiter.NewAudio(logger.WithField(cntl.LoggerFieldWaiter, waiter.TypeAudio), audioWaiterThreshold))
 
 				break
 			}
