@@ -76,7 +76,7 @@ func (p *Process) Start(ctx context.Context) error {
 		return ErrNoSongIDOrSetListIDGiven
 	}
 
-	return nil
+	return p.Stop()
 }
 
 func (p *Process) parseConfig(config *Config) (*parsedConfig, error) {
