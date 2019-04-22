@@ -6,9 +6,8 @@ import (
 	"time"
 
 	"github.com/StageAutoControl/controller/pkg/cntl"
-	"github.com/StageAutoControl/controller/pkg/internal/logging"
-
 	"github.com/StageAutoControl/controller/pkg/cntl/song"
+	"github.com/StageAutoControl/controller/pkg/internal/logging"
 )
 
 // Player plays various things from a given data store, for example songs or a whole SetList.
@@ -58,7 +57,12 @@ func (p *Player) PlaySetList(ctx context.Context, setListID string) error {
 		default:
 		}
 
-		p.logger.Infof("Playing song %s", songID)
+		s, ok := p.dataStore.Songs[songID]
+		if !ok {
+			return fmt.Errorf("failed to find song %v", songID)
+		}
+
+		p.logger.Infof("Playing song %v", s.Name)
 
 		if err := p.PlaySong(ctx, songID); err != nil {
 			return err
@@ -104,12 +108,19 @@ func (p *Player) PlaySong(ctx context.Context, songID string) error {
 		return err
 	}
 
-	p.logger.Infof("Waiting for waiters before playing song %s", songID)
+	s, ok := p.dataStore.Songs[songID]
+	if !ok {
+		return fmt.Errorf("failed to find song %v", songID)
+	}
+
+	p.logger.Infof("Playing song %v", s.Name)
+
+	p.logger.Infof("Waiting for waiters before playing song %v", s.Name)
 	if err := p.wait(ctx); err != nil {
 		return err
 	}
 
-	p.logger.Infof("Playing song %s", songID)
+	p.logger.Infof("Playing song %v", s.Name)
 	return Play(ctx, p.logger, p.writers, commands)
 }
 
