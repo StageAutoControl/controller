@@ -124,3 +124,8 @@ func (p *Process) Stop() error {
 
 	return nil
 }
+
+// Blocking returns true if calling Start() is a blocking operation and the process is stopped after start returned
+func (p *Process) Blocking() bool {
+	return true
+}

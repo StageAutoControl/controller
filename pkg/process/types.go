@@ -35,6 +35,9 @@ type Process interface {
 
 	// Stop should fully stop the process and also clean up any leftovers (state, files, go routines, ...)
 	Stop() error
+
+	// Blocking returns true if calling Start() is a blocking operation and the process is stopped after start returned
+	Blocking() bool
 }
 
 // Manager to handle a set of processes as pets

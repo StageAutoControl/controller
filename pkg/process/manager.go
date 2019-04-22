@@ -96,6 +96,11 @@ func (m *manager) Start(name string) (*Status, error) {
 			info.status.Running = false
 			m.logger.Errorf("failed to start process %s: %v", name, err)
 		}
+		if info.process.Blocking() {
+			if _, err := m.Stop(name); err != nil {
+				m.logger.Error(err)
+			}
+		}
 	}()
 
 	return &info.status, nil
@@ -118,6 +123,7 @@ func (m *manager) Stop(name string) (*Status, error) {
 
 	p.status.Running = false
 	p.status.StoppedAt = &JSONTime{Time: time.Now()}
+	m.logger.Infof("Process %s finished successfully", name)
 
 	return &p.status, nil
 }

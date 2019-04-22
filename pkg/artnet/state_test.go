@@ -34,7 +34,7 @@ func TestState_Set(t *testing.T) {
 		au := c.after.GetUniverses()
 
 		if !reflect.DeepEqual(bu, au) {
-			t.Errorf("Expected to get universes %+v at case %v, got %+v", au, c, bu)
+			t.Errorf("Expected to get universes %+v at case %v, got %+v", au, i, bu)
 			continue
 		}
 

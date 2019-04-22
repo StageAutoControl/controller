@@ -1,6 +1,7 @@
 package artnet
 
 import (
+	"sort"
 	"sync"
 )
 
@@ -88,6 +89,8 @@ func (s *State) GetUniverses() []uint16 {
 	for u := range s.data {
 		universes = append(universes, u)
 	}
+
+	sort.Slice(universes, func(i, j int) bool { return universes[i] < universes[j] })
 
 	return universes
 }
