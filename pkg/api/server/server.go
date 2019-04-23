@@ -4,6 +4,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	_ "net/http/pprof"
+
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/rpc"
+	"github.com/gorilla/rpc/json"
+	"github.com/sirupsen/logrus"
 
 	"github.com/StageAutoControl/controller/pkg/api"
 	"github.com/StageAutoControl/controller/pkg/api/datastore"
@@ -11,10 +17,6 @@ import (
 	"github.com/StageAutoControl/controller/pkg/api/playground"
 	"github.com/StageAutoControl/controller/pkg/artnet"
 	"github.com/StageAutoControl/controller/pkg/process"
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/rpc"
-	"github.com/gorilla/rpc/json"
-	"github.com/sirupsen/logrus"
 )
 
 // Server represents the controllers API server, aware of all the controllers
@@ -75,7 +77,7 @@ func (s *Server) registerControllers() error {
 func (s *Server) Run(ctx context.Context, endpoint string) error {
 	s.Server.RegisterCodec(json.NewCodec(), "application/json")
 
-	r := http.NewServeMux()
+	r := http.DefaultServeMux
 	r.Handle(api.RPCPath, s.Server)
 	r.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
 		if _, err := fmt.Fprint(rw, "OK"); err != nil {
