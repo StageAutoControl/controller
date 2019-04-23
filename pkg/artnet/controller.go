@@ -93,8 +93,6 @@ func (c *controller) Write(cmd cntl.Command) error {
 		values[i].Value = dmxCmd.Value.Uint8()
 	}
 
-	//c.logger.Warnf("%+v", values)
-
 	c.SetDMXChannelValues(values)
 
 	return nil
@@ -107,14 +105,9 @@ func (c *controller) triggerSend() {
 
 func (c *controller) sendBackground() {
 	for data := range c.sendTrigger {
-		c.logger.Debug("Sending DMX Values")
-		c.send(data)
-	}
-}
-
-func (c *controller) send(data *UniverseStateMap) {
-	for u, dmx := range *data {
-		c.sender.SendDMXToAddress(dmx.toByteSlice(), c.universeToAddress(u))
+		for u, dmx := range *data {
+			go c.sender.SendDMXToAddress(dmx.toByteSlice(), c.universeToAddress(u))
+		}
 	}
 }
 
