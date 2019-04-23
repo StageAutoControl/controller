@@ -12,7 +12,7 @@ type Status struct {
 	Running   bool      `json:"running"`
 	StartedAt *JSONTime `json:"startedAt"`
 	StoppedAt *JSONTime `json:"stoppedAt"`
-	Error     error     `json:"error"`
+	Error     string    `json:"error"`
 	Logs      []Log     `json:"logs"`
 	Verbose   bool      `json:"verbose"`
 }

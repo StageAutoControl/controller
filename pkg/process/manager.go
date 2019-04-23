@@ -83,7 +83,7 @@ func (m *manager) Start(name string) (*Status, error) {
 	}
 
 	info.status.Running = true
-	info.status.Error = nil
+	info.status.Error = ""
 	info.status.StartedAt = &JSONTime{Time: time.Now()}
 	info.status.StoppedAt = nil
 	info.status.Logs = make([]Log, 0)
@@ -92,7 +92,7 @@ func (m *manager) Start(name string) (*Status, error) {
 
 	go func() {
 		if err := info.process.Start(m.ctx); err != nil {
-			info.status.Error = err
+			info.status.Error = err.Error()
 			info.status.Running = false
 			m.logger.Errorf("failed to start process %s: %v", name, err)
 			return
