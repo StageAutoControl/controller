@@ -1,5 +1,5 @@
 hash: a4fdebacc4ad7b269ce3564aabd9fad9e59e8887361f39abd24634bcc9dbf063
-updated: 2019-04-22T17:30:18.910675+02:00
+updated: 2019-04-24T16:34:20.269918+02:00
 imports:
 - name: github.com/apinnecke/go-exitcontext
   version: 06015046a58d57f896f5e2ea290e6540c3fba863
@@ -22,7 +22,7 @@ imports:
 - name: github.com/jinzhu/copier
   version: 7e38e58719c33e0d44d585c4ab477a30f8cb82dd
 - name: github.com/jsimonetti/go-artnet
-  version: 95b99e5cf00022b85be1abbb668b1a482e01bf8b
+  version: 748cf5fe8328f0e39478d3ab6415589887856a5f
   subpackages:
   - packet
   - packet/code
@@ -44,7 +44,7 @@ imports:
 - name: github.com/spf13/viper
   version: 9e56dacc08fbbf8c9ee2dbc717553c758ce42bc9
 - name: golang.org/x/sys
-  version: e8e3143a4f4a00f1fafef0dd82ba78223281b01b
+  version: 953cdadca894cdc07be76fc99f95b40c28f06623
   subpackages:
   - unix
 testImports: []
