@@ -21,7 +21,7 @@ type controller struct {
 	logger      logging.Logger
 	sender      *artnet.Controller
 	state       *State
-	sendTrigger chan *UniverseStateMap
+	sendTrigger chan UniverseStateMap
 	context     context.Context
 }
 
@@ -49,7 +49,7 @@ func NewController(logger logging.Logger) (Controller, error) {
 		logger:      logger,
 		sender:      artnet.NewController(host, ip, senderLogger),
 		state:       NewState(),
-		sendTrigger: make(chan *UniverseStateMap, 100),
+		sendTrigger: make(chan UniverseStateMap, 100),
 	}
 
 	return control, nil
@@ -99,13 +99,12 @@ func (c *controller) Write(cmd cntl.Command) error {
 }
 
 func (c *controller) triggerSend() {
-	data := c.state.Get()
-	c.sendTrigger <- &data
+	c.sendTrigger <- c.state.Get()
 }
 
 func (c *controller) sendBackground() {
 	for data := range c.sendTrigger {
-		for u, dmx := range *data {
+		for u, dmx := range data {
 			c.sender.SendDMXToAddress(dmx.toByteSlice(), c.universeToAddress(u))
 		}
 	}

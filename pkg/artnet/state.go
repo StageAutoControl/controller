@@ -54,29 +54,32 @@ func (s *State) SetChannelValues(values []ChannelValue) {
 // SetUniverse sets a complete DMX universe data
 func (s *State) SetUniverse(u uint16, dmx Universe) {
 	s.m.Lock()
-	defer s.m.Unlock()
 	s.data[u] = dmx
+	s.m.Unlock()
 }
 
 // GetUniverse gets a complete DMX universe data
 func (s *State) GetUniverse(u uint16) Universe {
 	s.m.RLock()
-	defer s.m.RUnlock()
 
 	dmx, ok := s.data[u]
 	if !ok {
 		dmx = Universe{}
 	}
 
+	s.m.RUnlock()
 	return dmx
 }
 
 // Get returns all of the current state
 func (s *State) Get() UniverseStateMap {
 	s.m.RLock()
-	defer s.m.RUnlock()
-
-	return s.data
+	c := make(UniverseStateMap)
+	for k, v := range s.data {
+		c[k] = v
+	}
+	s.m.RUnlock()
+	return c
 }
 
 // GetUniverses returns a slice of all available universe indexes
@@ -84,13 +87,13 @@ func (s *State) GetUniverses() []uint16 {
 	universes := make([]uint16, 0)
 
 	s.m.RLock()
-	defer s.m.RUnlock()
 
 	for u := range s.data {
 		universes = append(universes, u)
 	}
 
 	sort.Slice(universes, func(i, j int) bool { return universes[i] < universes[j] })
+	s.m.RUnlock()
 
 	return universes
 }
