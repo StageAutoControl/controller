@@ -160,7 +160,7 @@ func RenderTransitionParams(ds *cntl.DataStore, dd []*cntl.DMXDevice, t *cntl.DM
 	return result, nil
 }
 
-func calcTransitionSteps(from, to, steps uint8, easingFunc easingFunc) ([]uint8, error) {
+func calcTransitionSteps(from, to uint8, steps uint16, easingFunc easingFunc) ([]uint8, error) {
 	result := make([]uint8, steps)
 	diff := float64(to) - float64(from)
 	floatFrom := float64(from)

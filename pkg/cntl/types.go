@@ -157,7 +157,7 @@ type DMXTransition struct {
 	ID     string                `json:"id" yaml:"id"`
 	Name   string                `json:"name" yaml:"name"`
 	Ease   EaseFunc              `json:"ease" yaml:"ease"`
-	Length uint8                 `json:"length" yaml:"length"`
+	Length uint16                `json:"length" yaml:"length"`
 	Params []DMXTransitionParams `json:"params" yaml:"params"`
 }
 
