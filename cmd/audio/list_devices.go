@@ -17,12 +17,6 @@ var DeviceCmd = &cobra.Command{
 	Short: "Prints info about all devices",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := portaudio.Initialize(); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		defer portaudio.Terminate()
-
 		devices, err := portaudio.Devices()
 		if err != nil {
 			fmt.Println(err)

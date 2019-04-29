@@ -32,13 +32,13 @@ func NewAudio(logger logging.Logger, threshold float32) *Audio {
 }
 
 func (a *Audio) start() (err error) {
-	if err := portaudio.Initialize(); err != nil {
-		return fmt.Errorf("failed to initialize portaudio: %v", err)
-	}
-
 	a.stream, err = portaudio.OpenDefaultStream(1, 0, sampleRate, len(a.buf), a.buf)
 	if err != nil {
 		return fmt.Errorf("failed to open default portaudio stream: %v", err)
+	}
+
+	if err := a.stream.Start(); err != nil {
+		return fmt.Errorf("failed to start portaudio stream: %v", err)
 	}
 
 	go a.readStream()
@@ -47,15 +47,10 @@ func (a *Audio) start() (err error) {
 }
 
 func (a *Audio) readStream() {
-	if err := a.stream.Start(); err != nil {
-		a.err <- err
-		return
-	}
-
 	for {
 		err := a.stream.Read()
 		if err != nil {
-			a.logger.Infof("Error reading audio stream: %s", err)
+			a.logger.Infof("Error reading portaudio stream: %s", err)
 			return
 		}
 
@@ -98,7 +93,6 @@ loop:
 	for {
 		select {
 		case <-waitForPeak:
-			a.logger.Info("Found peak. Starting playback!")
 			done <- struct{}{}
 			break loop
 		case <-cancel:
@@ -116,19 +110,16 @@ loop:
 func (a *Audio) stop() (err error) {
 	a.cancel <- struct{}{}
 
-	if err := a.stream.Abort(); err != nil {
+	if err := a.stream.Stop(); err != nil {
 		a.err <- err
 		a.logger.Errorf("failed to stop portaudio stream: %v", err)
+		return err
 	}
 
 	if err := a.stream.Close(); err != nil {
 		a.err <- err
 		a.logger.Errorf("failed to close portaudio stream: %v", err)
-	}
-
-	if err := portaudio.Terminate(); err != nil {
-		a.logger.Errorf("failed to terminate portaudio: %v", err)
-		a.err <- err
+		return err
 	}
 
 	return nil

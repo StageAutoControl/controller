@@ -3,13 +3,17 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"os"
 
-	"github.com/StageAutoControl/controller/pkg/artnet"
-	"github.com/StageAutoControl/controller/pkg/disk"
+	"github.com/apinnecke/go-exitcontext"
+	"github.com/gordonklaus/portaudio"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+
+	"github.com/StageAutoControl/controller/pkg/artnet"
+	"github.com/StageAutoControl/controller/pkg/disk"
 )
 
 var (
@@ -20,6 +24,7 @@ var (
 	loader            *disk.Loader
 	controller        artnet.Controller
 	disableController bool
+	ctx               context.Context
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -28,11 +33,29 @@ var RootCmd = &cobra.Command{
 	Short: "Stage automatic controlling, triggering state changes.",
 	Long:  `Automatic stage controlling, including midi and DMX, by analyzing audio signals and pre defined light scenes`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		ctx = exitcontext.New()
 		logger = createLogger(logLevel)
 		storage = createStorage(logger, storagePath)
 		controller = createController(logger, disableController)
 		loader = disk.NewLoader(storage)
+
+		if err := portaudio.Initialize(); err != nil {
+			logger.Fatalf("failed to initialize portaudio: %v", err)
+		}
+		go func() {
+			<-ctx.Done()
+			terminateAudio()
+		}()
 	},
+	PersistentPostRun: func(cmd *cobra.Command, args []string) {
+		terminateAudio()
+	},
+}
+
+func terminateAudio() {
+	if err := portaudio.Terminate(); err != nil {
+		logger.Errorf("failed to terminate portaudio: %v", err)
+	}
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.

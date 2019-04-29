@@ -22,9 +22,6 @@ var SineCmd = &cobra.Command{
 	Short: "Creates a sin curved audio",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		portaudio.Initialize()
-		defer portaudio.Terminate()
-
 		s := newStereoSine(float64(frequency), sampleRate)
 		defer s.Close()
 

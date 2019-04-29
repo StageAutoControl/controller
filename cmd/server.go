@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/apinnecke/go-exitcontext"
 	"github.com/spf13/cobra"
 
 	apiServer "github.com/StageAutoControl/controller/pkg/api/server"
@@ -17,7 +16,6 @@ var serverCmd = &cobra.Command{
 	Use:   "server",
 	Short: "Opens the RPC API to manage the data and control the processes",
 	Run: func(cmd *cobra.Command, args []string) {
-		ctx := exitcontext.New()
 		pm := process.NewManager(ctx, logger)
 		server, err := apiServer.New(logger.WithField("module", "api"), storage, loader, controller, pm)
 		if err != nil {

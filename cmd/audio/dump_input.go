@@ -24,11 +24,6 @@ var DumpInputCmd = &cobra.Command{
 	Short: "Dumps the audio input of a device to console",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := portaudio.Initialize(); err != nil {
-			panic(err)
-		}
-		defer portaudio.Terminate()
-
 		buf := make([]float32, averageSamples)
 		s, err := portaudio.OpenDefaultStream(1, 0, sampleRate, len(buf), buf)
 		if err != nil {
