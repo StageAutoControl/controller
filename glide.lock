@@ -1,5 +1,5 @@
-hash: a4fdebacc4ad7b269ce3564aabd9fad9e59e8887361f39abd24634bcc9dbf063
-updated: 2019-04-24T16:34:20.269918+02:00
+hash: 74ae0eab7a8591885e68128033eabac0034c15b565b3c1451ee2cb272bb4d2b6
+updated: 2019-04-30T20:36:29.710648+02:00
 imports:
 - name: github.com/apinnecke/go-exitcontext
   version: 06015046a58d57f896f5e2ea290e6540c3fba863
@@ -22,7 +22,7 @@ imports:
 - name: github.com/jinzhu/copier
   version: 7e38e58719c33e0d44d585c4ab477a30f8cb82dd
 - name: github.com/jsimonetti/go-artnet
-  version: 748cf5fe8328f0e39478d3ab6415589887856a5f
+  version: cfa1cd18052b6d65c69efca50716b00a16a39f48
   subpackages:
   - packet
   - packet/code
