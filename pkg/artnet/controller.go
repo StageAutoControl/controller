@@ -47,7 +47,7 @@ func NewController(logger logging.Logger) (Controller, error) {
 	senderLogger := artnet.NewLogger(logger.(*logrus.Entry).WithField("module", "artnet"))
 	control := &controller{
 		logger:      logger,
-		sender:      artnet.NewController(host, ip, senderLogger),
+		sender:      artnet.NewController(host, ip, senderLogger, artnet.MaxFPS(40)),
 		state:       NewState(),
 		sendTrigger: make(chan UniverseStateMap, 100),
 	}
