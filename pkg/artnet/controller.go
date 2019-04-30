@@ -105,6 +105,7 @@ func (c *controller) triggerSend() {
 func (c *controller) sendBackground() {
 	for data := range c.sendTrigger {
 		for u, dmx := range data {
+			fmt.Printf("%s %#v\n", c.universeToAddress(u), dmx.toByteSlice())
 			c.sender.SendDMXToAddress(dmx.toByteSlice(), c.universeToAddress(u))
 		}
 	}
