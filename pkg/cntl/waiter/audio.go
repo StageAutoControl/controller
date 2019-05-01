@@ -24,14 +24,16 @@ func NewAudio(logger logging.Logger, threshold float32) *Audio {
 	return &Audio{
 		logger:    logger,
 		threshold: threshold,
-		fanOut:    make([]chan struct{}, 0),
-		buf:       make([]float32, 64),
-		cancel:    make(chan struct{}, 1),
-		err:       make(chan error, 5),
 	}
 }
 
 func (a *Audio) start() (err error) {
+
+	a.fanOut = make([]chan struct{}, 0)
+	a.buf = make([]float32, 64)
+	a.cancel = make(chan struct{}, 1)
+	a.err = make(chan error, 5)
+
 	a.stream, err = portaudio.OpenDefaultStream(1, 0, sampleRate, len(a.buf), a.buf)
 	if err != nil {
 		return fmt.Errorf("failed to open default portaudio stream: %v", err)
@@ -113,7 +115,8 @@ func (a *Audio) stop() (err error) {
 	if err := a.stream.Stop(); err != nil {
 		a.err <- err
 		a.logger.Errorf("failed to stop portaudio stream: %v", err)
-		return err
+		// don't return the error, stream.Close has to be called
+		// return err
 	}
 
 	if err := a.stream.Close(); err != nil {
