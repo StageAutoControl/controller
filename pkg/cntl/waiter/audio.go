@@ -12,7 +12,7 @@ import (
 type Audio struct {
 	logger    logging.Logger
 	threshold float32
-	fanOut    []chan struct{}
+	notify    chan struct{}
 	buf       []float32
 	stream    *portaudio.Stream
 	cancel    chan struct{}
@@ -28,8 +28,7 @@ func NewAudio(logger logging.Logger, threshold float32) *Audio {
 }
 
 func (a *Audio) start() (err error) {
-
-	a.fanOut = make([]chan struct{}, 0)
+	a.notify = make(chan struct{}, 1)
 	a.buf = make([]float32, 64)
 	a.cancel = make(chan struct{}, 1)
 	a.err = make(chan error, 5)
@@ -52,34 +51,32 @@ func (a *Audio) readStream() {
 	for {
 		err := a.stream.Read()
 		if err != nil {
+			a.err <- err
 			a.logger.Infof("Error reading portaudio stream: %s", err)
 			return
 		}
 
-		a.checkForPeak()
+		if a.checkForPeak() {
+			return
+		}
 
 		select {
 		case <-a.cancel:
 			return
-
 		default:
 		}
 	}
 }
 
-func (a *Audio) checkForPeak() {
+func (a *Audio) checkForPeak() bool {
 	for _, i := range a.buf {
 		if i >= a.threshold || i <= (a.threshold*-1) {
-			a.notifyWait()
-			return
+			a.notify <- struct{}{}
+			return true
 		}
 	}
-}
 
-func (a *Audio) notifyWait() {
-	for _, c := range a.fanOut {
-		c <- struct{}{}
-	}
+	return false
 }
 
 // Wait for a peak in the incoming audio stream
@@ -88,13 +85,10 @@ func (a *Audio) Wait(done chan struct{}, cancel chan struct{}) error {
 		return err
 	}
 
-	waitForPeak := make(chan struct{}, 1)
-	a.fanOut = append(a.fanOut, waitForPeak)
-
 loop:
 	for {
 		select {
-		case <-waitForPeak:
+		case <-a.notify:
 			done <- struct{}{}
 			break loop
 		case <-cancel:
@@ -104,7 +98,6 @@ loop:
 		}
 	}
 
-	a.fanOut = a.fanOut[:len(a.fanOut)-1]
 	return a.stop()
 }
 
@@ -124,6 +117,10 @@ func (a *Audio) stop() (err error) {
 		a.logger.Errorf("failed to close portaudio stream: %v", err)
 		return err
 	}
+
+	close(a.notify)
+	close(a.cancel)
+	close(a.err)
 
 	return nil
 }
