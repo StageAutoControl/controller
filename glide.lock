@@ -1,5 +1,5 @@
-hash: 74ae0eab7a8591885e68128033eabac0034c15b565b3c1451ee2cb272bb4d2b6
-updated: 2019-04-30T20:36:29.710648+02:00
+hash: a4fdebacc4ad7b269ce3564aabd9fad9e59e8887361f39abd24634bcc9dbf063
+updated: 2019-05-10T18:33:46.434695+02:00
 imports:
 - name: github.com/apinnecke/go-exitcontext
   version: 06015046a58d57f896f5e2ea290e6540c3fba863

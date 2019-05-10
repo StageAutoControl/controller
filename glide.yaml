@@ -11,7 +11,7 @@ import:
       - v2/json
   - package: github.com/jsimonetti/go-artnet
     #  repo: https://github.com/StageAutoControl/go-artnet.git
-    version: maxfps
+    # version: maxfps
   - package: github.com/rakyll/portmidi
     version: 1246dd47c56089ea2ae791266edb7f4c6b90c045
   - package: github.com/satori/go.uuid
