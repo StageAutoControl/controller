@@ -25,6 +25,7 @@ type DMXScenePosition struct {
 	ID     string `json:"id" yaml:"id"`
 	At     uint64 `json:"at" yaml:"at"`
 	Repeat uint8  `json:"repeat" yaml:"repeat"`
+	Marker string `json:"marker" yaml:"marker"`
 }
 
 // Song is the whole container for everything that needs to be controlled during a song.
