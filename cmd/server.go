@@ -9,6 +9,7 @@ import (
 	"github.com/StageAutoControl/controller/pkg/cntl/playback"
 	"github.com/StageAutoControl/controller/pkg/disk"
 	"github.com/StageAutoControl/controller/pkg/process"
+	"github.com/StageAutoControl/controller/pkg/visualizer"
 )
 
 // serverCmd represents the server command
@@ -17,7 +18,9 @@ var serverCmd = &cobra.Command{
 	Short: "Opens the RPC API to manage the data and control the processes",
 	Run: func(cmd *cobra.Command, args []string) {
 		pm := process.NewManager(ctx, logger)
-		server, err := apiServer.New(logger.WithField("module", "api"), storage, loader, controller, pm)
+		visualizer := visualizer.NewServer(logger.WithField("module", "visualizer"))
+
+		server, err := apiServer.New(logger.WithField("module", "api"), storage, loader, controller, pm, visualizer)
 		if err != nil {
 			logger.Fatal(err)
 		}
@@ -34,7 +37,7 @@ var serverCmd = &cobra.Command{
 			if err := playback.EnsureDefaultConfig(storage); err != nil {
 				logger.Fatal(err)
 			}
-			if err := pm.AddProcess(playback.ProcessName, playback.NewProcess(loader, storage, controller), true); err != nil {
+			if err := pm.AddProcess(playback.ProcessName, playback.NewProcess(loader, storage, controller, visualizer), true); err != nil {
 				logger.Fatal(err)
 			}
 			if err := controller.Start(ctx); err != nil {

@@ -17,6 +17,7 @@ import (
 	"github.com/StageAutoControl/controller/pkg/api/playground"
 	"github.com/StageAutoControl/controller/pkg/artnet"
 	"github.com/StageAutoControl/controller/pkg/process"
+	"github.com/StageAutoControl/controller/pkg/visualizer"
 )
 
 // Server represents the controllers API server, aware of all the controllers
@@ -28,17 +29,27 @@ type Server struct {
 	apiController map[string]interface{}
 	cntl          artnet.Controller
 	pm            process.Manager
+	visualizer    *visualizer.Server
 }
 
 // New returns a new Server instance
-func New(logger *logrus.Entry, storage api.Storage, loader api.Loader, cntl artnet.Controller, pm process.Manager) (*Server, error) {
+func New(
+	logger *logrus.Entry,
+	storage api.Storage,
+	loader api.Loader,
+	cntl artnet.Controller,
+	pm process.Manager,
+	visualizer *visualizer.Server,
+) (*Server, error) {
+
 	server := &Server{
-		Server:  rpc.NewServer(),
-		logger:  logger,
-		storage: storage,
-		loader:  loader,
-		cntl:    cntl,
-		pm:      pm,
+		Server:     rpc.NewServer(),
+		logger:     logger,
+		storage:    storage,
+		loader:     loader,
+		cntl:       cntl,
+		pm:         pm,
+		visualizer: visualizer,
 	}
 
 	if err := server.registerControllers(); err != nil {
@@ -79,6 +90,7 @@ func (s *Server) Run(ctx context.Context, endpoint string) error {
 
 	r := http.DefaultServeMux
 	r.Handle(api.RPCPath, s.Server)
+	r.HandleFunc(api.VisualizerPath, s.visualizer.ServeRequest)
 	r.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
 		if _, err := fmt.Fprint(rw, "OK"); err != nil {
 			s.logger.Errorf("failed to write content to response: %v", err)

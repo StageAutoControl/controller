@@ -15,6 +15,7 @@ import (
 	"github.com/StageAutoControl/controller/pkg/cntl/playback"
 	"github.com/StageAutoControl/controller/pkg/cntl/transport"
 	"github.com/StageAutoControl/controller/pkg/cntl/waiter"
+	"github.com/StageAutoControl/controller/pkg/visualizer"
 )
 
 const (
@@ -75,11 +76,7 @@ var playbackCmd = &cobra.Command{
 				break
 
 			case transport.TypeVisualizer:
-				w, err := transport.NewVisualizer(logger.WithField(cntl.LoggerFieldTransport, transport.TypeVisualizer), viualizerEndpoint)
-				if err != nil {
-					logger.Fatalf("Unable to connect to the visualizer: %v", err)
-				}
-
+				w := visualizer.NewServer(logger.WithField(cntl.LoggerFieldTransport, transport.TypeVisualizer))
 				writers = append(writers, w)
 				break
 

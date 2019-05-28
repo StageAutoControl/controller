@@ -8,6 +8,7 @@ import (
 	"github.com/StageAutoControl/controller/pkg/cntl/transport"
 	"github.com/StageAutoControl/controller/pkg/cntl/waiter"
 	"github.com/StageAutoControl/controller/pkg/internal/logging"
+	"github.com/StageAutoControl/controller/pkg/visualizer"
 )
 
 // Process handles the playback of a single song
@@ -19,14 +20,16 @@ type Process struct {
 	controller artnet.Controller
 	player     *Player
 	cancel     context.CancelFunc
+	visualizer *visualizer.Server
 }
 
 // NewProcess returns a new playback process instance
-func NewProcess(loader loader, storage storage, controller artnet.Controller) *Process {
+func NewProcess(loader loader, storage storage, controller artnet.Controller, visualizer *visualizer.Server) *Process {
 	return &Process{
 		loader:     loader,
 		storage:    storage,
 		controller: controller,
+		visualizer: visualizer,
 	}
 }
 
@@ -99,8 +102,6 @@ func (p *Process) parseConfig(config *Config) (*parsedConfig, error) {
 	}
 
 	if config.TransportWriters.MIDI.Enabled {
-		writers++
-
 		mw, err := transport.NewMIDI(p.logger, config.TransportWriters.MIDI.OutputDeviceID)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create midi transport writer: %v", err)
@@ -108,6 +109,11 @@ func (p *Process) parseConfig(config *Config) (*parsedConfig, error) {
 
 		writers++
 		cfg.writers = append(cfg.writers, mw)
+	}
+
+	if config.TransportWriters.Visualizer.Enabled {
+		writers++
+		cfg.writers = append(cfg.writers, p.visualizer)
 	}
 
 	if config.Waiters.Audio.Enabled {

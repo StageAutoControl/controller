@@ -19,11 +19,14 @@ var defaultConfig = `
   "waiters": {
     "audio": {
       "enabled": true,
-			"threshold": 0.8
+			"threshold": 0.7
     }
   },
   "transportWriters": {
     "artNet": {
+      "enabled": true
+    },
+    "visualizer": {
       "enabled": true
     },
     "midi": {

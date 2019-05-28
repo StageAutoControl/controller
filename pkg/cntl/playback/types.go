@@ -51,6 +51,9 @@ type Config struct {
 		ArtNet struct {
 			Enabled bool `json:"enabled"`
 		} `json:"artNet"`
+		Visualizer struct {
+			Enabled bool `json:"enabled"`
+		} `json:"visualizer"`
 		MIDI struct {
 			Enabled        bool `json:"enabled"`
 			OutputDeviceID int8 `json:"outputDeviceId"`
