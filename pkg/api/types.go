@@ -9,7 +9,7 @@ import (
 var (
 	// RPCPath to where the RPC server should listen on
 	RPCPath        = "/api"
-	VisualizerPath = "/visualizer"
+	VisualizerPath = "/visualizer-socket"
 
 	// ErrNoIDGiven is returned when the request did not contain a valid ID
 	ErrNoIDGiven = errors.New("no ID was given with request")
