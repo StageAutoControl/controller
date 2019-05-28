@@ -1,5 +1,5 @@
-hash: a4fdebacc4ad7b269ce3564aabd9fad9e59e8887361f39abd24634bcc9dbf063
-updated: 2019-05-10T18:33:46.434695+02:00
+hash: 73ebe5508099716cf9b72fbca04a97e51fb1152ac07fbd495148e0a2b997a827
+updated: 2019-05-28T09:02:23.689353+02:00
 imports:
 - name: github.com/apinnecke/go-exitcontext
   version: 06015046a58d57f896f5e2ea290e6540c3fba863
@@ -17,6 +17,8 @@ imports:
   - json
   - v2
   - v2/json
+- name: github.com/gorilla/websocket
+  version: 66b9c49e59c6c48f0ffce28c2d8b8a5678502c6d
 - name: github.com/inconshreveable/mousetrap
   version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
 - name: github.com/jinzhu/copier
@@ -36,13 +38,13 @@ imports:
 - name: github.com/satori/go.uuid
   version: f58768cc1a7a7e77a3bd49e98cdd21419399b6a3
 - name: github.com/sirupsen/logrus
-  version: 9b3cdde74fbe9443d704467498a7dcb61a79de9b
+  version: 839c75faf7f98a33d445d181f3018b5c3409a45e
 - name: github.com/spf13/cobra
   version: 67fc4837d267bc9bfd6e47f77783fcc3dffc68de
 - name: github.com/spf13/pflag
   version: 24fa6976df40757dce6aea913e7b81ade90530e1
 - name: github.com/spf13/viper
-  version: 9e56dacc08fbbf8c9ee2dbc717553c758ce42bc9
+  version: b5bf975e5823809fb22c7644d008757f78a4259e
 - name: golang.org/x/sys
   version: 953cdadca894cdc07be76fc99f95b40c28f06623
   subpackages:
