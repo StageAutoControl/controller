@@ -87,6 +87,8 @@ workflows:
               only: /.*/
       - publish:
           context: docker
+          requires:
+            - build
           filters:
             tags:
               only: /.*/
