@@ -16,6 +16,8 @@ jobs:
             curl https://glide.sh/get | sh
             glide install --strip-vendor
 
+            apt-get install -y libportmidi-dev portaudio19-dev
+
       - run:
           name: run tests
           command: go test -v ./...
@@ -40,8 +42,12 @@ jobs:
       - run:
           name: install dependencies
           command: |
+            curl https://glide.sh/get | sh
+            glide install --strip-vendor
 
-      - push-docker:
+            apt-get install -y libportmidi-dev portaudio19-dev
+
+      - deploy:
           name: push docker images
           command: |
             [ "${CIRCLE_BRANCH}" != "master" ] && [ -z "${CIRCLE_TAG}" ] && exit 0
@@ -59,15 +65,13 @@ jobs:
               docker tag ${DOCKER_REPO} ${DOCKER_REPO}:${CIRCLE_TAG}
               docker push ${DOCKER_REPO}:${CIRCLE_TAG}
             fi
-      - push-artifacts:
+
+      - deploy:
           name: push artifacts
           command: |
             [ -z "${CIRCLE_TAG}" ] && exit 0
 
-            curl https://glide.sh/get | sh
-            glide install --strip-vendor
             go get github.com/tcnksm/ghr
-
             CGO_ENABLED=0 go build -a -ldflags '-s' -installsuffix cgo -o bin/controller_linux_amd64 .
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./bin
 
