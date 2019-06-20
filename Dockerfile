@@ -27,6 +27,6 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /root/
-COPY --from=builder /go/src/github.com/StageAutoControl/controller/bin/controller_amd64 ./controller
+COPY --from=builder /go/src/github.com/StageAutoControl/controller/bin/controller ./controller
 RUN chmod +x ./controller
 ENTRYPOINT ["./controller"]
