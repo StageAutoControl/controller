@@ -90,14 +90,12 @@ func (p *Process) parseConfig(config *Config) (*parsedConfig, error) {
 		writers: []TransportWriter{},
 	}
 
-	writers := 0
 	if config.TransportWriters.ArtNet.Enabled {
 		aw, err := transport.NewArtNet(p.controller)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create artnet transport writer: %v", err)
 		}
 
-		writers++
 		cfg.writers = append(cfg.writers, aw)
 	}
 
@@ -107,12 +105,10 @@ func (p *Process) parseConfig(config *Config) (*parsedConfig, error) {
 			return nil, fmt.Errorf("failed to create midi transport writer: %v", err)
 		}
 
-		writers++
 		cfg.writers = append(cfg.writers, mw)
 	}
 
 	if config.TransportWriters.Visualizer.Enabled {
-		writers++
 		cfg.writers = append(cfg.writers, p.visualizer)
 	}
 

@@ -69,16 +69,13 @@ var playbackCmd = &cobra.Command{
 
 			case transport.TypeStream:
 				writers = append(writers, transport.NewStream(logger.WithField(cntl.LoggerFieldTransport, transport.TypeStream), os.Stdout))
-				break
 
 			case transport.TypeBarLogger:
 				writers = append(writers, transport.NewBarLogger(logger.WithField(cntl.LoggerFieldTransport, transport.TypeBarLogger)))
-				break
 
 			case transport.TypeVisualizer:
 				w := visualizer.NewServer(logger.WithField(cntl.LoggerFieldTransport, transport.TypeVisualizer))
 				writers = append(writers, w)
-				break
 
 			case transport.TypeArtNet:
 				controller, err := artnet.NewController(logger.WithField(cntl.LoggerFieldTransport, transport.TypeArtNet))
@@ -92,7 +89,6 @@ var playbackCmd = &cobra.Command{
 				}
 
 				writers = append(writers, w)
-				break
 
 			case transport.TypeMidi:
 				w, err := transport.NewMIDI(logger.WithField(cntl.LoggerFieldTransport, transport.TypeMidi), midiDeviceID)
@@ -101,7 +97,6 @@ var playbackCmd = &cobra.Command{
 				}
 
 				writers = append(writers, w)
-				break
 
 			default:
 				logger.Fatalf("Transport %q is not supported", transportType)
@@ -114,12 +109,9 @@ var playbackCmd = &cobra.Command{
 			case waiter.TypeNone:
 				waiters = append(waiters, waiter.NewNone(logger.WithField(cntl.LoggerFieldWaiter, waiter.TypeNone)))
 
-				break
-
 			case waiter.TypeAudio:
 				waiters = append(waiters, waiter.NewAudio(logger.WithField(cntl.LoggerFieldWaiter, waiter.TypeAudio), audioWaiterThreshold))
 
-				break
 			}
 		}
 
@@ -133,7 +125,6 @@ var playbackCmd = &cobra.Command{
 				logger.Fatal(err)
 			}
 
-			break
 		case playbackTypeSetList:
 			setListID := args[1]
 			if err = player.PlaySetList(ctx, setListID); err != nil {

@@ -57,12 +57,12 @@ func (c *Controller) Start(r *http.Request, req *playback.Params, res *Status) e
 
 // Stop a playback
 func (c *Controller) Stop(r *http.Request, req *api.IDBody, res *Status) error {
-	p, s, err := c.pm.GetProcess(playback.ProcessName)
+	p, _, err := c.pm.GetProcess(playback.ProcessName)
 	if err != nil {
 		return fmt.Errorf("failed to get playback status: %v", err)
 	}
 
-	s, err = c.pm.Stop(playback.ProcessName)
+	s, err := c.pm.Stop(playback.ProcessName)
 	if err != nil {
 		return fmt.Errorf("failed to stop playback: %v", err)
 	}

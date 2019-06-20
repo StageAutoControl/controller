@@ -94,7 +94,7 @@ func (c *DMXPlaygroundController) PlayScene(r *http.Request, req *PlayOnceReques
 	c.defaultBarParams(&req.BarParams)
 	commands := playback.ToPlayable(req.BarParams, dmxCommands)
 	if err := playback.Play(context.Background(), c.logger, []playback.TransportWriter{c.controller}, commands); err != nil {
-
+		return fmt.Errorf("failed to start playback: %v", err)
 	}
 
 	return nil
@@ -120,7 +120,7 @@ func (c *DMXPlaygroundController) PlayPreset(r *http.Request, req *PlayOnceReque
 	c.defaultBarParams(&req.BarParams)
 	commands := playback.ToPlayable(req.BarParams, dmxCommands)
 	if err := playback.Play(context.Background(), c.logger, []playback.TransportWriter{c.controller}, commands); err != nil {
-
+		return fmt.Errorf("failed to start playback: %v", err)
 	}
 
 	return nil

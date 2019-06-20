@@ -4,6 +4,7 @@
 package audio
 
 import (
+	"log"
 	"math"
 	"time"
 
@@ -23,12 +24,20 @@ var SineCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		s := newStereoSine(float64(frequency), sampleRate)
-		defer s.Close()
+		defer func() {
+			if err := s.Close(); err != nil {
+				log.Fatal(err)
+			}
+		}()
 
 		if err := s.Start(); err != nil {
 			panic(err)
 		}
-		defer s.Stop()
+		defer func() {
+			if err := s.Stop(); err != nil {
+				log.Fatal(err)
+			}
+		}()
 
 		time.Sleep(time.Duration(length) * time.Millisecond)
 	},

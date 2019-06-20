@@ -5,6 +5,7 @@ package audio
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"os/signal"
@@ -29,16 +30,24 @@ var DumpInputCmd = &cobra.Command{
 		if err != nil {
 			panic(err)
 		}
-		defer s.Close()
+		defer func() {
+			if err := s.Close(); err != nil {
+				log.Fatal(err)
+			}
+		}()
 
 		if err := s.Start(); err != nil {
 			panic(err)
 		}
-		defer s.Stop()
+		defer func() {
+			if err := s.Stop(); err != nil {
+				log.Fatal(err)
+			}
+		}()
 
 		var frame int64
 		c := make(chan os.Signal, 1)
-		signal.Notify(c, os.Interrupt, os.Kill)
+		signal.Notify(c, os.Interrupt, os.Interrupt)
 
 		fmt.Println("Started listener, dumping input.")
 

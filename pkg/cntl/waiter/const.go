@@ -6,5 +6,4 @@ const (
 	TypeAudio = "audio"
 
 	sampleRate = 44100
-	precision  = 0.9
 )

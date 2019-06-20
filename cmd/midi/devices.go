@@ -5,6 +5,7 @@ package midi
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/rakyll/portmidi"
@@ -21,7 +22,11 @@ var MidiDeviceCmd = &cobra.Command{
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		defer portmidi.Terminate()
+		defer func() {
+			if err := portmidi.Terminate(); err != nil {
+				log.Fatal(err)
+			}
+		}()
 
 		num := portmidi.CountDevices()
 		fmt.Printf("Found %d devices. \n", num)

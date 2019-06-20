@@ -5,6 +5,7 @@ package midi
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 
@@ -26,7 +27,11 @@ var MidiDumpCmd = &cobra.Command{
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		defer portmidi.Terminate()
+		defer func() {
+			if err := portmidi.Terminate(); err != nil {
+				log.Fatal(err)
+			}
+		}()
 
 		var d portmidi.DeviceID
 		if deviceID == "" {

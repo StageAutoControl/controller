@@ -79,11 +79,11 @@ func (p *Player) wait(ctx context.Context) error {
 	}()
 
 	for _, w := range p.waiters {
-		go func() {
+		go func(w Waiter) {
 			if err := w.Wait(done, cancel); err != nil {
 				p.logger.Error(err)
 			}
-		}()
+		}(w)
 	}
 
 	select {
@@ -148,11 +148,11 @@ func Play(ctx context.Context, logger logging.Logger, writers []TransportWriter,
 			}
 
 			for _, w := range writers {
-				go func() {
+				go func(w TransportWriter) {
 					if err := w.Write(cmd); err != nil {
 						logger.Error(err)
 					}
-				}()
+				}(w)
 			}
 
 			i++
