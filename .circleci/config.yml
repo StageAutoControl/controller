@@ -1,0 +1,88 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.12
+    working_directory: /go/src/github.com/StageAutoControl/controller
+
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+
+      - run:
+          name: install dependencies
+          command: |
+            curl https://glide.sh/get | sh
+            glide install --strip-vendor
+
+      - run:
+          name: run tests
+          command: go test -v ./...
+
+      - run:
+          name: gometalinter
+          command: |
+            curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.16.0
+            golangci-lint run
+
+
+  publish:
+    docker:
+      - image: circleci/golang:1.12
+    working_directory: /go/src/github.com/StageAutoControl/controller
+
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+
+      - run:
+          name: install dependencies
+          command: |
+
+      - push-docker:
+        name: push docker images
+        command: |
+          [ "${CIRCLE_BRANCH}" != "master" ] && [ -z "${CIRCLE_TAG}" ] && exit 0
+
+          export DOCKER_REPO=$(echo "${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}" | awk '{print tolower($0)}')
+
+          docker login -u ${DOCKER_USER} -p "${DOCKER_PASS}" https://index.docker.io/v1/
+          docker build -t ${DOCKER_REPO} .
+
+          if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            docker push ${DOCKER_REPO}
+          fi
+
+          if [ -n "${CIRCLE_TAG}" ]; then
+            docker tag ${DOCKER_REPO} ${DOCKER_REPO}:${CIRCLE_TAG}
+            docker push ${DOCKER_REPO}:${CIRCLE_TAG}
+          fi
+      - push-artifacts:
+          name: push artifacts
+          command: |
+            [ -z "${CIRCLE_TAG}" ] && exit 0
+
+            curl https://glide.sh/get | sh
+            glide install --strip-vendor
+            go get github.com/tcnksm/ghr
+
+            CGO_ENABLED=0 go build -a -ldflags '-s' -installsuffix cgo -o bin/controller_linux_amd64 .
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./bin
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: /.*/
+      - publish:
+          context: docker
+          filters:
+            tags:
+              only: /.*/

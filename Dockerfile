@@ -14,11 +14,9 @@ RUN apt-get update \
 
 WORKDIR /go/src/github.com/StageAutoControl/controller/
 COPY --from=dependencies /go/src/github.com/StageAutoControl/controller/vendor vendor
+
 COPY . ./
-
-RUN go test ./...
-
-RUN go build -o bin/controller_amd64 .
+RUN CGO_ENABLED=0 go build -a -ldflags '-s' -installsuffix cgo -o bin/controller .
 
 FROM ubuntu
 
