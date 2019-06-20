@@ -16,7 +16,7 @@ WORKDIR /go/src/github.com/StageAutoControl/controller/
 COPY --from=dependencies /go/src/github.com/StageAutoControl/controller/vendor vendor
 
 COPY . ./
-RUN CGO_ENABLED=0 go build -a -ldflags '-s' -installsuffix cgo -o bin/controller .
+RUN go build -o bin/controller .
 
 FROM ubuntu
 

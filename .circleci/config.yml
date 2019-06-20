@@ -72,7 +72,7 @@ jobs:
             [ -z "${CIRCLE_TAG}" ] && exit 0
 
             go get github.com/tcnksm/ghr
-            CGO_ENABLED=0 go build -a -ldflags '-s' -installsuffix cgo -o bin/controller_linux_amd64 .
+            go build -o bin/controller .
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./bin
 
 workflows:
