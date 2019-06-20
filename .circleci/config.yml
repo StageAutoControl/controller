@@ -45,7 +45,7 @@ jobs:
             curl https://glide.sh/get | sh
             glide install --strip-vendor
 
-            apt-get install -y libportmidi-dev portaudio19-dev
+            sudo apt-get install -y libportmidi-dev portaudio19-dev
 
       - deploy:
           name: push docker images
