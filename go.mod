@@ -11,7 +11,7 @@ require (
 	github.com/gorilla/rpc v1.2.0
 	github.com/gorilla/websocket v1.4.1
 	github.com/jinzhu/copier v0.0.0-20190924061706-b57f9002281a
-	github.com/jsimonetti/go-artnet v0.0.0-20191008094654-e099a3930c68
+	github.com/jsimonetti/go-artnet v0.0.0-20200117113556-db828ac108e3
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible

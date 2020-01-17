@@ -34,6 +34,8 @@ github.com/jinzhu/copier v0.0.0-20190924061706-b57f9002281a h1:zPPuIq2jAWWPTrGt7
 github.com/jinzhu/copier v0.0.0-20190924061706-b57f9002281a/go.mod h1:yL958EeXv8Ylng6IfnvG4oflryUi3vgA3xPs9hmII1s=
 github.com/jsimonetti/go-artnet v0.0.0-20191008094654-e099a3930c68 h1:F+kPtehe174cTiBrkF6P5d31/kWUUaIEb+ueFJ+XxEE=
 github.com/jsimonetti/go-artnet v0.0.0-20191008094654-e099a3930c68/go.mod h1:N8sFzz7wHYGJd0Hu30NVGINiKthg2EVQW9E2xBVp9VM=
+github.com/jsimonetti/go-artnet v0.0.0-20200117113556-db828ac108e3 h1:gsImleLF/P0sgU8zyXPW6GXPfr/u4ul3VD041tKmzoA=
+github.com/jsimonetti/go-artnet v0.0.0-20200117113556-db828ac108e3/go.mod h1:N8sFzz7wHYGJd0Hu30NVGINiKthg2EVQW9E2xBVp9VM=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/konsorten/go-windows-terminal-sequences v1.0.2 h1:DB17ag19krx9CFsz4o3enTrPXyIXCl+2iCXH/aMAp9s=
 github.com/konsorten/go-windows-terminal-sequences v1.0.2/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
