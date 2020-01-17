@@ -1,9 +1,3 @@
-FROM scalify/glide:0.13.0 as dependencies
-WORKDIR /go/src/github.com/StageAutoControl/controller/
-
-COPY glide.yaml glide.lock ./
-RUN glide install --strip-vendor
-
 FROM golang:1.10 as builder
 
 RUN apt-get update \
@@ -13,7 +7,9 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /go/src/github.com/StageAutoControl/controller/
-COPY --from=dependencies /go/src/github.com/StageAutoControl/controller/vendor vendor
+
+COPY go.mod go.sum ./
+RUN go mod download
 
 COPY . ./
 RUN go build -o bin/controller .
