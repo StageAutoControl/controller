@@ -24,6 +24,10 @@ func createLogger(logLevel string) *logrus.Entry {
 }
 
 func createStorage(logger *logrus.Entry, storagePath string) *disk.Storage {
+	if filepath.IsAbs(storagePath) {
+		return disk.New(storagePath)
+	}
+
 	cwd, err := os.Getwd()
 	if err != nil {
 		logger.Fatal(err)
