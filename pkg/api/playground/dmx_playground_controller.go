@@ -76,6 +76,10 @@ func (c *DMXPlaygroundController) defaultBarParams(bp *cntl.BarParams) {
 
 // PlayScene plays the given Scene once
 func (c *DMXPlaygroundController) PlayScene(r *http.Request, req *PlayOnceRequest, response *api.Empty) error {
+	if c.controller == nil {
+		return nil
+	}
+
 	ds, err := c.loader.Load()
 	if err != nil {
 		return err
@@ -102,6 +106,10 @@ func (c *DMXPlaygroundController) PlayScene(r *http.Request, req *PlayOnceReques
 
 // PlayPreset plays the given Preset once
 func (c *DMXPlaygroundController) PlayPreset(r *http.Request, req *PlayOnceRequest, response *api.Empty) error {
+	if c.controller == nil {
+		return nil
+	}
+
 	ds, err := c.loader.Load()
 	if err != nil {
 		return err
